@@ -5,14 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationResponseModel {
+public class AutenticacaoRequestModel {
 
-    private SessionModel sessionProfile;
-    private String sessionToken;
-    private String refreshToken;
+    private String email;
+    String senha;
 }

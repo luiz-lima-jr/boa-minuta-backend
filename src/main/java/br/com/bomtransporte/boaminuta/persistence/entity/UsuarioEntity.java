@@ -1,8 +1,8 @@
 package br.com.bomtransporte.boaminuta.persistence.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import org.hibernate.annotations.JdbcTypeCode;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -17,30 +17,42 @@ import java.util.stream.Collectors;
 public class UsuarioEntity implements UserDetails {
 
     @Id
-    @JdbcTypeCode(java.sql.Types.VARCHAR)
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
+
+    @NotNull
     private String nome;
-    private String username;
+
+    @NotNull
     private String email;
+
+    @NotNull
     private String senha;
+
+    @NotNull
     private boolean ativo;
+
+    @NotNull
     private LocalDateTime dataCadastro;
+
     private UUID tokenRecuperarSenha;
 
-    private UUID usuarioCadastroId;
+    private Long usuarioCadastroId;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<UsuarioRoleEntity> roles;
+    private List<UsuarioFuncaoEntity> funcoes;
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<UsuarioFilialEntity> filiais;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<TokenEntity> tokens;
 
     @Override
     public List<SimpleGrantedAuthority> getAuthorities() {
-        var authorities = roles
+        var authorities = funcoes
                 .stream()
-                .map(role -> new SimpleGrantedAuthority(role.getRole().getName()))
+                .map(role -> new SimpleGrantedAuthority(role.getFuncao().getDescricao()))
                 .collect(Collectors.toList());
         return authorities;
     }
@@ -87,10 +99,6 @@ public class UsuarioEntity implements UserDetails {
         this.nome = nome;
         return this;
     }
-    public UsuarioEntity login(String login) {
-        this.username = login;
-        return this;
-    }
     public UsuarioEntity email(String email) {
         this.email = email;
         return this;
@@ -100,9 +108,15 @@ public class UsuarioEntity implements UserDetails {
         return this;
     }
 
-    public UsuarioEntity roles(List<RoleEntity> rolesCadastro){
-        this.roles = new ArrayList<>();
-        rolesCadastro.forEach(r -> this.roles.add(new UsuarioRoleEntity(null, this, r)));
+    public UsuarioEntity funcoes(List<FuncaoEntity> rolesCadastro){
+        this.funcoes = new ArrayList<>();
+        rolesCadastro.forEach(r -> this.funcoes.add(new UsuarioFuncaoEntity(null, this, r)));
+        return this;
+    }
+
+    public UsuarioEntity filiais(List<FilialEntity> filiais){
+        this.filiais = new ArrayList<>();
+        filiais.forEach(r -> this.filiais.add(new UsuarioFilialEntity(null, this, r)));
         return this;
     }
 

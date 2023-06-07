@@ -2,9 +2,9 @@ package br.com.bomtransporte.boaminuta.service;
 
 import br.com.bomtransporte.boaminuta.exception.UsuarioExistenteException;
 import br.com.bomtransporte.boaminuta.enuns.TokenTypeEnum;
-import br.com.bomtransporte.boaminuta.model.AuthenticationRequestModel;
-import br.com.bomtransporte.boaminuta.model.AuthenticationResponseModel;
-import br.com.bomtransporte.boaminuta.model.RegisterRequestModel;
+import br.com.bomtransporte.boaminuta.model.AutenticacaoRequestModel;
+import br.com.bomtransporte.boaminuta.model.AutenticacaoResponseModel;
+import br.com.bomtransporte.boaminuta.model.RegistroUsuarioModel;
 import br.com.bomtransporte.boaminuta.model.SessionModel;
 import br.com.bomtransporte.boaminuta.persistence.entity.TokenEntity;
 import br.com.bomtransporte.boaminuta.persistence.entity.UsuarioEntity;
@@ -33,33 +33,33 @@ public class AuthenticationService {
     @Autowired
     private  AuthenticationManager authenticationManager;
 
-    public void register(RegisterRequestModel request) throws UsuarioExistenteException {
-        usuarioService.register(request);
+    public void register(RegistroUsuarioModel request) throws UsuarioExistenteException {
+        usuarioService.cadastrarUsuario(request);
     }
 
     public SessionModel getDadosSessao(){
         var session = new SessionModel();
         session.setEmaill(usuarioService.getUserDetails().getEmail());
         session.setNome(usuarioService.getUserDetails().getNome());
-        session.setRoles(usuarioService.getUserDetails().getAuthorities().stream().map(SimpleGrantedAuthority::getAuthority).collect(Collectors.toList()));
+        session.setFuncoes(usuarioService.getUserDetails().getAuthorities().stream().map(SimpleGrantedAuthority::getAuthority).collect(Collectors.toList()));
 
         return session;
     }
 
-    public AuthenticationResponseModel authenticate(AuthenticationRequestModel request) {
+    public AutenticacaoResponseModel authenticate(AutenticacaoRequestModel request) {
         var usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                request.getUsername(),
-                request.getPassword()
+                request.getEmail(),
+                request.getSenha()
         );
         authenticationManager.authenticate(
                 usernamePasswordAuthenticationToken
         );
-        var user = usuarioService.getUsuarioByUsernameEmail(request.getUsername());
+        var user = usuarioService.getUsuarioByEmail(request.getEmail());
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);
-        return AuthenticationResponseModel.builder()
+        return AutenticacaoResponseModel.builder()
                 .sessionToken(jwtToken)
                 .refreshToken(refreshToken)
                 .sessionProfile(getDadosSessao())
@@ -108,12 +108,12 @@ public class AuthenticationService {
         refreshToken = authHeader.substring(7);
         userEmail = jwtService.extractUsername(refreshToken);
         if (userEmail != null) {
-            var user = this.usuarioService.getUsuarioByUsernameEmail(userEmail);
+            var user = this.usuarioService.getUsuarioByEmail(userEmail);
             if (jwtService.isTokenValid(refreshToken, user)) {
                 var accessToken = jwtService.generateToken(user);
                 revokeAllUserTokens(user);
                 saveUserToken(user, accessToken);
-                var authResponse = AuthenticationResponseModel.builder()
+                var authResponse = AutenticacaoResponseModel.builder()
                         .sessionToken(accessToken)
                         .refreshToken(refreshToken)
                         .build();

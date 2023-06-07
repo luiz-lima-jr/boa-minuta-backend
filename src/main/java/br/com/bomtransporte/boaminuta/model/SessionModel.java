@@ -9,5 +9,5 @@ import java.util.List;
 public class SessionModel {
     private String nome;
     private String emaill;
-    private List<String> roles;
+    private List<String> funcoes;
 }

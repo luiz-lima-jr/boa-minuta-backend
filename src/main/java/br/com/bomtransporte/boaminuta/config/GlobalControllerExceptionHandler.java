@@ -9,34 +9,35 @@ import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.stream.Collectors;
 
-@RestControllerAdvice
+@RestController
 public class GlobalControllerExceptionHandler {
 
-    @ExceptionHandler(value = {MethodArgumentNotValidException.class})
+    @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse invalidArguments(MethodArgumentNotValidException ex) {
         var erros = ex.getBindingResult().getFieldErrors().stream().map(err -> err.getField() + " " + err.getDefaultMessage()).collect(Collectors.toList());
         return ErrorResponse.create(ex, HttpStatus.BAD_REQUEST, erros.toString());
     }
 
-    @ExceptionHandler(value = {SessaoInvalidaException.class})
+    @ExceptionHandler(SessaoInvalidaException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ErrorResponse sessaoInvalida(SessaoInvalidaException ex) {
         return ErrorResponse.create(ex, HttpStatus.UNAUTHORIZED, ex.getMessage());
     }
 
 
-    @ExceptionHandler(value = {BoaMinutaBusinessException.class})
+    @ExceptionHandler(BoaMinutaBusinessException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse erroNegocio(BoaMinutaBusinessException ex) {
         return ErrorResponse.create(ex, HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
-    @ExceptionHandler(value = {BadCredentialsException.class})
+    @ExceptionHandler(BadCredentialsException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ErrorResponse deniedPermissionException(BadCredentialsException ex) {
         ex.printStackTrace();
@@ -44,14 +45,14 @@ public class GlobalControllerExceptionHandler {
     }
 
 
-    @ExceptionHandler(value = {ConstraintViolationException.class})
+    @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse constraintViolationException(ConstraintViolationException ex) {
         ex.printStackTrace();
         return ErrorResponse.create(ex, HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
-    @ExceptionHandler(value = {Exception.class})
+    @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse internalServerError(Exception ex) {
         ex.printStackTrace();

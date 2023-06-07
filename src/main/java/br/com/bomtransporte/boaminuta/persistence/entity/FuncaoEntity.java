@@ -1,14 +1,17 @@
 package br.com.bomtransporte.boaminuta.persistence.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-@Entity(name = "role")
+@Entity(name = "funcao")
 @Data
-public class RoleEntity {
+public class FuncaoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @Column(unique = true)
-    private String name;
+    @NotNull
+    private String descricao;
 }

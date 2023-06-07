@@ -2,9 +2,9 @@ package br.com.bomtransporte.boaminuta.controller;
 
 import br.com.bomtransporte.boaminuta.config.Constantes;
 import br.com.bomtransporte.boaminuta.exception.UsuarioExistenteException;
-import br.com.bomtransporte.boaminuta.model.AuthenticationRequestModel;
-import br.com.bomtransporte.boaminuta.model.AuthenticationResponseModel;
-import br.com.bomtransporte.boaminuta.model.RegisterRequestModel;
+import br.com.bomtransporte.boaminuta.model.AutenticacaoRequestModel;
+import br.com.bomtransporte.boaminuta.model.AutenticacaoResponseModel;
+import br.com.bomtransporte.boaminuta.model.RegistroUsuarioModel;
 import br.com.bomtransporte.boaminuta.model.SessionModel;
 import br.com.bomtransporte.boaminuta.service.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,20 +35,19 @@ public class AuthenticationController {
     }
 
     @PostMapping
-    public ResponseEntity<AuthenticationResponseModel> authenticate(
-            @Validated @RequestBody AuthenticationRequestModel request
+    public ResponseEntity<AutenticacaoResponseModel> authenticate(
+            @Validated @RequestBody AutenticacaoRequestModel request
     ) {
         return ResponseEntity.ok(service.authenticate(request));
     }
-
     @PostMapping("/register")
-    public ResponseEntity register(@Valid @RequestBody RegisterRequestModel request) throws UsuarioExistenteException {
+    public ResponseEntity register(@Valid @RequestBody RegistroUsuarioModel request) throws UsuarioExistenteException {
         service.register(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping("logout")
-    public ResponseEntity<AuthenticationResponseModel> logout() {
+    public ResponseEntity<AutenticacaoResponseModel> logout() {
         service.logout();
         return ResponseEntity.ok().build();
     }

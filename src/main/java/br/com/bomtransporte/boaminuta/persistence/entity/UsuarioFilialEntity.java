@@ -2,30 +2,29 @@ package br.com.bomtransporte.boaminuta.persistence.entity;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.JdbcTypeCode;
-
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "usuario_role")
-public class UsuarioRoleEntity {
+@Entity(name = "usuario_filial")
+public class UsuarioFilialEntity {
 
     @Id
-    @JdbcTypeCode(java.sql.Types.VARCHAR)
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
+    @NotNull
     private UsuarioEntity usuario;
 
 
     @ManyToOne
-    @JoinColumn(name = "role_id")
-    private RoleEntity role;
+    @JoinColumn(name = "filial_id")
+    @NotNull
+    private FilialEntity filial;
 }
