@@ -3,7 +3,6 @@ version:  "3.7"
 services:
   docker:
     image: boaminutabackend
-    restard: always
     ports:
       - "9094:9090"
     container_name: boaminutabackend
