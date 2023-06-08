@@ -2,7 +2,6 @@ package br.com.bomtransporte.boaminuta.service;
 
 import br.com.bomtransporte.boaminuta.exception.UsuarioExistenteException;
 import br.com.bomtransporte.boaminuta.model.RegistroUsuarioModel;
-import br.com.bomtransporte.boaminuta.persistence.entity.FilialEntity;
 import br.com.bomtransporte.boaminuta.persistence.entity.UsuarioEntity;
 import br.com.bomtransporte.boaminuta.persistence.repository.IUsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,7 @@ public class UsuarioService implements UserDetailsService {
 
     @Autowired
     private IUsuarioRepository repository;
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     public UsuarioService(){
         passwordEncoder = new BCryptPasswordEncoder();
@@ -35,7 +34,7 @@ public class UsuarioService implements UserDetailsService {
     }
 
     public void cadastrarUsuario(RegistroUsuarioModel request) throws UsuarioExistenteException {
-        var user = UsuarioEntity.builder()
+        var user = UsuarioEntity.UsuarioEntityBuilder.builder()
                 .nome(request.getNome())
                 .email(request.getEmail())
                 .senha(passwordEncoder.encode(request.getSenha()))

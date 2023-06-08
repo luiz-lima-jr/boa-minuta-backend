@@ -50,11 +50,10 @@ public class UsuarioEntity implements UserDetails {
 
     @Override
     public List<SimpleGrantedAuthority> getAuthorities() {
-        var authorities = funcoes
+        return funcoes
                 .stream()
                 .map(role -> new SimpleGrantedAuthority(role.getFuncao().getDescricao()))
                 .collect(Collectors.toList());
-        return authorities;
     }
 
     @Override
@@ -87,41 +86,55 @@ public class UsuarioEntity implements UserDetails {
         return true;
     }
 
-
-    public static UsuarioEntity builder(){
-        var user = new UsuarioEntity();
-        user.ativo = true;
-        user.dataCadastro = LocalDateTime.now();
-        return user;
+    public List<FilialEntity> getFiliaisEntity(){
+        return filiais != null ? new ArrayList<>() : filiais.stream().map(f -> f.getFilial()).collect(Collectors.toList());
     }
 
-    public UsuarioEntity nome(String nome) {
-        this.nome = nome;
-        return this;
-    }
-    public UsuarioEntity email(String email) {
-        this.email = email;
-        return this;
-    }
-    public UsuarioEntity senha(String senha) {
-        this.senha = senha;
-        return this;
+    public List<FuncaoEntity> getFuncoesEntity(){
+        return funcoes != null ? new ArrayList<>() : funcoes.stream().map(f -> f.getFuncao()).collect(Collectors.toList());
     }
 
-    public UsuarioEntity funcoes(List<FuncaoEntity> rolesCadastro){
-        this.funcoes = new ArrayList<>();
-        rolesCadastro.forEach(r -> this.funcoes.add(new UsuarioFuncaoEntity(null, this, r)));
-        return this;
-    }
+     public static class UsuarioEntityBuilder {
+        private UsuarioEntity usuario;
 
-    public UsuarioEntity filiais(List<FilialEntity> filiais){
-        this.filiais = new ArrayList<>();
-        filiais.forEach(r -> this.filiais.add(new UsuarioFilialEntity(null, this, r)));
-        return this;
-    }
+        private UsuarioEntityBuilder(UsuarioEntity usuario){
 
+        }
 
-    public UsuarioEntity build(){
-        return this;
+        public static UsuarioEntityBuilder builder(){
+            var usuario = new UsuarioEntity();
+            usuario.ativo = true;
+            usuario.dataCadastro = LocalDateTime.now();
+            return new UsuarioEntityBuilder(usuario);
+        }
+
+         public UsuarioEntityBuilder nome(String nome) {
+             this.usuario.nome = nome;
+             return this;
+         }
+         public UsuarioEntityBuilder email(String email) {
+             this.usuario.email = email;
+             return this;
+         }
+         public UsuarioEntityBuilder senha(String senha) {
+             this.usuario.senha = senha;
+             return this;
+         }
+
+         public UsuarioEntityBuilder funcoes(List<FuncaoEntity> rolesCadastro){
+             this.usuario.funcoes = new ArrayList<>();
+             rolesCadastro.forEach(r -> this.usuario.funcoes.add(new UsuarioFuncaoEntity(null, usuario, r)));
+             return this;
+         }
+
+         public UsuarioEntityBuilder filiais(List<FilialEntity> filiais){
+             this.usuario.filiais = new ArrayList<>();
+             filiais.forEach(r -> this.usuario.filiais.add(new UsuarioFilialEntity(null, usuario, r)));
+             return this;
+         }
+
+         public UsuarioEntity build(){
+             return usuario;
+         }
     }
 }
