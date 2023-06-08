@@ -2,8 +2,8 @@ version:  "3.7"
 
 services:
   backend:
-    image: boaminutabackend
+    image: boa-minuta-backend
     restart: always
     ports:
       - "9094:9090"
-    container_name: boaminutabackend
+    container_name: boa-minuta-backend
