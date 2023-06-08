@@ -5,5 +5,5 @@ services:
     image: boa-minuta-backend
     restart: always
     ports:
-      - "9094:9090"
+      - "9090"
     container_name: boa-minuta-backend
