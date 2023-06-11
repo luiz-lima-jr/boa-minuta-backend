@@ -5,4 +5,4 @@ RUN mvn clean
 RUN mvn package
 FROM openjdk:17.0.2-jdk
 COPY --from=build /target/*.jar app.jar
-CMD ["mvn","spring-boot:run"]
+CMD ["./mvnw","spring-boot:run"]
