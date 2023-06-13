@@ -52,6 +52,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/api/v1/auth/usuario").hasAuthority("ADMINISTRADOR")
                 .requestMatchers("/api/v1/auth/funcao").hasAuthority("ADMINISTRADOR")
                 .requestMatchers("/api/v1/filial/**").hasAuthority("ADMINISTRADOR")
+                .requestMatchers("/api/v1/recuperar-senha/**").hasAuthority("ADMINISTRADOR")
 
                 /* .requestMatchers("/api/v1/management/**").hasAnyRole(ADMIN.name(), MANAGER.name())
                   .requestMatchers("/api/v1/admin/**").hasRole(ADMIN.name())

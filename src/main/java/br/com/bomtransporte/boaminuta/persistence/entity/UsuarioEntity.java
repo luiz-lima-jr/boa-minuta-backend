@@ -94,6 +94,16 @@ public class UsuarioEntity implements UserDetails {
         return funcoes == null ? new ArrayList<>() : funcoes.stream().map(f -> f.getFuncao()).collect(Collectors.toList());
     }
 
+    public void setFuncoes(List<FuncaoEntity> rolesCadastro){
+        this.funcoes = new ArrayList<>();
+        rolesCadastro.forEach(r -> this.funcoes.add(new UsuarioFuncaoEntity(null, this, r)));
+    }
+
+    public void setFiliais(List<FilialEntity> filiais){
+        this.filiais = new ArrayList<>();
+        filiais.forEach(r -> this.filiais.add(new UsuarioFilialEntity(null, this, r)));
+    }
+
      public static class UsuarioEntityBuilder {
         private UsuarioEntity usuario;
 
@@ -122,19 +132,19 @@ public class UsuarioEntity implements UserDetails {
          }
 
          public UsuarioEntityBuilder funcoes(List<FuncaoEntity> rolesCadastro){
-             this.usuario.funcoes = new ArrayList<>();
-             rolesCadastro.forEach(r -> this.usuario.funcoes.add(new UsuarioFuncaoEntity(null, usuario, r)));
+             usuario.setFuncoes(rolesCadastro);
              return this;
          }
 
          public UsuarioEntityBuilder filiais(List<FilialEntity> filiais){
-             this.usuario.filiais = new ArrayList<>();
-             filiais.forEach(r -> this.usuario.filiais.add(new UsuarioFilialEntity(null, usuario, r)));
-             return this;
+             usuario.setFiliais(filiais);
+            return this;
          }
 
          public UsuarioEntity build(){
              return usuario;
          }
+
+
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UsuarioService implements UserDetailsService {
@@ -22,6 +23,10 @@ public class UsuarioService implements UserDetailsService {
 
     @Autowired
     private IUsuarioRepository repository;
+
+    @Autowired
+    private EmailService emailService;
+
     private final PasswordEncoder passwordEncoder;
 
     public UsuarioService(){
@@ -49,6 +54,20 @@ public class UsuarioService implements UserDetailsService {
         repository.save(user);
     }
 
+    public void alterarUsuario(RegistroUsuarioModel request) throws UsuarioExistenteException {
+        var usuario = repository.findById(request.getId()).orElse(null);
+        if(usuario == null){
+            throw new UsernameNotFoundException("Usuário não encontrado");
+        }
+        usuario.setEmail(request.getEmail());
+        usuario.setFiliais(request.getFiliais());
+        usuario.setFuncoes(request.getFuncoes());
+        usuario.setNome(request.getNome());
+        usuario.setAtivo(request.isAtivo());
+
+        repository.save(usuario);
+    }
+
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -70,5 +89,29 @@ public class UsuarioService implements UserDetailsService {
 
     public PasswordEncoder getPasswordEncoder() {
         return passwordEncoder;
+    }
+
+    public void recuperarSenha(Long idUsuario){
+        var usuario = repository.findById(idUsuario).orElse(null);
+        if(usuario == null){
+            throw new UsernameNotFoundException("Usuário não encontrado");
+        }
+        var tokenReset = UUID.randomUUID();
+        usuario.setTokenRecuperarSenha(tokenReset);
+        var emailCorpo = "Acesse o link a seguir para recuperar a senha do seu cadastro: http://localhost:4200/nova-senha/"+tokenReset;
+        emailService.enviar(usuario.getEmail(), "Recuperar senha", emailCorpo);
+        repository.save(usuario);
+    }
+
+    public void recuperarSenha(String email){
+        var usuario = repository.findByEmail(email).orElse(null);
+        if(usuario == null){
+            throw new UsernameNotFoundException("Usuário não encontrado");
+        }
+        var tokenReset = UUID.randomUUID();
+        usuario.setTokenRecuperarSenha(tokenReset);
+        var emailCorpo = "Acesse o link a seguir para recuperar a senha do seu cadastro: http://localhost:4200/nova-senha/"+tokenReset;
+        emailService.enviar(usuario.getEmail(), "Recuperar senha", emailCorpo);
+        repository.save(usuario);
     }
 }

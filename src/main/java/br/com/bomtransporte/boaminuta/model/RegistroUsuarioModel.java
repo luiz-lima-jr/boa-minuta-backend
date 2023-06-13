@@ -34,4 +34,6 @@ public class RegistroUsuarioModel {
     @NotNull
     @NotEmpty
     private List<FilialEntity> filiais;
+
+    private boolean ativo;
 }

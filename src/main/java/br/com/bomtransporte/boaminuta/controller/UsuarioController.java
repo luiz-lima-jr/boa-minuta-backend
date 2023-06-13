@@ -26,7 +26,7 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @PostMapping
-    public ResponseEntity register(@Valid @RequestBody RegistroUsuarioModel request) throws UsuarioExistenteException, UsuarioException {
+    public ResponseEntity salvar(@Valid @RequestBody RegistroUsuarioModel request) throws UsuarioExistenteException, UsuarioException {
         try {
             usuarioService.cadastrarUsuario(request);
             return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -34,6 +34,18 @@ public class UsuarioController {
             throw e;
         } catch (Exception e){
             throw new UsuarioException("Não foi possível salvar o usuário");
+        }
+    }
+
+    @PutMapping
+    public ResponseEntity alterar(@Valid @RequestBody RegistroUsuarioModel request) throws UsuarioExistenteException, UsuarioException {
+        try {
+            usuarioService.alterarUsuario(request);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (UsuarioExistenteException e ){
+            throw e;
+        } catch (Exception e){
+            throw new UsuarioException("Não foi possível alterar o usuário");
         }
     }
 
