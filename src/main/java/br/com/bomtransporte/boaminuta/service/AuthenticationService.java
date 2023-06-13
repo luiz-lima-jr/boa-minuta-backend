@@ -33,10 +33,6 @@ public class AuthenticationService {
     @Autowired
     private  AuthenticationManager authenticationManager;
 
-    public void register(RegistroUsuarioModel request) throws UsuarioExistenteException {
-        usuarioService.cadastrarUsuario(request);
-    }
-
     public SessionModel getDadosSessao(){
         var session = new SessionModel();
         session.setEmaill(usuarioService.getUserDetails().getEmail());

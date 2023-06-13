@@ -40,11 +40,6 @@ public class AuthenticationController {
     ) {
         return ResponseEntity.ok(service.authenticate(request));
     }
-    @PostMapping("/register")
-    public ResponseEntity register(@Valid @RequestBody RegistroUsuarioModel request) throws UsuarioExistenteException {
-        service.register(request);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
 
     @DeleteMapping("logout")
     public ResponseEntity<AutenticacaoResponseModel> logout() {

@@ -87,18 +87,18 @@ public class UsuarioEntity implements UserDetails {
     }
 
     public List<FilialEntity> getFiliaisEntity(){
-        return filiais != null ? new ArrayList<>() : filiais.stream().map(f -> f.getFilial()).collect(Collectors.toList());
+        return filiais == null ? new ArrayList<>() : filiais.stream().map(f -> f.getFilial()).collect(Collectors.toList());
     }
 
     public List<FuncaoEntity> getFuncoesEntity(){
-        return funcoes != null ? new ArrayList<>() : funcoes.stream().map(f -> f.getFuncao()).collect(Collectors.toList());
+        return funcoes == null ? new ArrayList<>() : funcoes.stream().map(f -> f.getFuncao()).collect(Collectors.toList());
     }
 
      public static class UsuarioEntityBuilder {
         private UsuarioEntity usuario;
 
         private UsuarioEntityBuilder(UsuarioEntity usuario){
-
+            this.usuario = usuario;
         }
 
         public static UsuarioEntityBuilder builder(){
