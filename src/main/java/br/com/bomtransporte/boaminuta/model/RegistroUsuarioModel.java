@@ -24,7 +24,6 @@ public class RegistroUsuarioModel {
     @NotNull
     private String email;
 
-    @NotNull
     private String senha;
 
     @NotNull
@@ -35,5 +34,5 @@ public class RegistroUsuarioModel {
     @NotEmpty
     private List<FilialEntity> filiais;
 
-    private boolean ativo;
+    private boolean situacao;
 }

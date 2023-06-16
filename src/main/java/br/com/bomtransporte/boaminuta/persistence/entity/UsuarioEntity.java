@@ -35,14 +35,14 @@ public class UsuarioEntity implements UserDetails {
     @NotNull
     private LocalDateTime dataCadastro;
 
-    private UUID tokenRecuperarSenha;
+    private String tokenRecuperarSenha;
 
     private Long usuarioCadastroId;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<UsuarioFuncaoEntity> funcoes;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<UsuarioFilialEntity> filiais;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
@@ -95,12 +95,12 @@ public class UsuarioEntity implements UserDetails {
     }
 
     public void setFuncoes(List<FuncaoEntity> rolesCadastro){
-        this.funcoes = new ArrayList<>();
+        this.funcoes.clear();
         rolesCadastro.forEach(r -> this.funcoes.add(new UsuarioFuncaoEntity(null, this, r)));
     }
 
     public void setFiliais(List<FilialEntity> filiais){
-        this.filiais = new ArrayList<>();
+        this.filiais.clear();
         filiais.forEach(r -> this.filiais.add(new UsuarioFilialEntity(null, this, r)));
     }
 

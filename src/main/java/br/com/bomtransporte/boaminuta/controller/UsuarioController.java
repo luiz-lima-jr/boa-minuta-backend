@@ -28,24 +28,16 @@ public class UsuarioController {
     @PostMapping
     public ResponseEntity salvar(@Valid @RequestBody RegistroUsuarioModel request) throws UsuarioExistenteException, UsuarioException {
         try {
-            usuarioService.cadastrarUsuario(request);
+            if(request.getId() != null) {
+                usuarioService.alterarUsuario(request);
+            } else {
+                usuarioService.cadastrarUsuario(request);
+            }
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (UsuarioExistenteException e ){
             throw e;
         } catch (Exception e){
-            throw new UsuarioException("Não foi possível salvar o usuário");
-        }
-    }
-
-    @PutMapping
-    public ResponseEntity alterar(@Valid @RequestBody RegistroUsuarioModel request) throws UsuarioExistenteException, UsuarioException {
-        try {
-            usuarioService.alterarUsuario(request);
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } catch (UsuarioExistenteException e ){
-            throw e;
-        } catch (Exception e){
-            throw new UsuarioException("Não foi possível alterar o usuário");
+            throw new UsuarioException("Não foi possível salvar o usuário. " + e.getMessage());
         }
     }
 
@@ -62,6 +54,17 @@ public class UsuarioController {
                                                 .build()
                                         ).collect(Collectors.toList());
         return ResponseEntity.ok(usuariosModel);
+    }
+
+    @DeleteMapping("{idUsuario}")
+    public ResponseEntity excluir(@PathVariable("idUsuario") Long idUsuario) throws Exception {
+        usuarioService.excluir(idUsuario);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("alterar-dados-pessoais")
+    public ResponseEntity alterarDadosPessoais(@Valid @RequestBody RegistroUsuarioModel request){
+        return ResponseEntity.ok().build();
     }
 
 }

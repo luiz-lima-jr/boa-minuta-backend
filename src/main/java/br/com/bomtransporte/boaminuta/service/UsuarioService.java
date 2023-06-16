@@ -1,6 +1,10 @@
 package br.com.bomtransporte.boaminuta.service;
 
+import br.com.bomtransporte.boaminuta.exception.BoaMinutaBusinessException;
+import br.com.bomtransporte.boaminuta.exception.UsuarioException;
 import br.com.bomtransporte.boaminuta.exception.UsuarioExistenteException;
+import br.com.bomtransporte.boaminuta.model.AlterarSenhaExternoModel;
+import br.com.bomtransporte.boaminuta.model.AlterarSenhaModel;
 import br.com.bomtransporte.boaminuta.model.RegistroUsuarioModel;
 import br.com.bomtransporte.boaminuta.persistence.entity.UsuarioEntity;
 import br.com.bomtransporte.boaminuta.persistence.repository.IUsuarioRepository;
@@ -14,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class UsuarioService implements UserDetailsService {
@@ -29,6 +32,8 @@ public class UsuarioService implements UserDetailsService {
 
     private final PasswordEncoder passwordEncoder;
 
+    @Autowired private JwtService jwtService;
+
     public UsuarioService(){
         passwordEncoder = new BCryptPasswordEncoder();
     }
@@ -40,14 +45,14 @@ public class UsuarioService implements UserDetailsService {
 
     public void cadastrarUsuario(RegistroUsuarioModel request) throws UsuarioExistenteException {
         var user = UsuarioEntity.UsuarioEntityBuilder.builder()
-                .nome(request.getNome())
-                .email(request.getEmail())
+                .nome(request.getNome().trim())
+                .email(request.getEmail().trim())
                 .senha(passwordEncoder.encode(request.getSenha()))
                 .funcoes(request.getFuncoes())
                 .filiais(request.getFiliais())
                 .build();
 
-        if (repository.findByEmail(request.getEmail()).isPresent()){
+        if (repository.findByEmail(request.getEmail().trim()).isPresent()){
             throw new UsuarioExistenteException("Email já cadastrado");
         }
 
@@ -63,7 +68,7 @@ public class UsuarioService implements UserDetailsService {
         usuario.setFiliais(request.getFiliais());
         usuario.setFuncoes(request.getFuncoes());
         usuario.setNome(request.getNome());
-        usuario.setAtivo(request.isAtivo());
+        usuario.setAtivo(request.isSituacao());
 
         repository.save(usuario);
     }
@@ -93,25 +98,58 @@ public class UsuarioService implements UserDetailsService {
 
     public void recuperarSenha(Long idUsuario){
         var usuario = repository.findById(idUsuario).orElse(null);
-        if(usuario == null){
-            throw new UsernameNotFoundException("Usuário não encontrado");
-        }
-        var tokenReset = UUID.randomUUID();
-        usuario.setTokenRecuperarSenha(tokenReset);
-        var emailCorpo = "Acesse o link a seguir para recuperar a senha do seu cadastro: http://localhost:4200/nova-senha/"+tokenReset;
-        emailService.enviar(usuario.getEmail(), "Recuperar senha", emailCorpo);
-        repository.save(usuario);
+        gerarTokenRecuperacao(usuario);
     }
 
     public void recuperarSenha(String email){
         var usuario = repository.findByEmail(email).orElse(null);
+        gerarTokenRecuperacao(usuario);
+    }
+
+    private void gerarTokenRecuperacao(UsuarioEntity usuario){
         if(usuario == null){
             throw new UsernameNotFoundException("Usuário não encontrado");
         }
-        var tokenReset = UUID.randomUUID();
-        usuario.setTokenRecuperarSenha(tokenReset);
-        var emailCorpo = "Acesse o link a seguir para recuperar a senha do seu cadastro: http://localhost:4200/nova-senha/"+tokenReset;
-        emailService.enviar(usuario.getEmail(), "Recuperar senha", emailCorpo);
+        var token = jwtService.gerarTokenRecuperacaoSenha(usuario);
+        usuario.setTokenRecuperarSenha(token);
+        var emailCorpo = "Acesse o link a seguir para recuperar a senha do seu cadastro. Ele é válido por 2 horas: http://localhost:4200/nova-senha/"+token;
+        //emailService.enviar(usuario.getEmail(), "Recuperar senha", emailCorpo);
         repository.save(usuario);
     }
+
+    public void alterarSenha(AlterarSenhaExternoModel model) throws BoaMinutaBusinessException {
+        UsuarioEntity usuario;
+        if(model.getToken() != null) {
+            usuario =  repository.findByTokenRecuperarSenha(model.getToken()).orElse(null);
+            if(jwtService.isTokenExpired(model.getToken()) || usuario == null){
+                throw new BoaMinutaBusinessException("Link de alteração expirado!");
+            }
+        } else {
+            usuario = repository.findById(userDetails.getId()).orElse(null);
+        }
+        alterarSenha(usuario, model.getSenha());
+    }
+
+    public void alterarSenha(AlterarSenhaModel model) throws BoaMinutaBusinessException {
+        UsuarioEntity usuario = repository.findById(userDetails.getId()).orElse(null);
+        var senhaAtualEncoded = passwordEncoder.encode(model.getSenhaAtual());
+        if(!usuario.getSenha().equals(senhaAtualEncoded)){
+            throw new UsuarioException("Senha inválida atual!");
+        }
+        alterarSenha(usuario, model.getSenha());
+    }
+
+    private void alterarSenha(UsuarioEntity usuario, String novaSenha){
+        if(usuario == null){
+            throw new UsernameNotFoundException("Usuário não encontrado");
+        }
+        usuario.setSenha(passwordEncoder.encode(novaSenha));
+        usuario.setTokenRecuperarSenha(null);
+        repository.save(usuario);
+    }
+
+    public void excluir(Long id) throws Exception {
+        repository.deleteById(id);
+    }
+
 }
