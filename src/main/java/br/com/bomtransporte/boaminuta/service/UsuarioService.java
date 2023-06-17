@@ -5,6 +5,7 @@ import br.com.bomtransporte.boaminuta.exception.UsuarioException;
 import br.com.bomtransporte.boaminuta.exception.UsuarioExistenteException;
 import br.com.bomtransporte.boaminuta.model.AlterarSenhaExternoModel;
 import br.com.bomtransporte.boaminuta.model.AlterarSenhaModel;
+import br.com.bomtransporte.boaminuta.model.DadosSessaoModel;
 import br.com.bomtransporte.boaminuta.model.RegistroUsuarioModel;
 import br.com.bomtransporte.boaminuta.persistence.entity.UsuarioEntity;
 import br.com.bomtransporte.boaminuta.persistence.repository.IUsuarioRepository;
@@ -73,6 +74,16 @@ public class UsuarioService implements UserDetailsService {
         repository.save(usuario);
     }
 
+    public void alterarDadosPessoais(DadosSessaoModel dadosSessaoModel) throws UsuarioException {
+        var usuario = repository.findById(userDetails.getId()).orElse(null);
+        if(usuario == null){
+            throw new UsuarioException("Erro ao buscar o perfil");
+        }
+        usuario.setNome(dadosSessaoModel.getNome());
+        usuario.setEmail(dadosSessaoModel.getEmail());
+        repository.save(usuario);
+    }
+
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -82,6 +93,10 @@ public class UsuarioService implements UserDetailsService {
 
     public UsuarioEntity getUserDetails(){
         return  userDetails;
+    }
+
+    public DadosSessaoModel getDadosSessao(){
+        return new DadosSessaoModel(userDetails.getNome(), userDetails.getEmail());
     }
 
     public UsuarioEntity getUsuarioByEmail(String login){
@@ -132,9 +147,8 @@ public class UsuarioService implements UserDetailsService {
 
     public void alterarSenha(AlterarSenhaModel model) throws BoaMinutaBusinessException {
         UsuarioEntity usuario = repository.findById(userDetails.getId()).orElse(null);
-        var senhaAtualEncoded = passwordEncoder.encode(model.getSenhaAtual());
-        if(!usuario.getSenha().equals(senhaAtualEncoded)){
-            throw new UsuarioException("Senha inválida atual!");
+        if(!passwordEncoder.matches(model.getSenhaAtual(), usuario.getPassword())){
+            throw new UsuarioException("Senha atual inválida!");
         }
         alterarSenha(usuario, model.getSenha());
     }

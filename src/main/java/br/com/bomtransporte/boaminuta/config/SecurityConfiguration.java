@@ -52,9 +52,9 @@ public class SecurityConfiguration {
                 .permitAll()
                 .requestMatchers("/api/v1/register").hasAuthority("ADMINISTRADOR")
                 .requestMatchers("/api/v1/usuario").hasAuthority("ADMINISTRADOR")
+                .requestMatchers("/api/v1/usuario/enviar-link-senha").hasAuthority("ADMINISTRADOR")
                 .requestMatchers("/api/v1/funcao").hasAuthority("ADMINISTRADOR")
                 .requestMatchers("/api/v1/filial/**").hasAuthority("ADMINISTRADOR")
-                .requestMatchers("/api/v1/senha/enviar-link/**").hasAuthority("ADMINISTRADOR")
 
                 /* .requestMatchers("/api/v1/management/**").hasAnyRole(ADMIN.name(), MANAGER.name())
                   .requestMatchers("/api/v1/admin/**").hasRole(ADMIN.name())

@@ -2,8 +2,11 @@ package br.com.bomtransporte.boaminuta.controller;
 
 
 import br.com.bomtransporte.boaminuta.config.Constantes;
+import br.com.bomtransporte.boaminuta.exception.BoaMinutaBusinessException;
 import br.com.bomtransporte.boaminuta.exception.UsuarioException;
 import br.com.bomtransporte.boaminuta.exception.UsuarioExistenteException;
+import br.com.bomtransporte.boaminuta.model.AlterarSenhaModel;
+import br.com.bomtransporte.boaminuta.model.DadosSessaoModel;
 import br.com.bomtransporte.boaminuta.model.RegistroUsuarioModel;
 import br.com.bomtransporte.boaminuta.model.UsuarioModel;
 import br.com.bomtransporte.boaminuta.persistence.entity.FuncaoEntity;
@@ -63,8 +66,23 @@ public class UsuarioController {
     }
 
     @PutMapping("alterar-dados-pessoais")
-    public ResponseEntity alterarDadosPessoais(@Valid @RequestBody RegistroUsuarioModel request){
+    public ResponseEntity alterarDadosPessoais(@Valid @RequestBody DadosSessaoModel request) throws UsuarioException {
+        usuarioService.alterarDadosPessoais(request);
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("dados-pessoais")
+    public ResponseEntity buscarDadosPessoais(){
+        return ResponseEntity.ok(usuarioService.getDadosSessao());
+    }
+
+    @PutMapping("enviar-link-senha/{idUsuario}")
+    public void recuperarSenhaAdm(@PathVariable("idUsuario") Long idUsuario){
+        usuarioService.recuperarSenha(idUsuario);
+    }
+
+    @PutMapping("alterar-senha")
+    public void alterarSenha(@RequestBody AlterarSenhaModel alterarSenhaModel) throws BoaMinutaBusinessException {
+        usuarioService.alterarSenha(alterarSenhaModel);
+    }
 }
