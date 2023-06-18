@@ -4,6 +4,5 @@ services:
   backend:
     image: boa-minuta-backend
     restart: always
-    ports:
-      - "9090:9094"
     container_name: boa-minuta-backend
+    network_mode: host
