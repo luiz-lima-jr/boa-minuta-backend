@@ -95,11 +95,17 @@ public class UsuarioEntity implements UserDetails {
     }
 
     public void setFuncoes(List<FuncaoEntity> rolesCadastro){
+        if(this.funcoes == null){
+            this.funcoes = new ArrayList<>();
+        }
         this.funcoes.clear();
         rolesCadastro.forEach(r -> this.funcoes.add(new UsuarioFuncaoEntity(null, this, r)));
     }
 
     public void setFiliais(List<FilialEntity> filiais){
+        if(this.filiais == null){
+            this.filiais = new ArrayList<>();
+        }
         this.filiais.clear();
         filiais.forEach(r -> this.filiais.add(new UsuarioFilialEntity(null, this, r)));
     }
@@ -137,7 +143,7 @@ public class UsuarioEntity implements UserDetails {
          }
 
          public UsuarioEntityBuilder filiais(List<FilialEntity> filiais){
-             usuario.setFiliais(filiais);
+            usuario.setFiliais(filiais);
             return this;
          }
 
