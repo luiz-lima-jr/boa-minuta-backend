@@ -1,5 +1,6 @@
 package br.com.bomtransporte.boaminuta.service;
 
+import br.com.bomtransporte.boaminuta.config.PropertyConfig;
 import br.com.bomtransporte.boaminuta.exception.BoaMinutaBusinessException;
 import br.com.bomtransporte.boaminuta.exception.UsuarioException;
 import br.com.bomtransporte.boaminuta.exception.UsuarioExistenteException;
@@ -29,7 +30,10 @@ public class UsuarioService implements UserDetailsService {
     private IUsuarioRepository repository;
 
     @Autowired
-    private EmailService emailService;
+    private EmailServiceImpl emailService;
+
+    @Autowired
+    private PropertyConfig propertyCofig;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -127,8 +131,9 @@ public class UsuarioService implements UserDetailsService {
         }
         var token = jwtService.gerarTokenRecuperacaoSenha(usuario);
         usuario.setTokenRecuperarSenha(token);
-        var emailCorpo = "Acesse o link a seguir para recuperar a senha do seu cadastro. Ele é válido por 2 horas: http://localhost:4200/nova-senha/"+token;
-        //emailService.enviar(usuario.getEmail(), "Recuperar senha", emailCorpo);
+        var url = propertyCofig.getFrontendUrl() + "/nova-senha/"+token;
+        var emailCorpo = "Olá, " + usuario.getNome() + "<br><br>Acesse o link a seguir para recuperar a senha do seu cadastro. Ele é válido por 2 horas: "+url;
+        emailService.enviar(usuario.getEmail(), "Recuperar senha", emailCorpo);
         repository.save(usuario);
     }
 
