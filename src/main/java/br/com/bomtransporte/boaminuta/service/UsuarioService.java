@@ -10,6 +10,7 @@ import br.com.bomtransporte.boaminuta.model.DadosSessaoModel;
 import br.com.bomtransporte.boaminuta.model.RegistroUsuarioModel;
 import br.com.bomtransporte.boaminuta.persistence.entity.UsuarioEntity;
 import br.com.bomtransporte.boaminuta.persistence.repository.IUsuarioRepository;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -141,9 +142,14 @@ public class UsuarioService implements UserDetailsService {
         UsuarioEntity usuario;
         if(model.getToken() != null) {
             usuario =  repository.findByTokenRecuperarSenha(model.getToken()).orElse(null);
-            if(jwtService.isTokenExpired(model.getToken()) || usuario == null){
+            try {
+                if(jwtService.isTokenExpired(model.getToken()) || usuario == null){
+                    throw new BoaMinutaBusinessException("Link de alteração expirado!");
+                }
+            } catch (ExpiredJwtException e){
                 throw new BoaMinutaBusinessException("Link de alteração expirado!");
             }
+
         } else {
             usuario = repository.findById(userDetails.getId()).orElse(null);
         }
