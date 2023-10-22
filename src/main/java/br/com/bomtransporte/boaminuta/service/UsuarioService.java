@@ -4,10 +4,7 @@ import br.com.bomtransporte.boaminuta.config.PropertyConfig;
 import br.com.bomtransporte.boaminuta.exception.BoaMinutaBusinessException;
 import br.com.bomtransporte.boaminuta.exception.UsuarioException;
 import br.com.bomtransporte.boaminuta.exception.UsuarioExistenteException;
-import br.com.bomtransporte.boaminuta.model.AlterarSenhaExternoModel;
-import br.com.bomtransporte.boaminuta.model.AlterarSenhaModel;
-import br.com.bomtransporte.boaminuta.model.DadosSessaoModel;
-import br.com.bomtransporte.boaminuta.model.RegistroUsuarioModel;
+import br.com.bomtransporte.boaminuta.model.*;
 import br.com.bomtransporte.boaminuta.persistence.entity.UsuarioEntity;
 import br.com.bomtransporte.boaminuta.persistence.repository.IUsuarioRepository;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -21,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UsuarioService implements UserDetailsService {
@@ -47,6 +45,10 @@ public class UsuarioService implements UserDetailsService {
 
     public List<UsuarioEntity> getAll(){
         return repository.findAll();
+    }
+    public List<UsuarioModel> filtrarPorNome(String nome){
+        var usuarios = repository.findByNomeContains(nome);
+        return usuarios.stream().map(u -> UsuarioModel.builder().nome(u.getNome()).id(u.getId()).build()).collect(Collectors.toList());
     }
 
     public void cadastrarUsuario(RegistroUsuarioModel request) throws UsuarioExistenteException {
@@ -94,6 +96,10 @@ public class UsuarioService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
        this.userDetails = getUsuarioByEmail(username);
        return userDetails;
+    }
+
+    public UsuarioEntity getById(Long idUsuario){
+        return repository.getById(idUsuario);
     }
 
     public UsuarioEntity getUserDetails(){

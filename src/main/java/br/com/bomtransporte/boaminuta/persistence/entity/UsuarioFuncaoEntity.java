@@ -17,13 +17,13 @@ public class UsuarioFuncaoEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "usuario_id")
     @NotNull
     private UsuarioEntity usuario;
 
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "funcao_id")
     @NotNull
     private FuncaoEntity funcao;

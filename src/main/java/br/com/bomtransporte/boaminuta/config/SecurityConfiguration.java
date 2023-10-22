@@ -1,6 +1,7 @@
 package br.com.bomtransporte.boaminuta.config;
 
 
+import br.com.bomtransporte.boaminuta.enuns.FuncaoEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,22 +40,24 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable()
+        http    .csrf().disable()
                 .cors().configurationSource(corsConfiguration()).and()
                 .authorizeHttpRequests()
                 .requestMatchers(
                         "/api/v1/auth",
+                        "/api/v1/carga",
                         //"/api/v1/auth/register",
                         "/swagger-ui.html",
                         "/api/v1/senha/externo/**"
                 )
                 .permitAll()
-                .requestMatchers("/api/v1/register").hasAuthority("ADMINISTRADOR")
-                .requestMatchers("/api/v1/usuario").hasAuthority("ADMINISTRADOR")
-                .requestMatchers("/api/v1/usuario/enviar-link-senha").hasAuthority("ADMINISTRADOR")
-                .requestMatchers("/api/v1/funcao").hasAuthority("ADMINISTRADOR")
-                .requestMatchers("/api/v1/filial/**").hasAuthority("ADMINISTRADOR")
+                .requestMatchers("/api/v1/register").hasAuthority(FuncaoEnum.ADMINISTRADOR.getDescricao())
+                .requestMatchers("/api/v1/usuario").hasAuthority(FuncaoEnum.ADMINISTRADOR.getDescricao())
+                .requestMatchers("/api/v1/usuario/enviar-link-senha").hasAuthority(FuncaoEnum.ADMINISTRADOR.getDescricao())
+                .requestMatchers("/api/v1/funcao").hasAuthority(FuncaoEnum.ADMINISTRADOR.getDescricao())
+                .requestMatchers(HttpMethod.GET, "/api/v1/filial").hasAuthority(FuncaoEnum.ADMINISTRADOR.getDescricao())
+                .requestMatchers(HttpMethod.POST, "/api/v1/filial").hasAuthority(FuncaoEnum.ADMINISTRADOR.getDescricao())
+                .requestMatchers(HttpMethod.DELETE, "/api/v1/filial").hasAuthority(FuncaoEnum.ADMINISTRADOR.getDescricao())
 
                 /* .requestMatchers("/api/v1/management/**").hasAnyRole(ADMIN.name(), MANAGER.name())
                   .requestMatchers("/api/v1/admin/**").hasRole(ADMIN.name())

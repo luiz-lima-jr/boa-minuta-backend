@@ -16,5 +16,8 @@ public class FilialEntity {
     private String nome;
 
     @NotNull
-    private Integer codigoMili;
+    private Long codigoMili;
+
+    @NotNull
+    private String senha;
 }

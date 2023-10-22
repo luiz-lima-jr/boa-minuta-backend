@@ -1,5 +1,6 @@
 package br.com.bomtransporte.boaminuta.persistence.entity;
 
+import br.com.bomtransporte.boaminuta.enuns.FuncaoEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -98,6 +99,9 @@ public class UsuarioEntity implements UserDetails {
         if(this.funcoes == null){
             this.funcoes = new ArrayList<>();
         }
+        if(rolesCadastro == null){
+            rolesCadastro  = new ArrayList<>();
+        }
         this.funcoes.clear();
         rolesCadastro.forEach(r -> this.funcoes.add(new UsuarioFuncaoEntity(null, this, r)));
     }
@@ -106,8 +110,19 @@ public class UsuarioEntity implements UserDetails {
         if(this.filiais == null){
             this.filiais = new ArrayList<>();
         }
+        if(filiais == null){
+            filiais = new ArrayList<>();
+        }
         this.filiais.clear();
         filiais.forEach(r -> this.filiais.add(new UsuarioFilialEntity(null, this, r)));
+    }
+
+    public boolean isAdministrador(){
+        return funcoes.stream().filter(f -> f.getFuncao().getDescricao().equals(FuncaoEnum.ADMINISTRADOR.getDescricao())).count() > 0;
+    }
+
+    public boolean isFaturista(){
+        return funcoes.stream().filter(f -> f.getFuncao().getDescricao().equals(FuncaoEnum.FATURISTA.getDescricao())).count() > 0;
     }
 
      public static class UsuarioEntityBuilder {

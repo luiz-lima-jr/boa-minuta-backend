@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<bindings version="3.0" xmlns="https://jakarta.ee/xml/ns/jaxb">
+  <!--
+
+Este arquivo foi gerado pela Eclipse Implementation of JAXB, v3.0.0 
+Consulte https://eclipse-ee4j.github.io/jaxb-ri 
+Todas as modificações neste arquivo serão perdidas após a recompilação do esquema de origem. 
+Gerado em: 2023.07.12 às 11:54:22 AM GMT-03:00 
+
+  -->
+  <bindings scd="x-schema::tns" xmlns:tns="http://controller.carga.efrotas.mili.com.br">
+    <schemaBindings map="false">
+      <package name="br.com.bomtransporte.boaminuta.mili"/>
+    </schemaBindings>
+    <bindings scd="tns:consultarCargasDisponiveisRedespacho">
+      <class ref="br.com.bomtransporte.boaminuta.mili.ConsultarCargasDisponiveisRedespacho"/>
+    </bindings>
+    <bindings scd="tns:consultarCargasDisponiveisRedespachoResponse">
+      <class ref="br.com.bomtransporte.boaminuta.mili.ConsultarCargasDisponiveisRedespachoResponse"/>
+    </bindings>
+    <bindings scd="tns:receberCargaRedespacho">
+      <class ref="br.com.bomtransporte.boaminuta.mili.ReceberCargaRedespacho"/>
+    </bindings>
+    <bindings scd="tns:receberCargaRedespachoResponse">
+      <class ref="br.com.bomtransporte.boaminuta.mili.ReceberCargaRedespachoResponse"/>
+    </bindings>
+    <bindings scd="tns:finalizarTransmissaoDelete">
+      <class ref="br.com.bomtransporte.boaminuta.mili.FinalizarTransmissaoDelete"/>
+    </bindings>
+    <bindings scd="tns:finalizarTransmissaoDeleteResponse">
+      <class ref="br.com.bomtransporte.boaminuta.mili.FinalizarTransmissaoDeleteResponse"/>
+    </bindings>
+    <bindings scd="tns:consultarCargasDisponiveis">
+      <class ref="br.com.bomtransporte.boaminuta.mili.ConsultarCargasDisponiveis"/>
+    </bindings>
+    <bindings scd="tns:consultarCargasDisponiveisResponse">
+      <class ref="br.com.bomtransporte.boaminuta.mili.ConsultarCargasDisponiveisResponse"/>
+    </bindings>
+    <bindings scd="tns:finalizarTransmissaoRedespacho">
+      <class ref="br.com.bomtransporte.boaminuta.mili.FinalizarTransmissaoRedespacho"/>
+    </bindings>
+    <bindings scd="tns:finalizarTransmissaoRedespachoResponse">
+      <class ref="br.com.bomtransporte.boaminuta.mili.FinalizarTransmissaoRedespachoResponse"/>
+    </bindings>
+    <bindings scd="tns:finalizarTransmissao">
+      <class ref="br.com.bomtransporte.boaminuta.mili.FinalizarTransmissao"/>
+    </bindings>
+    <bindings scd="tns:finalizarTransmissaoResponse">
+      <class ref="br.com.bomtransporte.boaminuta.mili.FinalizarTransmissaoResponse"/>
+    </bindings>
+    <bindings scd="tns:receberCargaResumido">
+      <class ref="br.com.bomtransporte.boaminuta.mili.ReceberCargaResumido"/>
+    </bindings>
+    <bindings scd="tns:receberCargaResumidoResponse">
+      <class ref="br.com.bomtransporte.boaminuta.mili.ReceberCargaResumidoResponse"/>
+    </bindings>
+    <bindings scd="tns:receberCarga">
+      <class ref="br.com.bomtransporte.boaminuta.mili.ReceberCarga"/>
+    </bindings>
+    <bindings scd="tns:receberCargaResponse">
+      <class ref="br.com.bomtransporte.boaminuta.mili.ReceberCargaResponse"/>
+    </bindings>
+  </bindings>
+  <bindings scd="x-schema::tns" xmlns:tns="http://entities.carga.efrotas.mili.com.br">
+    <schemaBindings map="false">
+      <package name="br.com.bomtransporte.boaminuta.mili"/>
+    </schemaBindings>
+    <bindings scd="~tns:ArrayOfCarga">
+      <class ref="br.com.bomtransporte.boaminuta.mili.ArrayOfCarga"/>
+    </bindings>
+    <bindings scd="~tns:Carga">
+      <class ref="br.com.bomtransporte.boaminuta.mili.Carga"/>
+    </bindings>
+    <bindings scd="~tns:ArrayOfPedido">
+      <class ref="br.com.bomtransporte.boaminuta.mili.ArrayOfPedido"/>
+    </bindings>
+    <bindings scd="~tns:Pedido">
+      <class ref="br.com.bomtransporte.boaminuta.mili.Pedido"/>
+    </bindings>
+    <bindings scd="~tns:Cliente">
+      <class ref="br.com.bomtransporte.boaminuta.mili.Cliente"/>
+    </bindings>
+    <bindings scd="~tns:ArrayOfItemPedido">
+      <class ref="br.com.bomtransporte.boaminuta.mili.ArrayOfItemPedido"/>
+    </bindings>
+    <bindings scd="~tns:ItemPedido">
+      <class ref="br.com.bomtransporte.boaminuta.mili.ItemPedido"/>
+    </bindings>
+    <bindings scd="~tns:Produto">
+      <class ref="br.com.bomtransporte.boaminuta.mili.Produto"/>
+    </bindings>
+    <bindings scd="~tns:NotaFiscal">
+      <class ref="br.com.bomtransporte.boaminuta.mili.NotaFiscal"/>
+    </bindings>
+    <bindings scd="~tns:ArrayOfItem">
+      <class ref="br.com.bomtransporte.boaminuta.mili.ArrayOfItem"/>
+    </bindings>
+    <bindings scd="~tns:Item">
+      <class ref="br.com.bomtransporte.boaminuta.mili.Item"/>
+    </bindings>
+    <bindings scd="~tns:ArrayOfNotaFiscal">
+      <class ref="br.com.bomtransporte.boaminuta.mili.ArrayOfNotaFiscal"/>
+    </bindings>
+  </bindings>
+  <bindings scd="x-schema::tns" xmlns:tns="http://common.mili.com.br">
+    <schemaBindings map="false">
+      <package name="br.com.bomtransporte.boaminuta.mili"/>
+    </schemaBindings>
+    <bindings scd="~tns:AuthorizationException">
+      <class ref="br.com.bomtransporte.boaminuta.mili.AuthorizationException"/>
+    </bindings>
+  </bindings>
+  <bindings scd="x-schema::tns" xmlns:tns="http://entities.caminhao.efrotas.mili.com.br">
+    <schemaBindings map="false">
+      <package name="br.com.bomtransporte.boaminuta.mili"/>
+    </schemaBindings>
+    <bindings scd="~tns:Caminhao">
+      <class ref="br.com.bomtransporte.boaminuta.mili.Caminhao"/>
+    </bindings>
+  </bindings>
+  <bindings scd="x-schema::tns" xmlns:tns="http://entities.motorista.efrotas.mili.com.br">
+    <schemaBindings map="false">
+      <package name="br.com.bomtransporte.boaminuta.mili"/>
+    </schemaBindings>
+    <bindings scd="~tns:Motorista">
+      <class ref="br.com.bomtransporte.boaminuta.mili.Motorista"/>
+    </bindings>
+    <bindings scd="~tns:ArrayOfReferenciaMotorista">
+      <class ref="br.com.bomtransporte.boaminuta.mili.ArrayOfReferenciaMotorista"/>
+    </bindings>
+    <bindings scd="~tns:ReferenciaMotorista">
+      <class ref="br.com.bomtransporte.boaminuta.mili.ReferenciaMotorista"/>
+    </bindings>
+  </bindings>
+</bindings>
+

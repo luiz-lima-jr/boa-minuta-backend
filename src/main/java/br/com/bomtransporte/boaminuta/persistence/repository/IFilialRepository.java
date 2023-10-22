@@ -8,4 +8,7 @@ import java.util.List;
 
 public interface IFilialRepository extends JpaRepository<FilialEntity, Long> {
 
+    FilialEntity findByCodigoMili(Long codigoMili);
+
+    List<FilialEntity> findAllByIdIn(List<Long> ids);
 }

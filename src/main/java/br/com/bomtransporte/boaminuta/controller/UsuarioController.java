@@ -10,6 +10,7 @@ import br.com.bomtransporte.boaminuta.model.DadosSessaoModel;
 import br.com.bomtransporte.boaminuta.model.RegistroUsuarioModel;
 import br.com.bomtransporte.boaminuta.model.UsuarioModel;
 import br.com.bomtransporte.boaminuta.persistence.entity.FuncaoEntity;
+import br.com.bomtransporte.boaminuta.persistence.entity.PessoaTransporteEntity;
 import br.com.bomtransporte.boaminuta.persistence.entity.UsuarioEntity;
 import br.com.bomtransporte.boaminuta.service.UsuarioService;
 import jakarta.validation.Valid;
@@ -84,5 +85,10 @@ public class UsuarioController {
     @PutMapping("alterar-senha")
     public void alterarSenha(@RequestBody AlterarSenhaModel alterarSenhaModel) throws BoaMinutaBusinessException {
         usuarioService.alterarSenha(alterarSenhaModel);
+    }
+
+    @GetMapping("buscar-por-nome")
+    public ResponseEntity<List<UsuarioModel>> filtrarPorNome(@RequestParam String nome) {
+        return ResponseEntity.ok(usuarioService.filtrarPorNome(nome));
     }
 }

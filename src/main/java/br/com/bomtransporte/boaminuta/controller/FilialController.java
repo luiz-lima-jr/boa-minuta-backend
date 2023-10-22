@@ -2,8 +2,10 @@ package br.com.bomtransporte.boaminuta.controller;
 
 
 import br.com.bomtransporte.boaminuta.config.Constantes;
+import br.com.bomtransporte.boaminuta.model.FilialModel;
 import br.com.bomtransporte.boaminuta.persistence.entity.FilialEntity;
 import br.com.bomtransporte.boaminuta.service.FilialService;
+import br.com.bomtransporte.boaminuta.service.UsuarioService;
 import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +21,22 @@ public class FilialController {
     @Autowired
     private FilialService service;
 
+    @Autowired
+    private UsuarioService usuarioService;
+
     @GetMapping
     public ResponseEntity<List<FilialEntity> > getAll(){
         return ResponseEntity.ok(service.getAll());
+    }
+
+    @GetMapping("usuario")
+    public ResponseEntity<List<FilialModel> > getAllUsuario(){
+        return ResponseEntity.ok(service.getFiliaisUsuario());
+    }
+
+    @GetMapping("{idFilial}")
+    public ResponseEntity<FilialModel> getById(@PathVariable("idFilial") Long idFilial){
+        return ResponseEntity.ok(service.getModelById(idFilial));
     }
 
 

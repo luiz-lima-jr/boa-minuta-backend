@@ -9,4 +9,5 @@ import org.springframework.context.annotation.Configuration;
 @Data
 public class PropertyConfig {
     private String frontendUrl;
+    private String cargaService;
 }

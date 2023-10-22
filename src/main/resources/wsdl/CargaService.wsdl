@@ -1,0 +1,626 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://controller.carga.efrotas.mili.com.br" xmlns:ns2="http://entities.caminhao.efrotas.mili.com.br" xmlns:ns1="http://entities.carga.efrotas.mili.com.br" xmlns:ns4="http://common.mili.com.br" xmlns:ns3="http://entities.motorista.efrotas.mili.com.br" xmlns:soapenc12="http://www.w3.org/2003/05/soap-encoding" xmlns:tns="http://controller.carga.efrotas.mili.com.br" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap11="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc11="http://schemas.xmlsoap.org/soap/encoding/" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
+  <wsdl:types>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://controller.carga.efrotas.mili.com.br">
+<xsd:element name="consultarCargasDisponiveisRedespacho">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="in0" type="xsd:long"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in1" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="consultarCargasDisponiveisRedespachoResponse">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="out" nillable="true" type="ns1:ArrayOfCarga"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="AuthorizationException" type="ns4:AuthorizationException"/>
+<xsd:element name="receberCargaRedespacho">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="in0" type="xsd:long"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in1" nillable="true" type="xsd:string"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in2" type="xsd:long"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="receberCargaRedespachoResponse">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="out" nillable="true" type="ns1:Carga"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="finalizarTransmissaoDelete">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="in0" type="xsd:long"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in1" nillable="true" type="xsd:string"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in2" type="xsd:long"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in3" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="finalizarTransmissaoDeleteResponse">
+<xsd:complexType/>
+</xsd:element>
+<xsd:element name="consultarCargasDisponiveis">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="in0" type="xsd:long"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in1" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="consultarCargasDisponiveisResponse">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="out" nillable="true" type="ns1:ArrayOfCarga"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="finalizarTransmissaoRedespacho">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="in0" type="xsd:long"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in1" nillable="true" type="xsd:string"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in2" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="finalizarTransmissaoRedespachoResponse">
+<xsd:complexType/>
+</xsd:element>
+<xsd:element name="finalizarTransmissao">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="in0" type="xsd:long"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in1" nillable="true" type="xsd:string"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in2" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="finalizarTransmissaoResponse">
+<xsd:complexType/>
+</xsd:element>
+<xsd:element name="receberCargaResumido">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="in0" type="xsd:long"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in1" nillable="true" type="xsd:string"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in2" type="xsd:long"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="receberCargaResumidoResponse">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="out" nillable="true" type="ns1:Carga"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="receberCarga">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="in0" type="xsd:long"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in1" nillable="true" type="xsd:string"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in2" type="xsd:long"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="receberCargaResponse">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="out" nillable="true" type="ns1:Carga"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+</xsd:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://entities.carga.efrotas.mili.com.br">
+<xsd:complexType name="ArrayOfCarga">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="Carga" nillable="true" type="ns1:Carga"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="Carga">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="caminhao" nillable="true" type="ns2:Caminhao"/>
+<xsd:element minOccurs="0" name="clienteRetira" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="cnpjRedespacho" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="codIbge" type="xsd:int"/>
+<xsd:element minOccurs="0" name="codMotorista" type="xsd:long"/>
+<xsd:element minOccurs="0" name="codTransp" type="xsd:long"/>
+<xsd:element minOccurs="0" name="codTranspRedespacho" type="xsd:long"/>
+<xsd:element minOccurs="0" name="dataAlteracao" nillable="true" type="xsd:dateTime"/>
+<xsd:element minOccurs="0" name="dataInicioTransmissao" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="destino" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="dtCaminhaoPatio" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="dtFaturamento" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="dtFinalExpedicao" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="dtHrFaturamento" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="dtLiberacaoFaturamento" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="dtLiberacaoTransporte" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="dtLiberadoExpedicao" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="dtSaidaCaminhao" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="dtSolicitacaoExpedicao" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="eftCodigo" type="xsd:long"/>
+<xsd:element minOccurs="0" name="filial" type="xsd:int"/>
+<xsd:element minOccurs="0" name="freteFob" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="liberado" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="localCarregamento" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="motorista" nillable="true" type="ns3:Motorista"/>
+<xsd:element minOccurs="0" name="notas" nillable="true" type="ns1:ArrayOfNotaFiscal"/>
+<xsd:element minOccurs="0" name="nrCarga" type="xsd:long"/>
+<xsd:element minOccurs="0" name="observacao" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="observacaoCarga" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="operacao" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="pedidos" nillable="true" type="ns1:ArrayOfPedido"/>
+<xsd:element minOccurs="0" name="pesoBruto" type="xsd:double"/>
+<xsd:element minOccurs="0" name="portaEmbarque" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="qde" type="xsd:int"/>
+<xsd:element minOccurs="0" name="tipoCarga" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="totalEntrega" type="xsd:int"/>
+<xsd:element minOccurs="0" name="totalVolume" type="xsd:double"/>
+<xsd:element minOccurs="0" name="uf" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="vlrConhecimento" type="xsd:double"/>
+<xsd:element minOccurs="0" name="vlrFrete" type="xsd:double"/>
+<xsd:element minOccurs="0" name="vlrFreteCalculado" type="xsd:double"/>
+<xsd:element minOccurs="0" name="vlrFreteCarga" type="xsd:double"/>
+<xsd:element minOccurs="0" name="vlrFreteCubico" type="xsd:double"/>
+<xsd:element minOccurs="0" name="vlrMercadoria" type="xsd:double"/>
+<xsd:element minOccurs="0" name="vlrPedagio" type="xsd:double"/>
+<xsd:element minOccurs="0" name="vlrRedespacho" type="xsd:double"/>
+<xsd:element minOccurs="0" name="vlrTxEntrega" type="xsd:double"/>
+<xsd:element minOccurs="0" name="vlrTxEntregaCalc" type="xsd:double"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="ArrayOfPedido">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="Pedido" nillable="true" type="ns1:Pedido"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="Pedido">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="cliente" nillable="true" type="ns1:Cliente"/>
+<xsd:element minOccurs="0" name="codVendedor" type="xsd:int"/>
+<xsd:element minOccurs="0" name="itensPedidos" nillable="true" type="ns1:ArrayOfItemPedido"/>
+<xsd:element minOccurs="0" name="nf" nillable="true" type="ns1:NotaFiscal"/>
+<xsd:element minOccurs="0" name="nrCarga" type="xsd:long"/>
+<xsd:element minOccurs="0" name="nrPedido" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="tipoFrete" type="xsd:int"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="Cliente">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="bairro" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="cep" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="cidade" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="cnpj" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="codCliente" type="xsd:long"/>
+<xsd:element minOccurs="0" name="codIbge" type="xsd:int"/>
+<xsd:element minOccurs="0" name="emailNfe" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="endereco" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="ie" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="nomeFantasia" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="observacao" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="ordem" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="razaoSocial" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="telefone" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="uf" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="ArrayOfItemPedido">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="ItemPedido" nillable="true" type="ns1:ItemPedido"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="ItemPedido">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="aliqIPI" type="xsd:double"/>
+<xsd:element minOccurs="0" name="codFiscal" type="xsd:double"/>
+<xsd:element minOccurs="0" name="nrNFiscal" type="xsd:long"/>
+<xsd:element minOccurs="0" name="precoUnitario" type="xsd:double"/>
+<xsd:element minOccurs="0" name="produto" nillable="true" type="ns1:Produto"/>
+<xsd:element minOccurs="0" name="qtde" type="xsd:double"/>
+<xsd:element minOccurs="0" name="serie" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="status" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="vendaBonificacao" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="vlrContabil" type="xsd:double"/>
+<xsd:element minOccurs="0" name="vlrMercadoria" type="xsd:double"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="Produto">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="cEan" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="codArea" type="xsd:int"/>
+<xsd:element minOccurs="0" name="codLinha" type="xsd:int"/>
+<xsd:element minOccurs="0" name="codProduto" type="xsd:int"/>
+<xsd:element minOccurs="0" name="descricao" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="idSetor" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="pesoBruto" type="xsd:double"/>
+<xsd:element minOccurs="0" name="pesoLiquido" type="xsd:double"/>
+<xsd:element minOccurs="0" name="unidade" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="volume_m3" type="xsd:double"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="NotaFiscal">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="caminhao" nillable="true" type="ns2:Caminhao"/>
+<xsd:element minOccurs="0" name="chaveAcesso" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="cliente" nillable="true" type="ns1:Cliente"/>
+<xsd:element minOccurs="0" name="dataInicioTransmissao" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="dtAlteracao" nillable="true" type="xsd:dateTime"/>
+<xsd:element minOccurs="0" name="dtEmissao" nillable="true" type="xsd:dateTime"/>
+<xsd:element minOccurs="0" name="dtSaida" nillable="true" type="xsd:dateTime"/>
+<xsd:element minOccurs="0" name="itens" nillable="true" type="ns1:ArrayOfItem"/>
+<xsd:element minOccurs="0" name="nrNFiscal" type="xsd:long"/>
+<xsd:element minOccurs="0" name="operacao" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="origemDados" type="xsd:int"/>
+<xsd:element minOccurs="0" name="serie" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="status" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="tabela" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="ArrayOfItem">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="Item" nillable="true" type="ns1:Item"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="Item">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="aliqIPI" type="xsd:double"/>
+<xsd:element minOccurs="0" name="codFiscal" type="xsd:double"/>
+<xsd:element minOccurs="0" name="nrNFiscal" type="xsd:long"/>
+<xsd:element minOccurs="0" name="precoUnitario" type="xsd:double"/>
+<xsd:element minOccurs="0" name="produto" nillable="true" type="ns1:Produto"/>
+<xsd:element minOccurs="0" name="qtde" type="xsd:double"/>
+<xsd:element minOccurs="0" name="serie" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="status" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="tabela" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="vendaBonificacao" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="vlrContabil" type="xsd:double"/>
+<xsd:element minOccurs="0" name="vlrMercadoria" type="xsd:double"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="ArrayOfNotaFiscal">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="NotaFiscal" nillable="true" type="ns1:NotaFiscal"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://entities.caminhao.efrotas.mili.com.br">
+<xsd:complexType name="Caminhao">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="altura1M" nillable="true" type="xsd:double"/>
+<xsd:element minOccurs="0" name="altura2M" nillable="true" type="xsd:double"/>
+<xsd:element minOccurs="0" name="ano" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="aparenciaCabine" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="aparenciaExtCarroceria" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="aparenciaGeralVeiculo" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="aparenciaIntCarroceria" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="aparenciaLimpeza" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="ativo" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="chassi" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="cnht" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="codCaminhao" type="xsd:long"/>
+<xsd:element minOccurs="0" name="codTransp" type="xsd:long"/>
+<xsd:element minOccurs="0" name="codigoANTT" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="comprimento1M" nillable="true" type="xsd:double"/>
+<xsd:element minOccurs="0" name="comprimento2M" nillable="true" type="xsd:double"/>
+<xsd:element minOccurs="0" name="contaContabil" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="cor" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="cpf" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="dataAlteracao" nillable="true" type="xsd:dateTime"/>
+<xsd:element minOccurs="0" name="dataCadastro" nillable="true" type="xsd:dateTime"/>
+<xsd:element minOccurs="0" name="dataMedicao" nillable="true" type="xsd:dateTime"/>
+<xsd:element minOccurs="0" name="eftCodigo" type="xsd:long"/>
+<xsd:element minOccurs="0" name="endereco" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="entradaBloqueada" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="largura1M" nillable="true" type="xsd:double"/>
+<xsd:element minOccurs="0" name="largura2M" nillable="true" type="xsd:double"/>
+<xsd:element minOccurs="0" name="marca" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="motorista" nillable="true" type="ns3:Motorista"/>
+<xsd:element minOccurs="0" name="municipio" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="numCartaoPedagio" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="numeroEixo" nillable="true" type="xsd:int"/>
+<xsd:element minOccurs="0" name="observacao" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="operacao" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="peso" nillable="true" type="xsd:double"/>
+<xsd:element minOccurs="0" name="placa" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="placaCarreta" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="proprietario" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="qtMaxCarga" nillable="true" type="xsd:double"/>
+<xsd:element minOccurs="0" name="renavam" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="rg" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="status" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="telefone" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="tipo" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="tipoCarroceria" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="ufPlaca" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://entities.motorista.efrotas.mili.com.br">
+<xsd:complexType name="Motorista">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="aparecencia" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="ativo" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="bairro" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="celular" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="cep" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="cidade" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="cnh" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="codAgencia" type="xsd:int"/>
+<xsd:element minOccurs="0" name="codBanco" type="xsd:int"/>
+<xsd:element minOccurs="0" name="cpf" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="cpfTitularConta" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="dataCadastro" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="digitoCC" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="digitoCodAgencia" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="dtNascimento" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="educacao" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="endereco" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="id" nillable="true" type="xsd:long"/>
+<xsd:element minOccurs="0" name="nomeCompleto" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="nomeTitularConta" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="numeroCC" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="obs" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="operacao" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="referencias" nillable="true" type="ns3:ArrayOfReferenciaMotorista"/>
+<xsd:element minOccurs="0" name="rg" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="telefone" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="uf" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="vestuario" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="ArrayOfReferenciaMotorista">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="ReferenciaMotorista" nillable="true" type="ns3:ReferenciaMotorista"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="ReferenciaMotorista">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="codMotorista" type="xsd:int"/>
+<xsd:element minOccurs="0" name="data" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="nome" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="observacao" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="telefone" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://common.mili.com.br">
+<xsd:complexType name="AuthorizationException"/>
+</xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="receberCargaResponse">
+    <wsdl:part name="parameters" element="tns:receberCargaResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="consultarCargasDisponiveisRedespachoResponse">
+    <wsdl:part name="parameters" element="tns:consultarCargasDisponiveisRedespachoResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="finalizarTransmissaoDeleteRequest">
+    <wsdl:part name="parameters" element="tns:finalizarTransmissaoDelete">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="finalizarTransmissaoResponse">
+    <wsdl:part name="parameters" element="tns:finalizarTransmissaoResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="receberCargaResumidoRequest">
+    <wsdl:part name="parameters" element="tns:receberCargaResumido">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="finalizarTransmissaoDeleteResponse">
+    <wsdl:part name="parameters" element="tns:finalizarTransmissaoDeleteResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="finalizarTransmissaoRedespachoRequest">
+    <wsdl:part name="parameters" element="tns:finalizarTransmissaoRedespacho">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="receberCargaResumidoResponse">
+    <wsdl:part name="parameters" element="tns:receberCargaResumidoResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="AuthorizationException">
+    <wsdl:part name="AuthorizationException" element="tns:AuthorizationException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="consultarCargasDisponiveisRequest">
+    <wsdl:part name="parameters" element="tns:consultarCargasDisponiveis">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="receberCargaRequest">
+    <wsdl:part name="parameters" element="tns:receberCarga">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="receberCargaRedespachoRequest">
+    <wsdl:part name="parameters" element="tns:receberCargaRedespacho">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="finalizarTransmissaoRequest">
+    <wsdl:part name="parameters" element="tns:finalizarTransmissao">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="consultarCargasDisponiveisResponse">
+    <wsdl:part name="parameters" element="tns:consultarCargasDisponiveisResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="finalizarTransmissaoRedespachoResponse">
+    <wsdl:part name="parameters" element="tns:finalizarTransmissaoRedespachoResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="consultarCargasDisponiveisRedespachoRequest">
+    <wsdl:part name="parameters" element="tns:consultarCargasDisponiveisRedespacho">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="receberCargaRedespachoResponse">
+    <wsdl:part name="parameters" element="tns:receberCargaRedespachoResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="CargaServicePortType">
+    <wsdl:operation name="consultarCargasDisponiveisRedespacho">
+      <wsdl:input name="consultarCargasDisponiveisRedespachoRequest" message="tns:consultarCargasDisponiveisRedespachoRequest">
+    </wsdl:input>
+      <wsdl:output name="consultarCargasDisponiveisRedespachoResponse" message="tns:consultarCargasDisponiveisRedespachoResponse">
+    </wsdl:output>
+      <wsdl:fault name="AuthorizationException" message="tns:AuthorizationException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="receberCargaRedespacho">
+      <wsdl:input name="receberCargaRedespachoRequest" message="tns:receberCargaRedespachoRequest">
+    </wsdl:input>
+      <wsdl:output name="receberCargaRedespachoResponse" message="tns:receberCargaRedespachoResponse">
+    </wsdl:output>
+      <wsdl:fault name="AuthorizationException" message="tns:AuthorizationException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="finalizarTransmissaoDelete">
+      <wsdl:input name="finalizarTransmissaoDeleteRequest" message="tns:finalizarTransmissaoDeleteRequest">
+    </wsdl:input>
+      <wsdl:output name="finalizarTransmissaoDeleteResponse" message="tns:finalizarTransmissaoDeleteResponse">
+    </wsdl:output>
+      <wsdl:fault name="AuthorizationException" message="tns:AuthorizationException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="consultarCargasDisponiveis">
+      <wsdl:input name="consultarCargasDisponiveisRequest" message="tns:consultarCargasDisponiveisRequest">
+    </wsdl:input>
+      <wsdl:output name="consultarCargasDisponiveisResponse" message="tns:consultarCargasDisponiveisResponse">
+    </wsdl:output>
+      <wsdl:fault name="AuthorizationException" message="tns:AuthorizationException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="finalizarTransmissaoRedespacho">
+      <wsdl:input name="finalizarTransmissaoRedespachoRequest" message="tns:finalizarTransmissaoRedespachoRequest">
+    </wsdl:input>
+      <wsdl:output name="finalizarTransmissaoRedespachoResponse" message="tns:finalizarTransmissaoRedespachoResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="finalizarTransmissao">
+      <wsdl:input name="finalizarTransmissaoRequest" message="tns:finalizarTransmissaoRequest">
+    </wsdl:input>
+      <wsdl:output name="finalizarTransmissaoResponse" message="tns:finalizarTransmissaoResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="receberCargaResumido">
+      <wsdl:input name="receberCargaResumidoRequest" message="tns:receberCargaResumidoRequest">
+    </wsdl:input>
+      <wsdl:output name="receberCargaResumidoResponse" message="tns:receberCargaResumidoResponse">
+    </wsdl:output>
+      <wsdl:fault name="AuthorizationException" message="tns:AuthorizationException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="receberCarga">
+      <wsdl:input name="receberCargaRequest" message="tns:receberCargaRequest">
+    </wsdl:input>
+      <wsdl:output name="receberCargaResponse" message="tns:receberCargaResponse">
+    </wsdl:output>
+      <wsdl:fault name="AuthorizationException" message="tns:AuthorizationException">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CargaServiceHttpBinding" type="tns:CargaServicePortType">
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="consultarCargasDisponiveisRedespacho">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="consultarCargasDisponiveisRedespachoRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="consultarCargasDisponiveisRedespachoResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="AuthorizationException">
+        <wsdlsoap:fault name="AuthorizationException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="receberCargaRedespacho">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="receberCargaRedespachoRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="receberCargaRedespachoResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="AuthorizationException">
+        <wsdlsoap:fault name="AuthorizationException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="finalizarTransmissaoDelete">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="finalizarTransmissaoDeleteRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="finalizarTransmissaoDeleteResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="AuthorizationException">
+        <wsdlsoap:fault name="AuthorizationException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="consultarCargasDisponiveis">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="consultarCargasDisponiveisRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="consultarCargasDisponiveisResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="AuthorizationException">
+        <wsdlsoap:fault name="AuthorizationException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="finalizarTransmissaoRedespacho">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="finalizarTransmissaoRedespachoRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="finalizarTransmissaoRedespachoResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="finalizarTransmissao">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="finalizarTransmissaoRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="finalizarTransmissaoResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="receberCargaResumido">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="receberCargaResumidoRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="receberCargaResumidoResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="AuthorizationException">
+        <wsdlsoap:fault name="AuthorizationException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="receberCarga">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="receberCargaRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="receberCargaResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="AuthorizationException">
+        <wsdlsoap:fault name="AuthorizationException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CargaService">
+    <wsdl:port name="CargaServiceHttpPort" binding="tns:CargaServiceHttpBinding">
+      <wsdlsoap:address location="https://web2.mili.com.br/eFrotasws/miliws/CargaService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

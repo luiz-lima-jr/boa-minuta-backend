@@ -17,13 +17,13 @@ public class UsuarioFilialEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "usuario_id")
     @NotNull
     private UsuarioEntity usuario;
 
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "filial_id")
     @NotNull
     private FilialEntity filial;
