@@ -44,7 +44,6 @@ public class CargaModel {
     private boolean paletizado;
     private FilialModel filial;
     private String observacoes;
-    private MunicipioEntity destino;
     private Double pedagio;
     private Double complementoCalculo;
     private Double descontos;

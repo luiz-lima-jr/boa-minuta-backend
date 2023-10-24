@@ -90,6 +90,7 @@ public class CargaService {
 
         filiais = filiais == null ? filialService.getFiliaisUsuarioEntity() : filialService.getTodasByIds(filiais.stream().map(f -> f.getId()).collect(Collectors.toList()));
         var cargas = new ArrayList<CargaModel>();
+
         for(var filial : filiais) {
             var cargaModel = consultarCargasDisponiveisMili(cargasExistentes.stream().map(c -> c.getNumeroCarga()).collect(Collectors.toList()), filial);
             cargas.addAll(cargaModel);
@@ -115,9 +116,15 @@ public class CargaService {
     }
 
     public CargaModel buscarCarga(Long nroCarga, Long idFilial) throws Exception {
-        var frete = freteRepository.findByNumeroCarga(nroCarga);
+        var frete = freteRepository.findByNumeroCargaAndFilialId(nroCarga, idFilial);
         var filial = filialService.getById(idFilial);
-        return frete != null ? cargaAdapter.freteEntityToModel(frete) : receberCargaDetalhe(nroCarga, filial.getCodigoMili(), filial.getSenha(), true);
+        var cargaModel = frete != null ? cargaAdapter.freteEntityToModel(frete) : receberCargaDetalhe(nroCarga, filial.getCodigoMili(), filial.getSenha(), true);
+        var usuarioOp = usuarioService.getUserDetails();
+        var respFatModel = UsuarioModel.builder().nome(usuarioOp.getNome()).id(usuarioOp.getId()).build();
+
+        cargaModel.setResponsavelOperacional(respFatModel);
+
+        return cargaModel;
     }
 
     public CargaModel receberCargaDetalhe(Long nroCarga, Long codigoMili, String senha, boolean isArquivoObrigatorio) throws Exception {
@@ -134,18 +141,12 @@ public class CargaService {
                 return cargaModel;
             }
         }
-        var cargaModel = cargaAdapter.receberCargaDetalheResponseToCargaModel(cargaMili, filialModel);
-        var usuario = usuarioService.getUserDetails();
-        var usuarioOperacional = UsuarioModel.builder().nome(usuario.getNome()).id(usuario.getId()).build();
-        cargaModel.setResponsavelOperacional(usuarioOperacional);
-        return cargaModel;
+        return cargaAdapter.receberCargaDetalheResponseToCargaModel(cargaMili, filialModel);
     }
 
     @Transactional
     public void salvar(FreteEntity frete) throws Exception {
         if(frete.getId() == null) {
-           // var usuarioOperacional = usuarioService.getById(frete.getResponsavelOperacional().getId());
-           // frete.setResponsavelOperacional(usuarioOperacional);
             criarNovoFrete(frete);
         } else {
             atualizar(frete);
@@ -158,6 +159,15 @@ public class CargaService {
 
         var pedidos = montarPedidos(frete);
         frete.setPedidos(pedidos);
+
+        var usuarioOperacional = usuarioService.getById(usuarioService.getUserDetails().getId());
+        frete.setResponsavelOperacional(usuarioOperacional);
+
+        if(frete.isFaturado()){
+            frete.setResponsavelFaturamento(usuarioService.getUserDetails());
+            frete.setFaturado(true);
+        }
+
         freteRepository.save(frete);
     }
 
@@ -187,24 +197,27 @@ public class CargaService {
         }
     }
     private void atualizar(FreteEntity frete) throws BoaMinutaBusinessException {
-        if(usuarioService.getUserDetails().isFaturista()){
-            salvarFaturista(frete);
-        } else {
-            var freteAnterior = freteRepository.findById(frete.getId()).get();
-            if(freteAnterior.isFaturado() && !usuarioService.getUserDetails().isAdministrador()){
-                throw new BoaMinutaBusinessException("Não é possível alterar o frete");
-            }
-            buscarEntidades(frete);
+
+        salvarFaturista(frete);
+        buscarEntidades(frete);
+
+        if(usuarioService.getUserDetails().isFaturista()) {
             freteRepository.save(frete);
+            return;
         }
+
+        var freteAnterior = freteRepository.findById(frete.getId()).get();
+        if(freteAnterior.isFaturado() && !usuarioService.getUserDetails().isAdministrador()){
+            throw new BoaMinutaBusinessException("Não é possível alterar o frete");
+        }
+        freteRepository.save(frete);
     }
 
     public void salvarFaturista(FreteEntity frete){
         var freteAnterior = freteRepository.findById(frete.getId()).get();
-        if(!freteAnterior.isFaturado() && frete.isFaturado()){
-            freteAnterior.setResponsavelFaturamento(usuarioService.getUserDetails());
-            freteAnterior.setFaturado(true);
-            freteRepository.save(freteAnterior);
+        if( !freteAnterior.isFaturado() && frete.isFaturado()){
+            frete.setResponsavelFaturamento(usuarioService.getById(usuarioService.getUserDetails().getId()));
+            frete.setFaturado(true);
         }
     }
 

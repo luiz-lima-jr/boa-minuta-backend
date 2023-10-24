@@ -2,6 +2,7 @@ package br.com.bomtransporte.boaminuta.persistence.entity;
 
 import br.com.bomtransporte.boaminuta.enuns.FobCifEnum;
 import br.com.bomtransporte.boaminuta.enuns.PagamentoPedagioEnum;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -115,10 +116,13 @@ public class FreteEntity {
 
     private boolean paletizado;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dataLimiteCarregamento;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dataLiberacaoFaturamento;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dataImpressaoMinuta;
 
     @ManyToOne(cascade = CascadeType.ALL)

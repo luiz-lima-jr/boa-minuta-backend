@@ -9,6 +9,7 @@ import java.util.List;
 public interface IFreteRepository extends JpaRepository<FreteEntity, Long> {
 
     List<FreteEntity> findAllByFilialIdIn(List<Long> numeros);
-    FreteEntity findByNumeroCarga(Long numeroCarga);
+    FreteEntity findByNumeroCargaAndFilialId(Long numeroCarga, Long idFilial);
+
 
 }

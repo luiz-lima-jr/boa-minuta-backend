@@ -172,7 +172,7 @@ public class CargaAdapter {
         var clientes = frete.getPedidos().stream().map(f -> f.getCliente()).collect(Collectors.toSet());
         cargaModel.setClientes(clientes);
 
-        cargaModel.setDestino(frete.getMunicipioDestino());
+        cargaModel.setMunicipioDestino(frete.getMunicipioDestino());
     }
 
     private void setCalculos(CargaModel cargaModel, FreteEntity frete){
