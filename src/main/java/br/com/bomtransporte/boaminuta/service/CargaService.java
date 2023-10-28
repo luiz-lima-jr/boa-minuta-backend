@@ -100,7 +100,7 @@ public class CargaService {
     }
 
     public List<CargaModel> consultarCargasDisponiveisMili(List<Long> numerosCargasExistentes, FilialEntity filial) throws Exception {
-        var request = new ConsultarCargasDisponiveis(filial.getCodigoMili(), filial.getSenha());
+        //var request = new ConsultarCargasDisponiveis(filial.getCodigoMili(), filial.getSenha());
         var cargas = articleClient.consultarCargasDisponiveis(filial.getCodigoMili());
         var cargasModel = new ArrayList<CargaModel>();
         if(cargas == null){
