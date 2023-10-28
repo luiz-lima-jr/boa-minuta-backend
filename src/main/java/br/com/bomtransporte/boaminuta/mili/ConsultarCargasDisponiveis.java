@@ -43,9 +43,17 @@ import lombok.NoArgsConstructor;
     "in1"
 })
 @XmlRootElement(name = "consultarCargasDisponiveis", namespace = "http://controller.carga.efrotas.mili.com.br")
-@AllArgsConstructor
-@NoArgsConstructor
 public class ConsultarCargasDisponiveis {
+
+    public ConsultarCargasDisponiveis(){
+
+    }
+
+    public ConsultarCargasDisponiveis(Long in0, String in1){
+        this.in0 = in0;
+        this.in1 = in1;
+
+    }
 
     @XmlElement(namespace = "http://controller.carga.efrotas.mili.com.br")
     protected long in0;

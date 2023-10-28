@@ -101,7 +101,7 @@ public class CargaService {
 
     public List<CargaModel> consultarCargasDisponiveisMili(List<Long> numerosCargasExistentes, FilialEntity filial) throws Exception {
         var request = new ConsultarCargasDisponiveis(filial.getCodigoMili(), filial.getSenha());
-        var cargas = articleClient.consultarCargasDisponiveis(request);
+        var cargas = articleClient.consultarCargasDisponiveis(filial.getCodigoMili());
         var cargasModel = new ArrayList<CargaModel>();
         if(cargas == null){
             return cargasModel;
@@ -128,8 +128,8 @@ public class CargaService {
     }
 
     public CargaModel receberCargaDetalhe(Long nroCarga, Long codigoMili, String senha, boolean isArquivoObrigatorio) throws Exception {
-        var request = new ReceberCarga(codigoMili, senha, nroCarga);
-        var cargaMili = articleClient.receberCarga(request);
+       // var request = new ReceberCarga(codigoMili, senha, nroCarga);
+        var cargaMili = articleClient.receberCarga(nroCarga, codigoMili);
         var filialModel = filialService.getModelByCodigoMili(codigoMili);
         if(cargaMili == null) {
             if(isArquivoObrigatorio) {

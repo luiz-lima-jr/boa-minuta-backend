@@ -52,7 +52,7 @@ public class ReceberCarga {
 
     }
 
-    public ReceberCarga(long in0, String in1, long in2){
+    public ReceberCarga(Long in0, String in1, Long in2){
         this.in0 = in0;
         this.in1 = in1;
         this.in2 = in2;

@@ -26,7 +26,7 @@ public class CargaMiliClient extends WebServiceGatewaySupport {
     @Autowired
     private IDetalheCargaArquivoRepository detalheCargaArquivoRepository;
 
-    public ConsultarCargasDisponiveisResponse consultarCargasDisponiveis(ConsultarCargasDisponiveis request) throws Exception {
+    public ConsultarCargasDisponiveisResponse consultarCargasDisponiveis(Long codigoMili) throws Exception {
         //return (ConsultarCargasDisponiveisResponse) getWebServiceTemplate().marshalSendAndReceive(request);
 
         var path = System.getProperty("user.dir");
@@ -34,7 +34,7 @@ public class CargaMiliClient extends WebServiceGatewaySupport {
         JAXBContext jaxbContext = JAXBContext.newInstance(ConsultarCargasDisponiveisResponse.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
         var res = this.getClass().getResource("/wsdl/consultarCargasDisponiveis.xml");
-        var wsdl = consultarCargasDisponiveisArquivoRepository.findTopByCodigoFilialOrderByIdDesc(request.getIn0());
+        var wsdl = consultarCargasDisponiveisArquivoRepository.findTopByCodigoFilialOrderByIdDesc(codigoMili);
         if(wsdl == null){
             return null;
         }
@@ -49,17 +49,17 @@ public class CargaMiliClient extends WebServiceGatewaySupport {
         return  carga;
     }
 
-    public ReceberCargaResponse receberCarga(ReceberCarga request) throws Exception {
+    public ReceberCargaResponse receberCarga(Long nroCarga, Long codigoMili) throws Exception {
         try {
             var path = System.getProperty("user.dir");
             var path2 = System.getProperty("project.basedir");
             JAXBContext jaxbContext = JAXBContext.newInstance(ReceberCargaResponse.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            var wsdl = detalheCargaArquivoRepository.findTopByCodigoFilialAndCodigoCargaOrderByIdDesc(request.getIn0(), request.getIn2());
+            var wsdl = detalheCargaArquivoRepository.findTopByCodigoFilialAndCodigoCargaOrderByIdDesc(nroCarga, codigoMili);
             if(wsdl == null){
                 return null;
             }
-            var res = this.getClass().getResource("/wsdl/carga-completa"+request.getIn2()+".xml");
+            var res = this.getClass().getResource("/wsdl/carga-completa"+codigoMili+".xml");
             var file = new File("carga-completa-"+wsdl.getCodigoFilial()+".xml");
             file.createNewFile();
             try(PrintWriter out = new PrintWriter(file)) {
