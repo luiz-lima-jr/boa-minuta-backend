@@ -7,7 +7,6 @@ import br.com.bomtransporte.boaminuta.mili.*;
 import br.com.bomtransporte.boaminuta.model.*;
 import br.com.bomtransporte.boaminuta.persistence.entity.FilialEntity;
 import br.com.bomtransporte.boaminuta.persistence.entity.FreteEntity;
-import br.com.bomtransporte.boaminuta.persistence.entity.ItemPedidoEntity;
 import br.com.bomtransporte.boaminuta.persistence.entity.PedidoEntity;
 import br.com.bomtransporte.boaminuta.persistence.repository.*;
 import jakarta.transaction.Transactional;
@@ -55,7 +54,10 @@ public class CargaService {
         var filiais = filtro.getFiliais();
         filiais = filiais == null || filiais.isEmpty() ? filialService.getFiliaisUsuarioEntity() : filiais;
         var fretes = freteRepository.findAllByFilialIdIn(filiais.stream().map(f ->f.getId()).collect(Collectors.toList()));
-        var cargas = fretes.stream().map(f -> cargaAdapter.freteEntityToModel(f)).collect(Collectors.toList());
+        List<CargaModel> cargas = new ArrayList<>();
+        for(var frete : fretes){
+            cargas.add(cargaAdapter.freteEntityToModel(frete));
+        }
 
         var cargasDisponiveis = consultarCargasDisponiveisMili(cargas, filiais);
         cargas.addAll(cargasDisponiveis);
@@ -107,7 +109,7 @@ public class CargaService {
             return cargasModel;
         }
         for(var carga : cargas.getOut().getCarga()) {
-            var cargaDetalhe = receberCargaDetalhe(carga.getNrCarga(), filial.getCodigoMili(), filial.getSenha(), false);
+            var cargaDetalhe = buscarDetalheCarga(carga.getNrCarga(), filial.getCodigoMili(), filial.getSenha(), false);
             if(!numerosCargasExistentes.contains(cargaDetalhe.getNumeroCarga())){
                 cargasModel.add(cargaDetalhe);
             }
@@ -118,7 +120,7 @@ public class CargaService {
     public CargaModel buscarCarga(Long nroCarga, Long idFilial) throws Exception {
         var frete = freteRepository.findByNumeroCargaAndFilialId(nroCarga, idFilial);
         var filial = filialService.getById(idFilial);
-        var cargaModel = frete != null ? cargaAdapter.freteEntityToModel(frete) : receberCargaDetalhe(nroCarga, filial.getCodigoMili(), filial.getSenha(), true);
+        var cargaModel = frete != null ? cargaAdapter.freteEntityToModel(frete) : buscarDetalheCarga(nroCarga, filial.getCodigoMili(), filial.getSenha(), true);
         var usuarioOp = usuarioService.getUserDetails();
         var respFatModel = UsuarioModel.builder().nome(usuarioOp.getNome()).id(usuarioOp.getId()).build();
 
@@ -127,7 +129,7 @@ public class CargaService {
         return cargaModel;
     }
 
-    public CargaModel receberCargaDetalhe(Long nroCarga, Long codigoMili, String senha, boolean isArquivoObrigatorio) throws Exception {
+    public CargaModel buscarDetalheCarga(Long nroCarga, Long codigoMili, String senha, boolean isArquivoObrigatorio) throws Exception {
        // var request = new ReceberCarga(codigoMili, senha, nroCarga);
         var cargaMili = articleClient.receberCarga(nroCarga, codigoMili);
         var filialModel = filialService.getModelByCodigoMili(codigoMili);

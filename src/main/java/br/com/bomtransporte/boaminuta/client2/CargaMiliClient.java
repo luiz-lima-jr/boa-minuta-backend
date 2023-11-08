@@ -55,17 +55,17 @@ public class CargaMiliClient extends WebServiceGatewaySupport {
             var path2 = System.getProperty("project.basedir");
             JAXBContext jaxbContext = JAXBContext.newInstance(ReceberCargaResponse.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            var wsdl = detalheCargaArquivoRepository.findTopByCodigoFilialAndCodigoCargaOrderByIdDesc(nroCarga, codigoMili);
+            var wsdl = detalheCargaArquivoRepository.findTopByCodigoFilialAndCodigoCargaOrderByIdDesc(codigoMili, nroCarga);
             if(wsdl == null){
                 return null;
             }
-            var res = this.getClass().getResource("/wsdl/carga-completa"+codigoMili+".xml");
-            var file = new File("carga-completa-"+wsdl.getCodigoFilial()+".xml");
+           // var res = this.getClass().getResource("/wsdl/carga-completa"+codigoMili+".xml");
+            var file = new File("carga-completa-"+wsdl.getCodigoFilial()+"-"+nroCarga+".xml");
             file.createNewFile();
             try(PrintWriter out = new PrintWriter(file)) {
                 out.println(wsdl.getArquivo());
             }
-            var carga =  (ReceberCargaResponse) jaxbUnmarshaller.unmarshal(new File(res.getFile()));
+            var carga =  (ReceberCargaResponse) jaxbUnmarshaller.unmarshal(file);
             file.delete();
             return carga;
         } catch (Exception e){

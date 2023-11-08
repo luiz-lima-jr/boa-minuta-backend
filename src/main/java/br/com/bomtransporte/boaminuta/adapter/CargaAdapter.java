@@ -8,8 +8,7 @@ import br.com.bomtransporte.boaminuta.mili.ReceberCargaResponse;
 import br.com.bomtransporte.boaminuta.model.CargaModel;
 import br.com.bomtransporte.boaminuta.model.FilialModel;
 import br.com.bomtransporte.boaminuta.model.UsuarioModel;
-import br.com.bomtransporte.boaminuta.persistence.entity.ClienteEntity;
-import br.com.bomtransporte.boaminuta.persistence.entity.FreteEntity;
+import br.com.bomtransporte.boaminuta.persistence.entity.*;
 import br.com.bomtransporte.boaminuta.persistence.repository.IClienteRepository;
 import br.com.bomtransporte.boaminuta.persistence.repository.IMunicipioRepository;
 import br.com.bomtransporte.boaminuta.service.AliquotaService;
@@ -80,6 +79,8 @@ public class CargaAdapter {
     public CargaModel receberCargaDetalheResponseToCargaModel(ReceberCargaResponse cargaResponse, FilialModel filial) throws AliquotaException {
         var cargaModel = new CargaModel();
         var cargaOut = cargaResponse.getOut();
+        var municipioDestino = municipioRepository.findByCodigoIbge(cargaOut.getCodIbge().longValue());
+        var filialOrigem = filialService.getByCodigoMili(Long.parseLong(cargaOut.getLocalCarregamento().getValue()));
 
         cargaModel.setNumeroCarga(cargaOut.getNrCarga());
         cargaModel.setPlaca(cargaOut.getCaminhao().getValue().getPlaca().getValue());
@@ -88,29 +89,32 @@ public class CargaAdapter {
         cargaModel.setComplementoCalculo(cargaOut.getVlrRedespacho());
 
         cargaModel.setObservacoes(cargaOut.getObservacao().getValue());
-
+        setAliquotasCargaModel(cargaModel, filialOrigem, municipioDestino.getEstado());
         setClientesVolumes(cargaOut, cargaModel);
         setDatas(cargaOut, cargaModel);
 
         //cargaModel.setFobCif()/;
 
-        cargaModel.setAliquotaIss(aliquotaService.buscarValorAliquotaFilial(2L, TipoAliquotaEnum.ISS.getId()));
-        cargaModel.setAliquotaPisCofins(aliquotaService.buscarValorAliquotaOrigemDestino(1L, 2L, TipoAliquotaEnum.PIS_COFINS.getId()));
-        cargaModel.setAliquotaCustos(aliquotaService.buscarValorAliquotaOrigemDestino(1L, 2L, TipoAliquotaEnum.CUSTOS.getId()));
-        cargaModel.setAliquotaIrcs(aliquotaService.buscarValorAliquotaOrigemDestino(1L, 2L, TipoAliquotaEnum.IRRF.getId()));
-        cargaModel.setAliquotaIcms(aliquotaService.buscarValorAliquotaOrigemDestino(1L, 2L, TipoAliquotaEnum.ICMS.getId()));
         cargaModel.setFilial(filial);
 
         cargaModel.setObservacoes(cargaOut.getObservacao().getValue());
 
-        var municipioDestino = municipioRepository.findByCodigoIbge(cargaOut.getCodIbge().longValue());
+
         cargaModel.setMunicipioDestino(municipioDestino);
 
-        var filialEntity = filialService.getByCodigoMili(Long.parseLong(cargaOut.getLocalCarregamento().getValue()));
 
-        cargaModel.setMunicipioOrigem(filialEntity);
+        cargaModel.setMunicipioOrigem(filialOrigem);
 
         return cargaModel;
+    }
+
+    private void setAliquotasCargaModel(CargaModel cargaModel, FilialEntity filialOrigem, EstadoEntity estadoDestino) throws AliquotaException {
+
+        cargaModel.setAliquotaIss(aliquotaService.buscarValorAliquotaFilial(filialOrigem.getId(), TipoAliquotaEnum.ISS.getId()));
+        cargaModel.setAliquotaPisCofins(aliquotaService.buscarValorAliquotaOrigemDestino(filialOrigem, estadoDestino, TipoAliquotaEnum.PIS_COFINS.getId()));
+        cargaModel.setAliquotaCustos(aliquotaService.buscarValorAliquotaOrigemDestino(filialOrigem, estadoDestino, TipoAliquotaEnum.CUSTOS.getId()));
+        cargaModel.setAliquotaIrcs(aliquotaService.buscarValorAliquotaOrigemDestino(filialOrigem, estadoDestino, TipoAliquotaEnum.IRRF.getId()));
+        cargaModel.setAliquotaIcms(aliquotaService.buscarValorAliquotaOrigemDestino(filialOrigem, estadoDestino, TipoAliquotaEnum.ICMS.getId()));
     }
 
     private void setDatas(Carga cargaOut, CargaModel cargaModel){
@@ -127,7 +131,7 @@ public class CargaAdapter {
         }
     }
 
-    public CargaModel freteEntityToModel(FreteEntity frete){
+    public CargaModel freteEntityToModel(FreteEntity frete) throws AliquotaException {
         var cargaModel = new CargaModel();
         cargaModel.setId(frete.getId());
 
@@ -140,6 +144,7 @@ public class CargaAdapter {
         cargaModel.setFilial(new FilialModel(frete.getFilial().getId(), frete.getFilial().getNome()));
         cargaModel.setMunicipioDestino(frete.getMunicipioDestino());
         cargaModel.setMunicipioOrigem(frete.getMunicipioOrigem());
+        setAliquotasCargaModel(cargaModel, frete.getFilial(), frete.getMunicipioDestino().getEstado());
 
         cargaModel.setCaminhao(frete.getCaminhao());
 

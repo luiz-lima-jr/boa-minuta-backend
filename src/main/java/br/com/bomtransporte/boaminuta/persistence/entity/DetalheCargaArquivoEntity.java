@@ -1,9 +1,6 @@
 package br.com.bomtransporte.boaminuta.persistence.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -16,6 +13,7 @@ public class DetalheCargaArquivoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length = Integer.MAX_VALUE)
     private String arquivo;
 
     private Long codigoFilial;

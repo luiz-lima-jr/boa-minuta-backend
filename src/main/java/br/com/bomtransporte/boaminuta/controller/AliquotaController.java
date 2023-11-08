@@ -28,7 +28,7 @@ public class AliquotaController {
     }
 
     @PostMapping
-    public ResponseEntity salvar(@Valid @RequestBody AliquotaEntity filial) {
+    public ResponseEntity salvar(@Valid @RequestBody AliquotaEntity filial) throws AliquotaException {
         service.salvar(filial);
         return ResponseEntity.ok().build();
     }
