@@ -39,10 +39,6 @@ public class CargaController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("minuta/{idFrete}")
-    public ResponseEntity minuta(@PathVariable("idFrete") Long idFrete){
-        var minuta = cargaService.buscarRelatorioMinuta(idFrete);
-        return ResponseEntity.ok(minuta);
-    }
+
 
 }
