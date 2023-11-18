@@ -1,26 +1,27 @@
 package br.com.bomtransporte.boaminuta.service;
 
-import br.com.bomtransporte.boaminuta.adapter.CargaAdapter;
+import br.com.bomtransporte.boaminuta.adapter.FreteAdapter;
 import br.com.bomtransporte.boaminuta.client2.CargaMiliClient;
 import br.com.bomtransporte.boaminuta.exception.BoaMinutaBusinessException;
-import br.com.bomtransporte.boaminuta.mili.*;
-import br.com.bomtransporte.boaminuta.model.*;
+import br.com.bomtransporte.boaminuta.mili.ReceberCargaResponse;
+import br.com.bomtransporte.boaminuta.model.CargaFiltro;
+import br.com.bomtransporte.boaminuta.model.FreteModel;
+import br.com.bomtransporte.boaminuta.model.UsuarioModel;
 import br.com.bomtransporte.boaminuta.persistence.entity.FilialEntity;
 import br.com.bomtransporte.boaminuta.persistence.entity.FreteEntity;
 import br.com.bomtransporte.boaminuta.persistence.entity.PedidoEntity;
-import br.com.bomtransporte.boaminuta.persistence.repository.*;
+import br.com.bomtransporte.boaminuta.persistence.repository.IFreteRepository;
+import br.com.bomtransporte.boaminuta.persistence.repository.IMunicipioRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class CargaService {
+public class FreteService {
 
     @Autowired
     private CargaMiliClient articleClient;
@@ -31,7 +32,7 @@ public class CargaService {
     private FilialService filialService;
 
     @Autowired
-    private CargaAdapter cargaAdapter;
+    private FreteAdapter cargaAdapter;
 
     @Autowired
     private CaminhaoService caminhaoService;
@@ -45,16 +46,17 @@ public class CargaService {
     @Autowired
     private PedidoService pedidoService;
 
-    public CargaService(){
+    public FreteService(){
         //AnnotationConfigApplicationContext annotationConfigApplicationContext = new AnnotationConfigApplicationContext(SoapClientConfig.class);
         //articleClient = annotationConfigApplicationContext.getBean(CargaClient.class);
     }
 
-    public List<CargaModel> consultarCargas(CargaFiltro filtro) throws Exception {
+    public List<FreteModel> consultarCargas(CargaFiltro filtro) throws Exception {
         var filiais = filtro.getFiliais();
         filiais = filiais == null || filiais.isEmpty() ? filialService.getFiliaisUsuarioEntity() : filiais;
+
         var fretes = freteRepository.findAllByFilialIdIn(filiais.stream().map(f ->f.getId()).collect(Collectors.toList()));
-        List<CargaModel> cargas = new ArrayList<>();
+        List<FreteModel> cargas = new ArrayList<>();
         for(var frete : fretes){
             cargas.add(cargaAdapter.freteEntityToModel(frete));
         }
@@ -62,49 +64,52 @@ public class CargaService {
         var cargasDisponiveis = consultarCargasDisponiveisMili(cargas, filiais);
         cargas.addAll(cargasDisponiveis);
 
-        cargas = cargas.stream().filter(c -> {
-            var ok = true;
-           if(filtro.getComPlaca() != null  && filtro.getComPlaca()){
-               ok = ok && c.getPlaca() != null && !c.getPlaca().isEmpty();
-           }
-           if(filtro.getSemPlaca() != null && filtro.getSemPlaca()){
-               ok = ok && (c.getPlaca() == null || c.getPlaca().isEmpty());
-           }
-           if(filtro.getSemPlaca() != null && filtro.getSemPlaca() && filtro.getComPlaca() != null  && filtro.getComPlaca()){
-               ok = true;
-           }
-           if(filtro.getFaturadas() != null && filtro.getFaturadas()){
-               ok = ok && c.isFaturado();
-           }
-           if(filtro.getDataInicioFaturamento() != null){
-               ok = ok && filtro.getDataInicioFaturamento().isBefore(c.getDataLiberacaoFaturamento());
-           }
-           if(filtro.getDataFimFaturamento() != null){
-               ok = ok && filtro.getDataFimFaturamento().isAfter(c.getDataLiberacaoFaturamento());
-           }
-           return ok;
-        }).collect(Collectors.toList());
-
-        return cargas;
+        return aplicarFiltros(cargas, filtro);
     }
 
-    private List<CargaModel> consultarCargasDisponiveisMili(List<CargaModel> cargasExistentes, List<FilialEntity> filiais) throws Exception {
+    private List<FreteModel> aplicarFiltros(List<FreteModel> cargas, CargaFiltro filtro){
+        return cargas.stream().filter(c -> {
+            var ok = true;
+            if(filtro.getComPlaca() != null  && filtro.getComPlaca()){
+                ok = ok && c.getPlaca() != null && !c.getPlaca().isEmpty();
+            }
+            if(filtro.getSemPlaca() != null && filtro.getSemPlaca()){
+                ok = ok && (c.getPlaca() == null || c.getPlaca().isEmpty());
+            }
+            if(filtro.getSemPlaca() != null && filtro.getSemPlaca() && filtro.getComPlaca() != null  && filtro.getComPlaca()){
+                ok = true;
+            }
+            if(filtro.getFaturadas() != null && filtro.getFaturadas()){
+                ok = ok && c.isFaturado();
+            }
+            if(filtro.getDataInicioFaturamento() != null){
+                ok = ok && filtro.getDataInicioFaturamento().isBefore(c.getDataLiberacaoFaturamento());
+            }
+            if(filtro.getDataFimFaturamento() != null){
+                ok = ok && filtro.getDataFimFaturamento().isAfter(c.getDataLiberacaoFaturamento());
+            }
+            return ok;
+        }).collect(Collectors.toList());
+    }
+
+    private List<FreteModel> consultarCargasDisponiveisMili(List<FreteModel> cargasExistentes, List<FilialEntity> filiais) throws Exception {
 
         filiais = filiais == null ? filialService.getFiliaisUsuarioEntity() : filialService.getTodasByIds(filiais.stream().map(f -> f.getId()).collect(Collectors.toList()));
-        var cargas = new ArrayList<CargaModel>();
+        var cargas = new ArrayList<FreteModel>();
 
         for(var filial : filiais) {
-            var cargaModel = consultarCargasDisponiveisMili(cargasExistentes.stream().map(c -> c.getNumeroCarga()).collect(Collectors.toList()), filial);
+            var numeroCargasExistentes = cargasExistentes.stream().map(c -> c.getNumeroCarga()).collect(Collectors.toList());
+            var cargaModel = consultarCargasDisponiveisMili(numeroCargasExistentes, filial);
             cargas.addAll(cargaModel);
         }
 
         return cargas;
     }
 
-    public List<CargaModel> consultarCargasDisponiveisMili(List<Long> numerosCargasExistentes, FilialEntity filial) throws Exception {
+    private List<FreteModel> consultarCargasDisponiveisMili(List<Long> numerosCargasExistentes, FilialEntity filial) throws Exception {
         //var request = new ConsultarCargasDisponiveis(filial.getCodigoMili(), filial.getSenha());
         var cargas = articleClient.consultarCargasDisponiveis(filial.getCodigoMili());
-        var cargasModel = new ArrayList<CargaModel>();
+        var cargasModel = new ArrayList<FreteModel>();
         if(cargas == null){
             return cargasModel;
         }
@@ -117,7 +122,7 @@ public class CargaService {
         return cargasModel;
     }
 
-    public CargaModel buscarCarga(Long nroCarga, Long idFilial) throws Exception {
+    public FreteModel buscarCarga(Long nroCarga, Long idFilial) throws Exception {
         var frete = freteRepository.findByNumeroCargaAndFilialId(nroCarga, idFilial);
         var filial = filialService.getById(idFilial);
         var cargaModel = frete != null ? cargaAdapter.freteEntityToModel(frete) : buscarDetalheCarga(nroCarga, filial.getCodigoMili(), filial.getSenha(), true);
@@ -129,7 +134,7 @@ public class CargaService {
         return cargaModel;
     }
 
-    public CargaModel buscarDetalheCarga(Long nroCarga, Long codigoMili, String senha, boolean isArquivoObrigatorio) throws Exception {
+    public FreteModel buscarDetalheCarga(Long nroCarga, Long codigoMili, String senha, boolean isArquivoObrigatorio) throws Exception {
        // var request = new ReceberCarga(codigoMili, senha, nroCarga);
         var cargaMili = articleClient.receberCarga(nroCarga, codigoMili);
         var filialModel = filialService.getModelByCodigoMili(codigoMili);
@@ -137,7 +142,7 @@ public class CargaService {
             if(isArquivoObrigatorio) {
                 throw new BoaMinutaBusinessException("Não existe arquivo disponivel desta carga");
             } else {
-                var cargaModel = new CargaModel();
+                var cargaModel = new FreteModel();
                 cargaModel.setNumeroCarga(nroCarga);
                 cargaModel.setFilial(filialModel);
                 return cargaModel;

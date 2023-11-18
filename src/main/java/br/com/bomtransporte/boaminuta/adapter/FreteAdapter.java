@@ -5,11 +5,12 @@ import br.com.bomtransporte.boaminuta.exception.AliquotaException;
 import br.com.bomtransporte.boaminuta.mili.Carga;
 import br.com.bomtransporte.boaminuta.mili.ConsultarCargasDisponiveisResponse;
 import br.com.bomtransporte.boaminuta.mili.ReceberCargaResponse;
-import br.com.bomtransporte.boaminuta.model.CargaModel;
 import br.com.bomtransporte.boaminuta.model.FilialModel;
+import br.com.bomtransporte.boaminuta.model.FreteModel;
 import br.com.bomtransporte.boaminuta.model.UsuarioModel;
-import br.com.bomtransporte.boaminuta.persistence.entity.*;
-import br.com.bomtransporte.boaminuta.persistence.repository.IClienteRepository;
+import br.com.bomtransporte.boaminuta.persistence.entity.EstadoEntity;
+import br.com.bomtransporte.boaminuta.persistence.entity.FilialEntity;
+import br.com.bomtransporte.boaminuta.persistence.entity.FreteEntity;
 import br.com.bomtransporte.boaminuta.persistence.repository.IMunicipioRepository;
 import br.com.bomtransporte.boaminuta.service.AliquotaService;
 import br.com.bomtransporte.boaminuta.service.ClienteService;
@@ -24,7 +25,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
-public class CargaAdapter {
+public class FreteAdapter {
 
     @Autowired
     private AliquotaService aliquotaService;
@@ -38,12 +39,68 @@ public class CargaAdapter {
     @Autowired
     private FilialService filialService;
 
-    public Set<CargaModel> consultarCargasDisponivelsToCargaModel(ConsultarCargasDisponiveisResponse response, FilialModel filial){
-        var cargas = new HashSet<CargaModel>();
+    public FreteModel freteEntityToModel(FreteEntity frete) throws AliquotaException {
+        var cargaModel = new FreteModel();
+        cargaModel.setId(frete.getId());
+
+        var respFatEntity = frete.getResponsavelFaturamento();
+        if(frete.getResponsavelFaturamento() != null){
+            var respFatModel = UsuarioModel.builder().nome(respFatEntity.getNome()).id(respFatEntity.getId()).build();
+            cargaModel.setResponsavelFaturamento(respFatModel);
+        }
+
+        var respOpEntity = frete.getResponsavelOperacional();
+        if(frete.getResponsavelOperacional() != null) {
+            var respOpModel = UsuarioModel.builder().nome(respOpEntity.getNome()).id(respOpEntity.getId()).build();
+            cargaModel.setResponsavelOperacional(respOpModel);
+        }
+        var clientes = frete.getPedidos().stream().map(f -> f.getCliente()).collect(Collectors.toSet());
+        cargaModel.setClientes(clientes);
+
+        cargaModel.setPlaca(frete.getCaminhao().getPlaca());
+        cargaModel.setFaturado(frete.isFaturado());
+        cargaModel.setVolumes(frete.getEntregas());
+        cargaModel.setM3(frete.getM3());
+        cargaModel.setEntregas(frete.getEntregas());
+        cargaModel.setComplemento(frete.getComplemento());
+        cargaModel.setDataSaida(frete.getDataSaida());
+        cargaModel.setMunicipioDestino(frete.getMunicipioDestino());
+        cargaModel.setValorCarga(frete.getValorCarga());
+        cargaModel.setPedagio(frete.getPedagio());
+        cargaModel.setComplementoCalculo(frete.getComplementoCalculo());
+        cargaModel.setDescontos(frete.getDescontos());
+        cargaModel.setFrete(frete.getFrete());
+        cargaModel.setFobCif(frete.getFobCif());
+        cargaModel.setPagamentoPedagio(frete.getPagamentoPedagio());
+        cargaModel.setNfse(frete.getNfse());
+        cargaModel.setFretePago(frete.getFretePago());
+        cargaModel.setIss(frete.getIss());
+        cargaModel.setPisCofins(frete.getPisCofins());
+        cargaModel.setIcms(frete.getIcms());
+        cargaModel.setCustos(frete.getCustos());
+        cargaModel.setIrCs(frete.getIrCs());
+        cargaModel.setSaldo(frete.getSaldo());
+        cargaModel.setMargem(frete.getFrete());
+        cargaModel.setMarkup(frete.getMarkup());
+        cargaModel.setObservacoes(frete.getObservacoes());
+        cargaModel.setDataLimiteCarregamento(frete.getDataLimiteCarregamento());
+        cargaModel.setDataLiberacaoFaturamento(frete.getDataLiberacaoFaturamento());
+        cargaModel.setFilial(new FilialModel(frete.getFilial().getId(), frete.getFilial().getNome()));
+        cargaModel.setMunicipioDestino(frete.getMunicipioDestino());
+        cargaModel.setMunicipioOrigem(frete.getMunicipioOrigem());
+        setAliquotasCargaModel(cargaModel, frete.getFilial(), frete.getMunicipioDestino().getEstado());
+
+        cargaModel.setCaminhao(frete.getCaminhao());
+
+        return cargaModel;
+    }
+
+    public Set<FreteModel> consultarCargasDisponivelsToCargaModel(ConsultarCargasDisponiveisResponse response, FilialModel filial){
+        var cargas = new HashSet<FreteModel>();
         if(response.getOut().getCarga() != null && !response.getOut().getCarga().isEmpty()){
             response.getOut().getCarga().forEach(cargaResponse -> {
                 if(cargaResponse.getOperacao().getValue().equals("INSERT")){
-                    var cargaModel = new CargaModel();
+                    var cargaModel = new FreteModel();
                     cargaModel.setNumeroCarga(cargaResponse.getNrCarga());
                     var placa = cargaResponse.getCaminhao().getValue().getPlaca();
                     cargaModel.setPlaca(placa == null ? null : placa.getValue());
@@ -63,7 +120,7 @@ public class CargaAdapter {
 
         return cargas;
     }
-    private void setClientesVolumes(Carga cargaResponse, CargaModel cargaModel){
+    private void setClientesVolumes(Carga cargaResponse, FreteModel cargaModel){
         var volume = 0.0;
         cargaModel.setClientes(new HashSet<>());
         for(var pedido : cargaResponse.getPedidos().getValue().getPedido()){
@@ -76,8 +133,8 @@ public class CargaAdapter {
         cargaModel.setM3(volume);
     }
 
-    public CargaModel receberCargaDetalheResponseToCargaModel(ReceberCargaResponse cargaResponse, FilialModel filial) throws AliquotaException {
-        var cargaModel = new CargaModel();
+    public FreteModel receberCargaDetalheResponseToCargaModel(ReceberCargaResponse cargaResponse, FilialModel filial) throws AliquotaException {
+        var cargaModel = new FreteModel();
         var cargaOut = cargaResponse.getOut();
         var municipioDestino = municipioRepository.findByCodigoIbge(cargaOut.getCodIbge().longValue());
         var filialOrigem = filialService.getByCodigoMili(Long.parseLong(cargaOut.getLocalCarregamento().getValue()));
@@ -108,7 +165,7 @@ public class CargaAdapter {
         return cargaModel;
     }
 
-    private void setAliquotasCargaModel(CargaModel cargaModel, FilialEntity filialOrigem, EstadoEntity estadoDestino) throws AliquotaException {
+    private void setAliquotasCargaModel(FreteModel cargaModel, FilialEntity filialOrigem, EstadoEntity estadoDestino) throws AliquotaException {
 
         cargaModel.setAliquotaIss(aliquotaService.buscarValorAliquotaFilial(filialOrigem.getId(), TipoAliquotaEnum.ISS.getId()));
         cargaModel.setAliquotaPisCofins(aliquotaService.buscarValorAliquotaOrigemDestino(filialOrigem, estadoDestino, TipoAliquotaEnum.PIS_COFINS.getId()));
@@ -117,7 +174,7 @@ public class CargaAdapter {
         cargaModel.setAliquotaIcms(aliquotaService.buscarValorAliquotaOrigemDestino(filialOrigem, estadoDestino, TipoAliquotaEnum.ICMS.getId()));
     }
 
-    private void setDatas(Carga cargaOut, CargaModel cargaModel){
+    private void setDatas(Carga cargaOut, FreteModel cargaModel){
         var df = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
         var dtLiberacaoFaturamento = cargaOut.getDtLiberacaoFaturamento();
@@ -131,74 +188,5 @@ public class CargaAdapter {
         }
     }
 
-    public CargaModel freteEntityToModel(FreteEntity frete) throws AliquotaException {
-        var cargaModel = new CargaModel();
-        cargaModel.setId(frete.getId());
-
-        setDadosFrete(cargaModel, frete);
-
-        //cargaModel.setDestino();
-        //cargaModel.setCliente(cargaOut.getClienteRetira().getValue());
-        cargaModel.setDataLimiteCarregamento(frete.getDataLimiteCarregamento());
-        cargaModel.setDataLiberacaoFaturamento(frete.getDataLiberacaoFaturamento());
-        cargaModel.setFilial(new FilialModel(frete.getFilial().getId(), frete.getFilial().getNome()));
-        cargaModel.setMunicipioDestino(frete.getMunicipioDestino());
-        cargaModel.setMunicipioOrigem(frete.getMunicipioOrigem());
-        setAliquotasCargaModel(cargaModel, frete.getFilial(), frete.getMunicipioDestino().getEstado());
-
-        cargaModel.setCaminhao(frete.getCaminhao());
-
-        setCalculos(cargaModel, frete);
-
-        return cargaModel;
-    }
-
-    private void setDadosFrete(CargaModel cargaModel, FreteEntity frete) {
-        var respFatEntity = frete.getResponsavelFaturamento();
-        if(frete.getResponsavelFaturamento() != null){
-            var respFatModel = UsuarioModel.builder().nome(respFatEntity.getNome()).id(respFatEntity.getId()).build();
-            cargaModel.setResponsavelFaturamento(respFatModel);
-        }
-
-        var respOpEntity = frete.getResponsavelOperacional();
-        if(frete.getResponsavelOperacional() != null) {
-            var respOpModel = UsuarioModel.builder().nome(respOpEntity.getNome()).id(respOpEntity.getId()).build();
-            cargaModel.setResponsavelOperacional(respOpModel);
-        }
-
-        cargaModel.setPlaca(frete.getCaminhao().getPlaca());
-        cargaModel.setNumeroCarga(frete.getNumeroCarga());
-        cargaModel.setFaturado(frete.isFaturado());
-        cargaModel.setVolumes(frete.getEntregas());
-        cargaModel.setM3(frete.getM3());
-        cargaModel.setEntregas(frete.getEntregas());
-        cargaModel.setComplemento(frete.getComplemento());
-        cargaModel.setDataSaida(frete.getDataSaida());
-        var clientes = frete.getPedidos().stream().map(f -> f.getCliente()).collect(Collectors.toSet());
-        cargaModel.setClientes(clientes);
-
-        cargaModel.setMunicipioDestino(frete.getMunicipioDestino());
-    }
-
-    private void setCalculos(CargaModel cargaModel, FreteEntity frete){
-        cargaModel.setValorCarga(frete.getValorCarga());
-        cargaModel.setPedagio(frete.getPedagio());
-        cargaModel.setComplementoCalculo(frete.getComplementoCalculo());
-        cargaModel.setDescontos(frete.getDescontos());
-        cargaModel.setFrete(frete.getFrete());
-        cargaModel.setFobCif(frete.getFobCif());
-        cargaModel.setPagamentoPedagio(frete.getPagamentoPedagio());
-        cargaModel.setNfse(frete.getNfse());
-        cargaModel.setFretePago(frete.getFretePago());
-        cargaModel.setIss(frete.getIss());
-        cargaModel.setPisCofins(frete.getPisCofins());
-        cargaModel.setIcms(frete.getIcms());
-        cargaModel.setCustos(frete.getCustos());
-        cargaModel.setIrCs(frete.getIrCs());
-        cargaModel.setSaldo(frete.getSaldo());
-        cargaModel.setMargem(frete.getFrete());
-        cargaModel.setMarkup(frete.getMarkup());
-        cargaModel.setObservacoes(frete.getObservacoes());
-    }
 
 }

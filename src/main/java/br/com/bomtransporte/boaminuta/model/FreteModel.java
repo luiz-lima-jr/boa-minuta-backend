@@ -7,12 +7,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
 @Data
-public class CargaModel {
+public class FreteModel {
 
     private Long id;
     private Long numeroCarga;
@@ -77,7 +76,7 @@ public class CargaModel {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CargaModel that = (CargaModel) o;
+        FreteModel that = (FreteModel) o;
         return  Objects.equals(numeroCarga, that.numeroCarga) && Objects.equals(placa, that.placa) ;
     }
 
