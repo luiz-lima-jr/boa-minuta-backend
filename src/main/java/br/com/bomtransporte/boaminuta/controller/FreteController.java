@@ -28,7 +28,7 @@ public class FreteController {
     public ResponseEntity<FreteModel> consultarDetalheCarga(@RequestParam Long nroCarga, @RequestParam Long idFilial) throws Exception {
         return ResponseEntity.ok(cargaService.buscarCarga(nroCarga, idFilial));
     }
-    
+
     @PostMapping
     public ResponseEntity salvar(@Valid @RequestBody FreteEntity frete) throws Exception {
         cargaService.salvar(frete);

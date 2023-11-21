@@ -2,6 +2,7 @@ package br.com.bomtransporte.boaminuta.adapter;
 
 import br.com.bomtransporte.boaminuta.enuns.TipoAliquotaEnum;
 import br.com.bomtransporte.boaminuta.exception.AliquotaException;
+import br.com.bomtransporte.boaminuta.exception.BoaMinutaBusinessException;
 import br.com.bomtransporte.boaminuta.mili.Carga;
 import br.com.bomtransporte.boaminuta.mili.ConsultarCargasDisponiveisResponse;
 import br.com.bomtransporte.boaminuta.mili.ReceberCargaResponse;
@@ -39,7 +40,7 @@ public class FreteAdapter {
     @Autowired
     private FilialService filialService;
 
-    public FreteModel freteEntityToModel(FreteEntity frete) throws AliquotaException {
+    public FreteModel freteEntityToModel(FreteEntity frete) throws BoaMinutaBusinessException {
         var cargaModel = new FreteModel();
         cargaModel.setId(frete.getId());
 
@@ -57,6 +58,7 @@ public class FreteAdapter {
         var clientes = frete.getPedidos().stream().map(f -> f.getCliente()).collect(Collectors.toSet());
         cargaModel.setClientes(clientes);
 
+        cargaModel.setNumeroCarga(frete.getNumeroCarga());
         cargaModel.setPlaca(frete.getCaminhao().getPlaca());
         cargaModel.setFaturado(frete.isFaturado());
         cargaModel.setVolumes(frete.getEntregas());
@@ -80,7 +82,7 @@ public class FreteAdapter {
         cargaModel.setCustos(frete.getCustos());
         cargaModel.setIrCs(frete.getIrCs());
         cargaModel.setSaldo(frete.getSaldo());
-        cargaModel.setMargem(frete.getFrete());
+        cargaModel.setMargem(frete.getMargem());
         cargaModel.setMarkup(frete.getMarkup());
         cargaModel.setObservacoes(frete.getObservacoes());
         cargaModel.setDataLimiteCarregamento(frete.getDataLimiteCarregamento());

@@ -16,6 +16,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -153,6 +155,9 @@ public class FreteService {
 
     @Transactional
     public void salvar(FreteEntity frete) throws Exception {
+        frete.setSaldo(round(frete.getSaldo()));
+        frete.setMargem(round(frete.getMargem()));
+        frete.setMarkup(round(frete.getMarkup()));
         if(frete.getId() == null) {
             criarNovoFrete(frete);
         } else {
@@ -207,6 +212,7 @@ public class FreteService {
 
         salvarFaturista(frete);
         buscarEntidades(frete);
+        salvarCaminhao(frete);
 
         if(usuarioService.getUserDetails().isFaturista()) {
             freteRepository.save(frete);
@@ -226,6 +232,10 @@ public class FreteService {
             frete.setResponsavelFaturamento(usuarioService.getById(usuarioService.getUserDetails().getId()));
             frete.setFaturado(true);
         }
+    }
+
+    private Double round(Double value){
+        return BigDecimal.valueOf(value).setScale(2, RoundingMode.FLOOR).doubleValue();
     }
 
 }

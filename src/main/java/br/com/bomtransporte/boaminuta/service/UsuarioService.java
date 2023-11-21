@@ -5,7 +5,11 @@ import br.com.bomtransporte.boaminuta.exception.BoaMinutaBusinessException;
 import br.com.bomtransporte.boaminuta.exception.UsuarioException;
 import br.com.bomtransporte.boaminuta.exception.UsuarioExistenteException;
 import br.com.bomtransporte.boaminuta.model.*;
+import br.com.bomtransporte.boaminuta.persistence.entity.FilialEntity;
+import br.com.bomtransporte.boaminuta.persistence.entity.FuncaoEntity;
 import br.com.bomtransporte.boaminuta.persistence.entity.UsuarioEntity;
+import br.com.bomtransporte.boaminuta.persistence.repository.IFilialRepository;
+import br.com.bomtransporte.boaminuta.persistence.repository.IFuncaoRepository;
 import br.com.bomtransporte.boaminuta.persistence.repository.IUsuarioRepository;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +31,12 @@ public class UsuarioService implements UserDetailsService {
 
     @Autowired
     private IUsuarioRepository repository;
+
+    @Autowired
+    private IFuncaoRepository funcaoRepository;
+
+    @Autowired
+    private IFilialRepository filialRepository;
 
     @Autowired
     private EmailServiceImpl emailService;
@@ -56,8 +66,8 @@ public class UsuarioService implements UserDetailsService {
                 .nome(request.getNome().trim())
                 .email(request.getEmail().trim())
                 .senha(passwordEncoder.encode(request.getSenha()))
-                .funcoes(request.getFuncoes())
-                .filiais(request.getFiliais())
+                .funcoes(buscarFuncoes(request.getFuncoes()))
+                .filiais(buscarFiliais(request.getFiliais()))
                 .build();
 
         if (repository.findByEmail(request.getEmail().trim()).isPresent()){
@@ -67,14 +77,22 @@ public class UsuarioService implements UserDetailsService {
         repository.save(user);
     }
 
+    private List<FuncaoEntity> buscarFuncoes(List<FuncaoEntity> funcoes){
+        return funcaoRepository.findAllById(funcoes.stream().map(f -> f.getId()).collect(Collectors.toList()));
+    }
+
+    private List<FilialEntity> buscarFiliais(List<FilialEntity> funcoes){
+        return filialRepository.findAllById(funcoes.stream().map(f -> f.getId()).collect(Collectors.toList()));
+    }
+
     public void alterarUsuario(RegistroUsuarioModel request) throws UsuarioExistenteException {
         var usuario = repository.findById(request.getId()).orElse(null);
         if(usuario == null){
             throw new UsernameNotFoundException("Usuário não encontrado");
         }
         usuario.setEmail(request.getEmail());
-        usuario.setFiliais(request.getFiliais());
-        usuario.setFuncoes(request.getFuncoes());
+        usuario.setFiliais(buscarFiliais(request.getFiliais()));
+        usuario.setFuncoes(buscarFuncoes(request.getFuncoes()));
         usuario.setNome(request.getNome());
         usuario.setAtivo(request.isSituacao());
 

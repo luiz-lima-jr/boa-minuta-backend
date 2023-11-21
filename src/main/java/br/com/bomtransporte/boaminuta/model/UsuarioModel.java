@@ -4,6 +4,7 @@ import br.com.bomtransporte.boaminuta.persistence.entity.FilialEntity;
 import br.com.bomtransporte.boaminuta.persistence.entity.FuncaoEntity;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,14 @@ import java.util.List;
 @Validated
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UsuarioModel {
+
+    public UsuarioModel(Long id, String nome){
+        this.id = id;
+        this.nome = nome;
+    }
 
     private Long id;
 
