@@ -31,7 +31,7 @@ public class GlobalControllerExceptionHandler {
                 || e instanceof ConstraintViolationException
                 || e instanceof UsuarioExistenteException){
             response.setStatus(400);
-        } else if(e instanceof BadCredentialsException){
+        } else if(e instanceof BadCredentialsException || e instanceof SessaoInvalidaException){
             response.setStatus(401);
         } else {
             response.setStatus(500);
