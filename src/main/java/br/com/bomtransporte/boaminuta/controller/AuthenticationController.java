@@ -29,10 +29,6 @@ public class AuthenticationController {
     @Autowired
     private AuthenticationService service;
 
-    @GetMapping
-    public ResponseEntity<SessionModel> getDadosSessao() {
-        return ResponseEntity.ok(service.getDadosSessao());
-    }
 
     @PostMapping
     public ResponseEntity<AutenticacaoResponseModel> authenticate(

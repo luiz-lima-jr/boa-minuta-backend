@@ -5,10 +5,7 @@ import br.com.bomtransporte.boaminuta.config.Constantes;
 import br.com.bomtransporte.boaminuta.exception.BoaMinutaBusinessException;
 import br.com.bomtransporte.boaminuta.exception.UsuarioException;
 import br.com.bomtransporte.boaminuta.exception.UsuarioExistenteException;
-import br.com.bomtransporte.boaminuta.model.AlterarSenhaModel;
-import br.com.bomtransporte.boaminuta.model.DadosSessaoModel;
-import br.com.bomtransporte.boaminuta.model.RegistroUsuarioModel;
-import br.com.bomtransporte.boaminuta.model.UsuarioModel;
+import br.com.bomtransporte.boaminuta.model.*;
 import br.com.bomtransporte.boaminuta.persistence.entity.FuncaoEntity;
 import br.com.bomtransporte.boaminuta.persistence.entity.PessoaTransporteEntity;
 import br.com.bomtransporte.boaminuta.persistence.entity.UsuarioEntity;
@@ -28,6 +25,12 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
+
+
+    @GetMapping("validar-sessao")
+    public ResponseEntity validarSessao() {
+        return ResponseEntity.ok().build();
+    }
 
     @PostMapping
     public ResponseEntity salvar(@Valid @RequestBody RegistroUsuarioModel request) throws UsuarioExistenteException, UsuarioException {
