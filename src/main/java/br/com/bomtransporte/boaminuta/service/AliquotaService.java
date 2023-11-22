@@ -24,12 +24,14 @@ public class AliquotaService {
     }
 
     public void salvar(AliquotaEntity aliquota) throws AliquotaException {
-        var idsAliquotasValidacao = Arrays.asList(TipoAliquotaEnum.ISS.getId(), TipoAliquotaEnum.DISTRIBUICAO.getId());
-        if(idsAliquotasValidacao.contains(aliquota.getTipoAliquota().getId())){
-            var aliquotaCadastrada = repository.findByFilialIdAndTipoAliquotaId(aliquota.getFilial().getId(), TipoAliquotaEnum.ISS.getId());
-            if(aliquotaCadastrada != null && aliquotaCadastrada.getId() != aliquota.getId()){
-                throw  new AliquotaException("Já existe uma aliquota cadastrada para esta filial!");
-            }
+
+        var tipo = aliquota.getTipoAliquota().getId();
+        var origem = aliquota.getEstadoOrigem().getId();
+        var destino = aliquota.getEstadoDestino().getId();
+        var filial = aliquota.getFilial().getId();
+        var aliquotaExistente = repository.findByEstadoOrigemIdAndEstadoDestinoIdAndTipoAliquotaIdAndFilialId(origem, destino, tipo, filial);
+        if(aliquotaExistente != null && !aliquotaExistente.getId().equals(aliquota.getId())){
+            throw  new AliquotaException("Já existe uma aliquota cadastrada para esta filial, origem e destino!");
         }
         repository.save(aliquota);
     }

@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface IAliquotaRepository extends JpaRepository<AliquotaEntity, Long> {
 
-    AliquotaEntity findByEstadoOrigemIdAndEstadoDestinoIdAndTipoAliquotaId(Long idOrigem, Long idDestino, Long idTipoAliquota);
+    AliquotaEntity findByEstadoOrigemIdAndEstadoDestinoIdAndTipoAliquotaIdAndFilialId(Long idOrigem, Long idDestino, Long idTipoAliquota, Long idFiliam);
     AliquotaEntity findByFilialIdAndEstadoDestinoIdAndTipoAliquotaId(Long idOrigem, Long idDestino, Long idTipoAliquota);
     AliquotaEntity findByFilialIdAndTipoAliquotaId(Long idFilial, Long idTipoAliquota);
 
