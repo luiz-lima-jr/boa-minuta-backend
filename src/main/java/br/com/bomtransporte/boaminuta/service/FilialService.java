@@ -48,7 +48,7 @@ public class FilialService {
 
     public FilialModel getModelByCodigoMili(Long codigoMili) {
         var filial = filialRepository.findByCodigoMili(codigoMili);
-        return new FilialModel(filial.getId(), filial.getNome());
+        return new FilialModel(filial.getId(), filial.getNome(), filial.getCodigoMili());
     }
 
     public FilialEntity getById(Long idFilial) {

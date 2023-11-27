@@ -41,9 +41,9 @@ public class FreteAdapter {
     private FilialService filialService;
 
     public FreteModel freteEntityToModel(FreteEntity frete) throws BoaMinutaBusinessException {
+        var filial = frete.getFilial();
         var cargaModel = new FreteModel();
         cargaModel.setId(frete.getId());
-
         var respFatEntity = frete.getResponsavelFaturamento();
         if(frete.getResponsavelFaturamento() != null){
             var respFatModel = UsuarioModel.builder().nome(respFatEntity.getNome()).id(respFatEntity.getId()).build();
@@ -87,7 +87,7 @@ public class FreteAdapter {
         cargaModel.setObservacoes(frete.getObservacoes());
         cargaModel.setDataLimiteCarregamento(frete.getDataLimiteCarregamento());
         cargaModel.setDataLiberacaoFaturamento(frete.getDataLiberacaoFaturamento());
-        cargaModel.setFilial(new FilialModel(frete.getFilial().getId(), frete.getFilial().getNome()));
+        cargaModel.setFilial(new FilialModel(filial.getId(), filial.getNome(), filial.getCodigoMili()));
         cargaModel.setMunicipioDestino(frete.getMunicipioDestino());
         cargaModel.setMunicipioOrigem(frete.getMunicipioOrigem());
         setAliquotasCargaModel(cargaModel, frete.getFilial(), frete.getMunicipioDestino().getEstado());

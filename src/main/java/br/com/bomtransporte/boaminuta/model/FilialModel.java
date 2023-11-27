@@ -7,6 +7,12 @@ import lombok.Data;
 @AllArgsConstructor
 public class FilialModel {
 
+    public FilialModel(Long id, String nome){
+        this.id = id;
+        this.nome = nome;
+    }
+
     private Long id;
     private String nome;
+    private Long codigoMili;
 }

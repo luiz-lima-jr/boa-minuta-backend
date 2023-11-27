@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(Constantes.VERSAO_API_URL + "carga")
+@RequestMapping(Constantes.VERSAO_API_URL + "frete")
 public class FreteController {
 
     @Autowired
