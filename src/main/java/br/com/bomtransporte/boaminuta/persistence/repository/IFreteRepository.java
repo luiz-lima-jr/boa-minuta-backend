@@ -1,7 +1,6 @@
 package br.com.bomtransporte.boaminuta.persistence.repository;
 
 //import br.com.bomtransporte.boaminuta.model.FiltroRelatorioMargemOperacional;
-import br.com.bomtransporte.boaminuta.model.FiltroRelatorioMargemOperacional;
 import br.com.bomtransporte.boaminuta.model.UsuarioModel;
 import br.com.bomtransporte.boaminuta.persistence.entity.EstadoEntity;
 import br.com.bomtransporte.boaminuta.persistence.entity.FreteEntity;
