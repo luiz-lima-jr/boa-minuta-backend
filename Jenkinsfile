@@ -28,7 +28,7 @@ pipeline {
 			steps {
                 bat "cmd.exe"
                 bat "echo Hello from the new command prompt window!"
-                bat "spring-boot:run"
+                bat "mvn spring-boot:run"
 			}
 		}
 	}
