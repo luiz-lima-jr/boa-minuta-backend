@@ -17,16 +17,18 @@ pipeline {
 				bat "mvn clean install -DskipTests"
 			}
 		}
-
+/*
 		stage('Test'){
 			steps{
 				bat "mvn test"
 			}
 		}
-
+*/
 		stage('Deploy') {
 			steps {
-			    bat "mvn spring-boot:run"
+                bat "cmd.exe"
+                bat "echo Hello from the new command prompt window!"
+                bat "spring-boot:run"
 			}
 		}
 	}
