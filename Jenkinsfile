@@ -26,9 +26,7 @@ pipeline {
 */
 		stage('Deploy') {
 			steps {
-                bat "cmd.exe"
-                bat "echo Hello from the new command prompt window!"
-                bat "mvn spring-boot:run"
+			    bat "mvn jar:jar deploy:deploy"
 			}
 		}
 	}
