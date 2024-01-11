@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>br.com.bomtransporte</groupId>
 	<artifactId>boa-minuta-backend</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>boa-minuta-backend</name>
 	<description>Serviço de backend do Boa Minuta</description>
 	<properties>
