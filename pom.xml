@@ -173,6 +173,14 @@
 					<noPackageLevelAnnotations>true</noPackageLevelAnnotations>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>3.1.1</version>
+				<configuration>
+					<mainClass>br.com.bomtransporte.boaminuta.BoaMinutaApplication</mainClass>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
