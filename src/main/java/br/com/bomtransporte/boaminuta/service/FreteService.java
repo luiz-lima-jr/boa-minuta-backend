@@ -128,7 +128,7 @@ public class FreteService {
         var frete = freteRepository.findByNumeroCargaAndFilialId(nroCarga, idFilial);
         var filial = filialService.getById(idFilial);
         var cargaModel = frete != null ? cargaAdapter.freteEntityToModel(frete) : buscarDetalheCarga(nroCarga, filial.getCodigoMili(), filial.getSenha(), true);
-        var usuarioOp = usuarioService.getUserDetails();
+        var usuarioOp = frete != null ? frete.getResponsavelOperacional() : usuarioService.getUserDetails();
         var respFatModel = UsuarioModel.builder().nome(usuarioOp.getNome()).id(usuarioOp.getId()).build();
 
         cargaModel.setResponsavelOperacional(respFatModel);

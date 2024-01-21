@@ -8,8 +8,10 @@ import br.com.bomtransporte.boaminuta.model.*;
 import br.com.bomtransporte.boaminuta.persistence.entity.FilialEntity;
 import br.com.bomtransporte.boaminuta.persistence.entity.FuncaoEntity;
 import br.com.bomtransporte.boaminuta.persistence.entity.UsuarioEntity;
+import br.com.bomtransporte.boaminuta.persistence.entity.UsuarioFilialEntity;
 import br.com.bomtransporte.boaminuta.persistence.repository.IFilialRepository;
 import br.com.bomtransporte.boaminuta.persistence.repository.IFuncaoRepository;
+import br.com.bomtransporte.boaminuta.persistence.repository.IUsuarioFilialRepository;
 import br.com.bomtransporte.boaminuta.persistence.repository.IUsuarioRepository;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,6 +46,9 @@ public class UsuarioService implements UserDetailsService {
 
     @Autowired
     private PropertyConfig propertyCofig;
+
+    @Autowired
+    private IUsuarioFilialRepository usuarioFilialRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -81,9 +87,24 @@ public class UsuarioService implements UserDetailsService {
         return funcaoRepository.findAllById(funcoes.stream().map(f -> f.getId()).collect(Collectors.toList()));
     }
 
-    private List<FilialEntity> buscarFiliais(List<FilialEntity> funcoes){
-        return filialRepository.findAllById(funcoes.stream().map(f -> f.getId()).collect(Collectors.toList()));
+    private List<FilialEntity> buscarFiliais(List<FilialEntity> filiais){
+        return filialRepository.findAllById(filiais.stream().map(f -> f.getId()).collect(Collectors.toList()));
     }
+    /*
+    private List<FilialEntity> buscarFiliaisUpdate(UsuarioEntity usuario, List<FilialEntity> filiais){
+        var usuarioFiliais = new ArrayList<UsuarioFilialEntity>();
+        var filiaisEncontradas = new  ArrayList<FilialEntity>();
+        for(var filial : filiais){
+            var usuarioFilial = usuarioFilialRepository.findByUsuarioIdAndFilialId(usuario.getId(), filial.getId());
+            if(usuarioFilial.isEmpty()) {
+                filiaisEncontradas.add();
+            } else {
+                usuarioFiliais.add(usuarioFilial.get());
+            }
+        }
+
+        return filialRepository.findAllById(filiais.stream().map(f -> f.getId()).collect(Collectors.toList()));
+    }*/
 
     public void alterarUsuario(RegistroUsuarioModel request) throws UsuarioExistenteException {
         var usuario = repository.findById(request.getId()).orElse(null);

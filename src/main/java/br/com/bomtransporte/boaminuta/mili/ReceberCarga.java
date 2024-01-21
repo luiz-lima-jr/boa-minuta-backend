@@ -2,7 +2,7 @@
 // Este arquivo foi gerado pela Eclipse Implementation of JAXB, v3.0.0 
 // Consulte https://eclipse-ee4j.github.io/jaxb-ri 
 // Todas as modificações neste arquivo serão perdidas após a recompilação do esquema de origem. 
-// Gerado em: 2023.07.12 às 11:54:22 AM GMT-03:00 
+// Gerado em: 2024.01.06 às 05:40:41 PM GMT-03:00 
 //
 
 
@@ -13,8 +13,6 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 
 /**
@@ -46,18 +44,6 @@ import lombok.NoArgsConstructor;
 })
 @XmlRootElement(name = "receberCarga", namespace = "http://controller.carga.efrotas.mili.com.br")
 public class ReceberCarga {
-
-
-    public ReceberCarga(){
-
-    }
-
-    public ReceberCarga(Long in0, String in1, Long in2){
-        this.in0 = in0;
-        this.in1 = in1;
-        this.in2 = in2;
-
-    }
 
     @XmlElement(namespace = "http://controller.carga.efrotas.mili.com.br")
     protected long in0;
