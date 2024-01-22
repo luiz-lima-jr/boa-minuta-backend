@@ -2,7 +2,7 @@ version:  "3.7"
 
 services:
   backend:
-    image: boa-minuta
+    image: boa-minuta-homologacao
     restart: always
     container_name: boa-minuta-backend-homologacao
     network_mode: host
