@@ -2,7 +2,9 @@ version:  "3.7"
 
 services:
   backend:
-    image: boa-minuta-backend-homologacao
+    image: $IMAGE
     restart: always
-    container_name: boa-minuta-backend-homologacao
+    container_name: $CONTAINER_NAME
     network_mode: host
+    environment:
+      - PROFILE=$PROFILE_ENV
