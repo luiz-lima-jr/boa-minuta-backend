@@ -2,7 +2,7 @@ version:  "3.7"
 
 services:
   backend:
-    image: $IMAGE
+    image: $CONTAINER_NAME
     restart: always
     container_name: $CONTAINER_NAME
     network_mode: host
