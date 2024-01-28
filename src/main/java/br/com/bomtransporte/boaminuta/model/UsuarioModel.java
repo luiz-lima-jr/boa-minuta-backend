@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
+import java.util.Objects;
 
 @Validated
 @Data
@@ -41,4 +42,17 @@ public class UsuarioModel {
     private List<FilialEntity> filiais;
 
     private Boolean situacao;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UsuarioModel that = (UsuarioModel) o;
+        return Objects.equals(id, that.id) && Objects.equals(nome, that.nome);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nome);
+    }
 }
