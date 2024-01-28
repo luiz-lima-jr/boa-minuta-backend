@@ -134,4 +134,10 @@ public class FreteEntity {
     @JoinColumn(name = "usuario_responsavel_faturamento_id")
     private UsuarioEntity responsavelFaturamento;
 
+    @Transient
+    public double totalImpostos(){
+        return pisCofins;
+    }
+
+
 }

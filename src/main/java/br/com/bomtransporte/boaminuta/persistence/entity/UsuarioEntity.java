@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -125,7 +126,20 @@ public class UsuarioEntity implements UserDetails {
         return funcoes.stream().filter(f -> f.getFuncao().getDescricao().equals(FuncaoEnum.FATURISTA.getDescricao())).count() > 0;
     }
 
-     public static class UsuarioEntityBuilder {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UsuarioEntity that = (UsuarioEntity) o;
+        return Objects.equals(id, that.id) && Objects.equals(nome, that.nome) && Objects.equals(email, that.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nome, email);
+    }
+
+    public static class UsuarioEntityBuilder {
         private UsuarioEntity usuario;
 
         private UsuarioEntityBuilder(UsuarioEntity usuario){

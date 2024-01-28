@@ -1,10 +1,11 @@
-package br.com.bomtransporte.boaminuta.service;
+package br.com.bomtransporte.boaminuta.service.relatorio;
 
 import br.com.bomtransporte.boaminuta.model.ClienteModel;
-import br.com.bomtransporte.boaminuta.model.MinutaCargaModel;
+import br.com.bomtransporte.boaminuta.model.relatorio.MinutaCargaModel;
 import br.com.bomtransporte.boaminuta.model.PedidoModel;
 import br.com.bomtransporte.boaminuta.persistence.entity.PedidoEntity;
 import br.com.bomtransporte.boaminuta.persistence.repository.IFreteRepository;
+import br.com.bomtransporte.boaminuta.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

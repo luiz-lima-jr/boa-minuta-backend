@@ -1,12 +1,14 @@
-package br.com.bomtransporte.boaminuta.model;
+package br.com.bomtransporte.boaminuta.model.relatorio;
 
+import br.com.bomtransporte.boaminuta.model.FilialModel;
+import br.com.bomtransporte.boaminuta.model.UsuarioModel;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-public class FiltroRelatorioMargemOperacional {
+public class FiltroRelatorios {
 
     private List<FilialModel> filiais;
 

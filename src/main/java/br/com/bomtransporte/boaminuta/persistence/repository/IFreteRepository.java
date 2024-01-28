@@ -1,6 +1,6 @@
 package br.com.bomtransporte.boaminuta.persistence.repository;
 
-import br.com.bomtransporte.boaminuta.model.FiltroRelatorioMargemOperacional;
+import br.com.bomtransporte.boaminuta.model.relatorio.FiltroRelatorios;
 import br.com.bomtransporte.boaminuta.model.UsuarioModel;
 import br.com.bomtransporte.boaminuta.persistence.entity.FreteEntity;
 import jakarta.persistence.EntityManager;
@@ -15,7 +15,7 @@ public interface IFreteRepository extends JpaRepository<FreteEntity, Long> {
     FreteEntity findByNumeroCargaAndFilialId(Long numeroCarga, Long idFilial);
 
 
-    default List<FreteEntity> findByFiltro(FiltroRelatorioMargemOperacional filtro, EntityManager entityManager){
+    default List<FreteEntity> findByFiltro(FiltroRelatorios filtro, EntityManager entityManager){
         StringBuilder query = new StringBuilder("SELECT f FROM br.com.bomtransporte.boaminuta.persistence.entity.FreteEntity f WHERE 1=1 ");
 
         if(filtro.getFiliais() != null && !filtro.getFiliais().isEmpty()){

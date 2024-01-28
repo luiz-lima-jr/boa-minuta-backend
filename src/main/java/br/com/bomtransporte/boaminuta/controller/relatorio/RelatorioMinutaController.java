@@ -1,7 +1,7 @@
-package br.com.bomtransporte.boaminuta.controller;
+package br.com.bomtransporte.boaminuta.controller.relatorio;
 
 import br.com.bomtransporte.boaminuta.config.Constantes;
-import br.com.bomtransporte.boaminuta.service.RelatorioMinutaService;
+import br.com.bomtransporte.boaminuta.service.relatorio.RelatorioMinutaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,5 +1,7 @@
-package br.com.bomtransporte.boaminuta.model;
+package br.com.bomtransporte.boaminuta.model.relatorio;
 
+import br.com.bomtransporte.boaminuta.model.ClienteModel;
+import br.com.bomtransporte.boaminuta.model.PedidoModel;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
