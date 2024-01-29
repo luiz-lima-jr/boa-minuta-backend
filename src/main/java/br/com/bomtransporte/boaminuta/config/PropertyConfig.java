@@ -8,6 +8,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration("applicationProperties")
 @Data
 public class PropertyConfig {
+
     private String frontendUrl;
     private String cargaService;
+    private String datasourceUsernameMili;
+    private String datasourcePasswordMili;
+    private String datasourceUrlMili;
+    private String datasourceDriverClassNameMili;
 }
