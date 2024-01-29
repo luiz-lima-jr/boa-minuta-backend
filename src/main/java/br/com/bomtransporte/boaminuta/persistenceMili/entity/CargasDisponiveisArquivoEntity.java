@@ -1,4 +1,4 @@
-package br.com.bomtransporte.boaminuta.persistence.entity;
+package br.com.bomtransporte.boaminuta.persistenceMili.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

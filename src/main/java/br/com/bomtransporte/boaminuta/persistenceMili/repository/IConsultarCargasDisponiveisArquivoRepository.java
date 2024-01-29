@@ -1,9 +1,7 @@
-package br.com.bomtransporte.boaminuta.persistence.repository;
+package br.com.bomtransporte.boaminuta.persistenceMili.repository;
 
-import br.com.bomtransporte.boaminuta.persistence.entity.CargasDisponiveisArquivoEntity;
+import br.com.bomtransporte.boaminuta.persistenceMili.entity.CargasDisponiveisArquivoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.List;
 
 public interface IConsultarCargasDisponiveisArquivoRepository extends JpaRepository<CargasDisponiveisArquivoEntity, Long> {
 

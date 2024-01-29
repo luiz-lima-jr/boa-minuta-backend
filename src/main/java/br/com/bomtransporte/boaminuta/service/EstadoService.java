@@ -1,9 +1,7 @@
 package br.com.bomtransporte.boaminuta.service;
 
 import br.com.bomtransporte.boaminuta.persistence.entity.EstadoEntity;
-import br.com.bomtransporte.boaminuta.persistence.entity.FuncaoEntity;
 import br.com.bomtransporte.boaminuta.persistence.repository.IEstadoRepository;
-import br.com.bomtransporte.boaminuta.persistence.repository.IFuncaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -8,7 +8,6 @@ import br.com.bomtransporte.boaminuta.model.*;
 import br.com.bomtransporte.boaminuta.persistence.entity.FilialEntity;
 import br.com.bomtransporte.boaminuta.persistence.entity.FuncaoEntity;
 import br.com.bomtransporte.boaminuta.persistence.entity.UsuarioEntity;
-import br.com.bomtransporte.boaminuta.persistence.entity.UsuarioFilialEntity;
 import br.com.bomtransporte.boaminuta.persistence.repository.IFilialRepository;
 import br.com.bomtransporte.boaminuta.persistence.repository.IFuncaoRepository;
 import br.com.bomtransporte.boaminuta.persistence.repository.IUsuarioFilialRepository;
@@ -23,7 +22,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

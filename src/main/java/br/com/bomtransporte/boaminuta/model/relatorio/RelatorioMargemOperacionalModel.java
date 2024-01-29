@@ -1,8 +1,6 @@
 package br.com.bomtransporte.boaminuta.model.relatorio;
 
 import br.com.bomtransporte.boaminuta.model.FreteModel;
-import br.com.bomtransporte.boaminuta.persistence.entity.FilialEntity;
-import br.com.bomtransporte.boaminuta.persistence.entity.MunicipioEntity;
 import lombok.Data;
 
 import java.util.List;

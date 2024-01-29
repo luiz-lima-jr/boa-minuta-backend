@@ -3,7 +3,6 @@ package br.com.bomtransporte.boaminuta.persistence.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.List;
 import java.util.Objects;
 
 @Entity(name = "cliente")

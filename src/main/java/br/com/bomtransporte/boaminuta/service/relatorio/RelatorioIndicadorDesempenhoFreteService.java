@@ -1,6 +1,5 @@
 package br.com.bomtransporte.boaminuta.service.relatorio;
 
-import br.com.bomtransporte.boaminuta.adapter.FreteAdapter;
 import br.com.bomtransporte.boaminuta.exception.BoaMinutaBusinessException;
 import br.com.bomtransporte.boaminuta.model.UsuarioModel;
 import br.com.bomtransporte.boaminuta.model.relatorio.FiltroRelatorios;
@@ -8,8 +7,6 @@ import br.com.bomtransporte.boaminuta.model.relatorio.IndicadorDesempenhoFreteRe
 import br.com.bomtransporte.boaminuta.model.relatorio.RelatorioIndicadorDesempenhoFretes;
 import br.com.bomtransporte.boaminuta.persistence.entity.FreteEntity;
 import br.com.bomtransporte.boaminuta.persistence.entity.UsuarioEntity;
-import br.com.bomtransporte.boaminuta.service.PedidoService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;

@@ -1,10 +1,8 @@
 package br.com.bomtransporte.boaminuta.service;
 
-import br.com.bomtransporte.boaminuta.exception.UsuarioExistenteException;
 import br.com.bomtransporte.boaminuta.enuns.TokenTypeEnum;
 import br.com.bomtransporte.boaminuta.model.AutenticacaoRequestModel;
 import br.com.bomtransporte.boaminuta.model.AutenticacaoResponseModel;
-import br.com.bomtransporte.boaminuta.model.RegistroUsuarioModel;
 import br.com.bomtransporte.boaminuta.model.SessionModel;
 import br.com.bomtransporte.boaminuta.persistence.entity.TokenEntity;
 import br.com.bomtransporte.boaminuta.persistence.entity.UsuarioEntity;

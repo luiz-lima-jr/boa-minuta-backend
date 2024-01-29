@@ -1,6 +1,5 @@
 package br.com.bomtransporte.boaminuta.service;
 
-import br.com.bomtransporte.boaminuta.enuns.TipoAliquotaEnum;
 import br.com.bomtransporte.boaminuta.exception.AliquotaException;
 import br.com.bomtransporte.boaminuta.exception.BoaMinutaBusinessException;
 import br.com.bomtransporte.boaminuta.persistence.entity.AliquotaEntity;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Service

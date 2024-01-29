@@ -2,9 +2,7 @@ package br.com.bomtransporte.boaminuta.controller;
 
 
 import br.com.bomtransporte.boaminuta.config.Constantes;
-import br.com.bomtransporte.boaminuta.persistence.entity.AliquotaEntity;
 import br.com.bomtransporte.boaminuta.persistence.entity.CaminhaoEntity;
-import br.com.bomtransporte.boaminuta.service.AliquotaService;
 import br.com.bomtransporte.boaminuta.service.CaminhaoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

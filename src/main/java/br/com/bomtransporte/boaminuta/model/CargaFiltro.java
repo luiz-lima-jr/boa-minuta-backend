@@ -2,7 +2,6 @@ package br.com.bomtransporte.boaminuta.model;
 
 import br.com.bomtransporte.boaminuta.persistence.entity.FilialEntity;
 import lombok.Data;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 

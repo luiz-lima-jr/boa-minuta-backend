@@ -2,7 +2,10 @@ package br.com.bomtransporte.boaminuta.model;
 
 import br.com.bomtransporte.boaminuta.enuns.FobCifEnum;
 import br.com.bomtransporte.boaminuta.enuns.PagamentoPedagioEnum;
-import br.com.bomtransporte.boaminuta.persistence.entity.*;
+import br.com.bomtransporte.boaminuta.persistence.entity.CaminhaoEntity;
+import br.com.bomtransporte.boaminuta.persistence.entity.ClienteEntity;
+import br.com.bomtransporte.boaminuta.persistence.entity.FilialEntity;
+import br.com.bomtransporte.boaminuta.persistence.entity.MunicipioEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
