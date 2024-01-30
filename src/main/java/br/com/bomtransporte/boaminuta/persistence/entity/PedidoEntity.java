@@ -12,6 +12,7 @@ public class PedidoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "numero_pedido")
     private String numeroPedido;
 
     @ManyToOne(cascade = CascadeType.ALL)

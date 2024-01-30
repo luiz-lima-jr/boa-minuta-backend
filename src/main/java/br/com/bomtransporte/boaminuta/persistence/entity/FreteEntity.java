@@ -23,6 +23,7 @@ public class FreteEntity {
     private FilialEntity filial;
 
     @NotNull
+    @Column(name = "numero_carga")
     private Long numeroCarga;
 
     @NotNull
@@ -44,6 +45,7 @@ public class FreteEntity {
     private List<PedidoEntity> pedidos;
 
     @NotNull
+    @Column(name = "data_saida")
     private LocalDateTime dataSaida;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -60,12 +62,14 @@ public class FreteEntity {
     private CaminhaoEntity caminhao;
 
     @NotNull
+    @Column(name = "valor_carga")
     private Double valorCarga;
 
     @NotNull
     private Double pedagio;
 
     @NotNull
+    @Column(name = "complemento_calculo")
     private Double complementoCalculo;
 
     //@NotNull
@@ -76,22 +80,26 @@ public class FreteEntity {
 
     @NotNull
     @Enumerated(EnumType.STRING)
+    @Column(name = "fob_cif")
     private FobCifEnum fobCif;
 
     @NotNull
     @Enumerated(EnumType.STRING)
+    @Column(name = "pagamento_pedagio")
     private PagamentoPedagioEnum pagamentoPedagio;
 
     @NotNull
     private Double nfse;
 
     @NotNull
+    @Column(name = "frete_pago")
     private Double fretePago;
 
     @NotNull
     private Double iss;
 
     @NotNull
+    @Column(name = "pis_cofins")
     private Double pisCofins;
 
     @NotNull
@@ -101,6 +109,7 @@ public class FreteEntity {
     private Double custos;
 
     @NotNull
+    @Column(name = "ir_cs")
     private Double irCs;
 
     @NotNull
@@ -117,12 +126,15 @@ public class FreteEntity {
     private boolean paletizado;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @Column(name = "data_limite_carregamento")
     private LocalDateTime dataLimiteCarregamento;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @Column(name = "data_liberacao_faturamento")
     private LocalDateTime dataLiberacaoFaturamento;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @Column(name = "data_impressao_minuta")
     private LocalDateTime dataImpressaoMinuta;
 
     @ManyToOne(cascade = CascadeType.ALL)

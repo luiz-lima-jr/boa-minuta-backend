@@ -25,5 +25,6 @@ public class CaminhaoEntity {
     private PessoaTransporteEntity motorista;
 
     @NotNull
+    @Column(name = "data_alteracao")
     private LocalDateTime dataAlteracao;
 }

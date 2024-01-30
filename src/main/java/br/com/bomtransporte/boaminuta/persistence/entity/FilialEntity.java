@@ -16,6 +16,7 @@ public class FilialEntity {
     private String nome;
 
     @NotNull
+    @Column(name = "codigo_mili")
     private Long codigoMili;
 
     @NotNull

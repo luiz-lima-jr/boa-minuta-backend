@@ -16,6 +16,7 @@ public class MunicipioEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "codigo_ibge")
     private Long codigoIbge;
 
     private String nome;

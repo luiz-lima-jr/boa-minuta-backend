@@ -34,10 +34,13 @@ public class UsuarioEntity implements UserDetails {
     private boolean ativo;
 
     @NotNull
+    @Column(name = "data_cadastro")
     private LocalDateTime dataCadastro;
 
+    @Column(name = "token_recuperar_senha")
     private String tokenRecuperarSenha;
 
+    @Column(name = "usuario_cadastro_id")
     private Long usuarioCadastroId;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)

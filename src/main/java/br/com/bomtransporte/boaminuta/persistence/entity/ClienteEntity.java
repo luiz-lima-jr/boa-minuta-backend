@@ -13,6 +13,7 @@ public class ClienteEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "codigo_cliente_mili")
     private Long codigoClienteMili;
 
     private String cnpj;

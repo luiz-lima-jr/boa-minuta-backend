@@ -35,7 +35,7 @@ public class BancoMiliConfiguration {
     @Bean(name = "miliEntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder, @Qualifier("miliDataSource") DataSource dataSource) {
         Map<String, String> properties = new HashMap<>();
-        properties.put("hibernate.hbm2ddl.auto", "update");
+        properties.put("spring.jpa.hibernate.ddl-auto", "update");
         return builder
                 .dataSource(dataSource)
                 .packages("br.com.bomtransporte.boaminuta.persistenceMili.entity")

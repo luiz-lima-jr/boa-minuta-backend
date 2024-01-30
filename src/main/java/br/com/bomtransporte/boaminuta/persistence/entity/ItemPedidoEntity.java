@@ -19,6 +19,10 @@ public class ItemPedidoEntity {
     private String descricao;
     private BigDecimal volume;
     private BigDecimal quantidade;
+
+    @Column(name = "peso_bruto_unitario")
     private BigDecimal pesoBrutoUnitario;
+
+    @Column(name = "valor_unitario")
     private BigDecimal valorUnitario;
 }
