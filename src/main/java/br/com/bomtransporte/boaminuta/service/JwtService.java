@@ -1,6 +1,7 @@
 package br.com.bomtransporte.boaminuta.service;
 
 
+import br.com.bomtransporte.boaminuta.persistence.entity.UsuarioDadosAcessoEntity;
 import br.com.bomtransporte.boaminuta.persistence.entity.UsuarioEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -56,9 +57,9 @@ public class JwtService {
         return buildToken(new HashMap<>(), userDetails, refreshExpiration);
     }
 
-    public String gerarTokenRecuperacaoSenha(UsuarioEntity usuario){
+    public String gerarTokenRecuperacaoSenha(UsuarioDadosAcessoEntity usuario){
         return Jwts.builder()
-                .setSubject(usuario.getEmail())
+                .setSubject(usuario.getUsuario().getEmail())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiracaoTokenRecuperacao))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)

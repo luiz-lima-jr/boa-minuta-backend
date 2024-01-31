@@ -30,16 +30,16 @@ public class TokenEntity {
 
     @Enumerated(EnumType.STRING)
     @NotNull
-    private TokenTypeEnum tokenType = TokenTypeEnum.BEARER;
+    private TokenTypeEnum tokenType;
 
     private boolean revoked;
 
     private boolean expired;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "usuario_id")
+    @JoinColumn(name = "usuario_dados_acesso_id")
     @NotNull
-    private UsuarioEntity usuario;
+    private UsuarioDadosAcessoEntity usuarioDadosAcesso;
 
     public void revoke(){
         this.expired = true;

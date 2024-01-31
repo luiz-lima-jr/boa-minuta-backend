@@ -11,9 +11,8 @@ public interface ITokenRepository extends JpaRepository<TokenEntity, Integer> {
 
     @Query(value = """
       select t from br.com.bomtransporte.boaminuta.persistence.entity.TokenEntity t 
-      inner join br.com.bomtransporte.boaminuta.persistence.entity.UsuarioEntity u\s
-      on t.usuario.id = u.id\s
-      where u.id = :id and (t.expired = false or t.revoked = false)\s
+      inner join br.com.bomtransporte.boaminuta.persistence.entity.UsuarioDadosAcessoEntity u\s
+      on t.usuarioDadosAcesso.id = u.id where u.id = :id and (t.expired = false or t.revoked = false)\s
       """)
     List<TokenEntity> findAllValidTokenByUser(Long id);
 

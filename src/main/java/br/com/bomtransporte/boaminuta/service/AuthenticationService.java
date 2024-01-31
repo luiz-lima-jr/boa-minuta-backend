@@ -5,6 +5,7 @@ import br.com.bomtransporte.boaminuta.model.AutenticacaoRequestModel;
 import br.com.bomtransporte.boaminuta.model.AutenticacaoResponseModel;
 import br.com.bomtransporte.boaminuta.model.SessionModel;
 import br.com.bomtransporte.boaminuta.persistence.entity.TokenEntity;
+import br.com.bomtransporte.boaminuta.persistence.entity.UsuarioDadosAcessoEntity;
 import br.com.bomtransporte.boaminuta.persistence.entity.UsuarioEntity;
 import br.com.bomtransporte.boaminuta.persistence.repository.ITokenRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,9 +34,9 @@ public class AuthenticationService {
 
     public SessionModel getDadosSessao(){
         var session = new SessionModel();
-        session.setEmaill(usuarioService.getUserDetails().getEmail());
-        session.setNome(usuarioService.getUserDetails().getNome());
-        session.setFuncoes(usuarioService.getUserDetails().getAuthorities().stream().map(SimpleGrantedAuthority::getAuthority).collect(Collectors.toList()));
+        session.setEmaill(usuarioService.getUsuarioLogado().getEmail());
+        session.setNome(usuarioService.getUsuarioLogado().getNome());
+        session.setFuncoes(usuarioService.getUsuarioLogadoDadosAcesso().getAuthorities().stream().map(SimpleGrantedAuthority::getAuthority).collect(Collectors.toList()));
 
         return session;
     }
@@ -61,15 +62,15 @@ public class AuthenticationService {
     }
 
     public void logout(){
-        var user = usuarioService.getUserDetails();
+        var user = usuarioService.getUsuarioLogado();
         var tokens =  tokenRepository.findAllValidTokenByUser(user.getId());
         tokens.forEach(t -> t.revoke());
         tokenRepository.saveAll(tokens);
     }
 
-    private void saveUserToken(UsuarioEntity user, String jwtToken) {
+    private void saveUserToken(UsuarioDadosAcessoEntity user, String jwtToken) {
         var token = TokenEntity.builder()
-                .usuario(user)
+                .usuarioDadosAcesso(user)
                 .token(jwtToken)
                 .tokenType(TokenTypeEnum.BEARER)
                 .expired(false)
@@ -78,7 +79,7 @@ public class AuthenticationService {
         tokenRepository.save(token);
     }
 
-    private void revokeAllUserTokens(UsuarioEntity user) {
+    private void revokeAllUserTokens(UsuarioDadosAcessoEntity user) {
         var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
         if (validUserTokens.isEmpty())
             return;
