@@ -128,7 +128,7 @@ public class FreteService {
         var frete = freteRepository.findByNumeroCargaAndFilialId(nroCarga, idFilial);
         var filial = filialService.getById(idFilial);
         var cargaModel = frete != null ? cargaAdapter.freteEntityToModel(frete) : buscarDetalheCarga(nroCarga, filial.getCodigoMili(), filial.getSenha(), true);
-        var usuarioOp = frete != null ? frete.getResponsavelOperacional() : usuarioService.getUserDetails();
+        var usuarioOp = frete != null ? frete.getResponsavelOperacional() : usuarioService.getUsuarioLogado();
         var respFatModel = UsuarioModel.builder().nome(usuarioOp.getNome()).id(usuarioOp.getId()).build();
 
         cargaModel.setResponsavelOperacional(respFatModel);
@@ -167,16 +167,17 @@ public class FreteService {
 
     private void criarNovoFrete(FreteEntity frete) throws Exception {
         buscarEntidades(frete);
-        salvarCaminhao(frete);
 
         var pedidos = montarPedidos(frete);
         frete.setPedidos(pedidos);
 
-        var usuarioOperacional = usuarioService.getById(usuarioService.getUserDetails().getId());
+        var usuarioOperacional = usuarioService.getById(usuarioService.getUsuarioLogado().getId());
         frete.setResponsavelOperacional(usuarioOperacional);
 
+        salvarCaminhao(frete);
+
         if(frete.isFaturado()){
-            frete.setResponsavelFaturamento(usuarioService.getUserDetails());
+            frete.setResponsavelFaturamento(usuarioService.getUsuarioLogado());
             frete.setFaturado(true);
         }
 
@@ -214,13 +215,13 @@ public class FreteService {
         buscarEntidades(frete);
         salvarCaminhao(frete);
 
-        if(usuarioService.getUserDetails().isFaturista()) {
+        if(usuarioService.getUsuarioLogadoDadosAcesso().isFaturista()) {
             freteRepository.save(frete);
             return;
         }
 
         var freteAnterior = freteRepository.findById(frete.getId()).get();
-        if(freteAnterior.isFaturado() && !usuarioService.getUserDetails().isAdministrador()){
+        if(freteAnterior.isFaturado() && !usuarioService.getUsuarioLogadoDadosAcesso().isAdministrador()){
             throw new BoaMinutaBusinessException("Não é possível alterar o frete");
         }
         freteRepository.save(frete);
@@ -229,7 +230,7 @@ public class FreteService {
     public void salvarFaturista(FreteEntity frete){
         var freteAnterior = freteRepository.findById(frete.getId()).get();
         if( !freteAnterior.isFaturado() && frete.isFaturado()){
-            frete.setResponsavelFaturamento(usuarioService.getById(usuarioService.getUserDetails().getId()));
+            frete.setResponsavelFaturamento(usuarioService.getById(usuarioService.getUsuarioLogado().getId()));
             frete.setFaturado(true);
         }
     }

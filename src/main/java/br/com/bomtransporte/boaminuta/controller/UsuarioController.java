@@ -50,11 +50,11 @@ public class UsuarioController {
         var usuarios = usuarioService.getAll();
         var usuariosModel = usuarios.stream().map(u -> UsuarioModel.builder()
                                                 .id(u.getId())
-                                                .nome(u.getNome())
-                                                .email(u.getEmail())
+                                                .nome(u.getUsuario().getNome())
+                                                .email(u.getUsuario().getEmail())
                                                 .filiais(u.getFiliaisEntity())
                                                 .funcoes(u.getFuncoesEntity())
-                                                .situacao(u.isAtivo())
+                                                .situacao(u.getUsuario().isAtivo())
                                                 .build()
                                         ).collect(Collectors.toList());
         return ResponseEntity.ok(usuariosModel);

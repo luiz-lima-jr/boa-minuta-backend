@@ -24,13 +24,13 @@ public class FilialService {
     }
 
     public List<FilialModel> getFiliaisUsuario(){
-        var filiaisEntity = usuarioService.getUserDetails().isAdministrador()
-                ? getAll() : usuarioService.getUserDetails().getFiliaisEntity();
+        var filiaisEntity = usuarioService.getUsuarioLogadoDadosAcesso().isAdministrador()
+                ? getAll() : usuarioService.getUsuarioLogadoDadosAcesso().getFiliaisEntity();
         return filiaisEntity.stream().map(f -> new FilialModel(f.getId(), f.getNome())).collect(Collectors.toList());
     }
     public List<FilialEntity> getFiliaisUsuarioEntity(){
-        return usuarioService.getUserDetails().isAdministrador()
-                ? getAll() : usuarioService.getUserDetails().getFiliaisEntity();
+        return usuarioService.getUsuarioLogadoDadosAcesso().isAdministrador()
+                ? getAll() : usuarioService.getUsuarioLogadoDadosAcesso().getFiliaisEntity();
     }
 
     public FilialEntity getByCodigoMili(Long codigoMili){

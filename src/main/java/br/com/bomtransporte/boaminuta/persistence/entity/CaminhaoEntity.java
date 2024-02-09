@@ -27,4 +27,8 @@ public class CaminhaoEntity {
     @NotNull
     @Column(name = "data_alteracao")
     private LocalDateTime dataAlteracao;
+
+    @Transient
+    private boolean copiarTransportador;
+
 }

@@ -58,8 +58,8 @@ public class UsuarioService implements UserDetailsService {
     }
 
 
-    public List<UsuarioEntity> getAll(){
-        return repository.findAll();
+    public List<UsuarioDadosAcessoEntity> getAll(){
+        return usuarioDadosAcessoRepository.findAll();
     }
     public List<UsuarioModel> filtrarPorNome(String nome){
         var usuarios = repository.findByNomeContains(nome);
@@ -111,8 +111,8 @@ public class UsuarioService implements UserDetailsService {
             throw new UsernameNotFoundException("Usuário não encontrado");
         }
         usuarioDadosAcesso.getUsuario().setEmail(request.getEmail());
-        usuarioDadosAcesso.getUsuario().setFiliais(buscarFiliais(request.getFiliais()));
-        usuarioDadosAcesso.getUsuario().setFuncoes(buscarFuncoes(request.getFuncoes()));
+        usuarioDadosAcesso.setFiliais(buscarFiliais(request.getFiliais()));
+        usuarioDadosAcesso.setFuncoes(buscarFuncoes(request.getFuncoes()));
         usuarioDadosAcesso.getUsuario().setNome(request.getNome());
         usuarioDadosAcesso.getUsuario().setAtivo(request.isSituacao());
 

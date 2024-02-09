@@ -18,4 +18,11 @@ public class PessoaTransporteEntity {
 
     @Enumerated(EnumType.STRING)
     private ExperienciaBomEnum experiencia;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "usuario_responsavel_operacional_id")
+    private UsuarioEntity responsavelOperacional;
+
+
+
 }

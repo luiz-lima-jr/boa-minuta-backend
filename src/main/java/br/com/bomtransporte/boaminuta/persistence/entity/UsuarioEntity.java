@@ -37,28 +37,6 @@ public class UsuarioEntity {
     @Column(name = "usuario_cadastro_id")
     private Long usuarioCadastroId;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-    private List<UsuarioFuncaoEntity> funcoes;
-
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-    private List<UsuarioFilialEntity> filiais;
-
-    public List<FuncaoEntity> getFuncoesEntity(){
-        return funcoes == null ? new ArrayList<>() : funcoes.stream().map(f -> f.getFuncao()).collect(Collectors.toList());
-    }
-    public List<FilialEntity> getFiliaisEntity(){
-        return filiais == null ? new ArrayList<>() : filiais.stream().map(f -> f.getFilial()).collect(Collectors.toList());
-    }
-    public void setFiliais(List<FilialEntity> filiais){
-        if(this.filiais == null){
-            this.filiais = new ArrayList<>();
-        }
-        if(filiais == null){
-            filiais = new ArrayList<>();
-        }
-        this.filiais.clear();
-        filiais.forEach(r -> this.filiais.add(new UsuarioFilialEntity(null, this, r)));
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -81,24 +59,5 @@ public class UsuarioEntity {
                 ", email='" + email + '\'' +
                 ", ativo=" + ativo +
                 '}';
-    }
-
-    public void setFuncoes(List<FuncaoEntity> rolesCadastro){
-        if(this.funcoes == null){
-            this.funcoes = new ArrayList<>();
-        }
-        if(rolesCadastro == null){
-            rolesCadastro  = new ArrayList<>();
-        }
-        this.funcoes.clear();
-        rolesCadastro.forEach(r -> this.funcoes.add(new UsuarioFuncaoEntity(null, this, r)));
-    }
-
-    public boolean isAdministrador(){
-        return funcoes.stream().filter(f -> f.getFuncao().getDescricao().equals(FuncaoEnum.ADMINISTRADOR.getDescricao())).count() > 0;
-    }
-
-    public boolean isFaturista(){
-        return funcoes.stream().filter(f -> f.getFuncao().getDescricao().equals(FuncaoEnum.FATURISTA.getDescricao())).count() > 0;
     }
 }

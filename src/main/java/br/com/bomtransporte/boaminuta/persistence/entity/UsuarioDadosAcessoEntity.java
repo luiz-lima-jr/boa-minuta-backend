@@ -34,9 +34,38 @@ public class UsuarioDadosAcessoEntity implements UserDetails {
     @OneToMany(mappedBy = "usuarioDadosAcesso", cascade = CascadeType.ALL)
     private List<TokenEntity> tokens;
 
+
+    //@ManyToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER )
+    @JoinTable(name = "usuario_funcao",
+            joinColumns = { @JoinColumn(name = "usuario_dados_acesso_id") },
+            inverseJoinColumns = {@JoinColumn(name = "funcao_id")}
+    )
+    private List<FuncaoEntity> funcoes;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER )
+    @JoinTable(name = "usuario_filial",
+            joinColumns = { @JoinColumn(name = "usuario_dados_acesso_id") },
+            inverseJoinColumns = {@JoinColumn(name = "filial_id")}
+    )
+    private List<FilialEntity> filiais;
+
+    public List<FuncaoEntity> getFuncoesEntity(){
+        return funcoes == null ? new ArrayList<>() : funcoes;
+    }
+    public List<FilialEntity> getFiliaisEntity(){
+        return filiais == null ? new ArrayList<>() : filiais;
+    }
+    public void setFiliais(List<FilialEntity> filiais){
+        if(filiais == null){
+            filiais = new ArrayList<>();
+        }
+        this.filiais = filiais;
+    }
+
     @Override
     public List<SimpleGrantedAuthority> getAuthorities() {
-        return usuario.getFuncoesEntity()
+        return funcoes
                 .stream()
                 .map(role -> new SimpleGrantedAuthority(role.getDescricao()))
                 .collect(Collectors.toList());
@@ -74,6 +103,22 @@ public class UsuarioDadosAcessoEntity implements UserDetails {
     }
 
 
+
+    public void setFuncoes(List<FuncaoEntity> rolesCadastro){
+        if(rolesCadastro == null){
+            rolesCadastro  = new ArrayList<>();
+        }
+        this.funcoes = rolesCadastro;
+    }
+
+    public boolean isAdministrador(){
+        return funcoes.stream().filter(f -> f.getDescricao().equals(FuncaoEnum.ADMINISTRADOR.getDescricao())).count() > 0;
+    }
+
+    public boolean isFaturista(){
+        return funcoes.stream().filter(f -> f.getDescricao().equals(FuncaoEnum.FATURISTA.getDescricao())).count() > 0;
+    }
+
     public static class UsuarioDadosAcessoEntityBuilder {
         private UsuarioDadosAcessoEntity usuarioDados;
 
@@ -106,12 +151,12 @@ public class UsuarioDadosAcessoEntity implements UserDetails {
         }
 
         public UsuarioDadosAcessoEntityBuilder funcoes(List<FuncaoEntity> rolesCadastro){
-            this.usuarioDados.getUsuario().setFuncoes(rolesCadastro);
+            this.usuarioDados.setFuncoes(rolesCadastro);
             return this;
         }
 
         public UsuarioDadosAcessoEntityBuilder filiais(List<FilialEntity> filiais){
-            this.usuarioDados.getUsuario().setFiliais(filiais);
+            this.usuarioDados.setFiliais(filiais);
             return this;
         }
 
