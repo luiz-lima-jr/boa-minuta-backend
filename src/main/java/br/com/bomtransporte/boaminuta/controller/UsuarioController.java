@@ -41,7 +41,7 @@ public class UsuarioController {
         } catch (UsuarioExistenteException e ){
             throw e;
         } catch (Exception e){
-            throw new UsuarioException("Não foi possível salvar o usuário. " + e.getMessage());
+            throw new UsuarioException("Não foi possível salvar o usuário. " + e.getMessage(), e);
         }
     }
 

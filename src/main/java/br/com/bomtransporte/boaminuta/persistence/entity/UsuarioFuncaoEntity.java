@@ -14,17 +14,17 @@ import lombok.NoArgsConstructor;
 public class UsuarioFuncaoEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "usuario_id")
+    @JoinColumn(name = "usuarioId")
     @NotNull
     private UsuarioEntity usuario;
 
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "funcao_id")
+    @JoinColumn(name = "funcaoId")
     @NotNull
     private FuncaoEntity funcao;
 }

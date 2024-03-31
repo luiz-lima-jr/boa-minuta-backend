@@ -12,17 +12,16 @@ public class PedidoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "numero_pedido")
     private String numeroPedido;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "frete_id")
+    @JoinColumn(name = "freteId")
     private FreteEntity frete;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
     private List<ItemPedidoEntity> itensPedido;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "cliente_id")
+    @JoinColumn(name = "clienteId")
     private ClienteEntity cliente;
 }

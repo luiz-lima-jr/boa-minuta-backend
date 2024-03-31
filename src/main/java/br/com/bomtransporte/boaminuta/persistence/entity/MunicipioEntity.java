@@ -16,13 +16,12 @@ public class MunicipioEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "codigo_ibge")
     private Long codigoIbge;
 
     private String nome;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "estado_id")
+    @JoinColumn(name = "estadoId")
     private EstadoEntity estado;
 
     @Override

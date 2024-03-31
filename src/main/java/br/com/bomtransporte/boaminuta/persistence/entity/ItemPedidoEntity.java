@@ -13,16 +13,14 @@ public class ItemPedidoEntity {
     private Long id;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "pedido_id")
+    @JoinColumn(name = "pedidoId")
     private PedidoEntity pedido;
 
     private String descricao;
     private BigDecimal volume;
     private BigDecimal quantidade;
 
-    @Column(name = "peso_bruto_unitario")
     private BigDecimal pesoBrutoUnitario;
 
-    @Column(name = "valor_unitario")
     private BigDecimal valorUnitario;
 }

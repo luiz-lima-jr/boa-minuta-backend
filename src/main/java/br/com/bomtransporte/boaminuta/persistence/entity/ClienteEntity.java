@@ -13,7 +13,7 @@ public class ClienteEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "codigo_cliente_mili")
+    @Column(name = "codigoClienteMiliId")
     private Long codigoClienteMili;
 
     private String cnpj;
@@ -23,11 +23,11 @@ public class ClienteEntity {
     private String endereco;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "estado_id")
+    @JoinColumn(name = "estadoId")
     private EstadoEntity estado;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "municipio_id")
+    @JoinColumn(name = "municipioId")
     private MunicipioEntity cidade;
 
 

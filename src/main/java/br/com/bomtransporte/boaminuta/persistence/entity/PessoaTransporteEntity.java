@@ -20,7 +20,7 @@ public class PessoaTransporteEntity {
     private ExperienciaBomEnum experiencia;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "usuario_responsavel_operacional_id")
+    @JoinColumn(name = "responsavelOperacionalId")
     private UsuarioEntity responsavelOperacional;
 
 

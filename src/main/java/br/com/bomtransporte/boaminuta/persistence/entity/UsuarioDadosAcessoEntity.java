@@ -17,17 +17,17 @@ import java.util.stream.Collectors;
 public class UsuarioDadosAcessoEntity implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "usuario_id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "usuarioId")
     private UsuarioEntity usuario;
 
     @NotNull
     private String senha;
 
-    @Column(name = "token_recuperar_senha")
+    @Column(name = "tokenRecuperarSenhaId")
     private String tokenRecuperarSenha;
 
 
@@ -38,15 +38,15 @@ public class UsuarioDadosAcessoEntity implements UserDetails {
     //@ManyToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER )
     @JoinTable(name = "usuario_funcao",
-            joinColumns = { @JoinColumn(name = "usuario_dados_acesso_id") },
-            inverseJoinColumns = {@JoinColumn(name = "funcao_id")}
+            joinColumns = { @JoinColumn(name = "usuarioId") },
+            inverseJoinColumns = {@JoinColumn(name = "funcaoId")}
     )
     private List<FuncaoEntity> funcoes;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER )
     @JoinTable(name = "usuario_filial",
-            joinColumns = { @JoinColumn(name = "usuario_dados_acesso_id") },
-            inverseJoinColumns = {@JoinColumn(name = "filial_id")}
+            joinColumns = { @JoinColumn(name = "usuarioId") },
+            inverseJoinColumns = {@JoinColumn(name = "filialId")}
     )
     private List<FilialEntity> filiais;
 

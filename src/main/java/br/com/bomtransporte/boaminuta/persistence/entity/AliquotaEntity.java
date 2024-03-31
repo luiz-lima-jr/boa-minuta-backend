@@ -13,19 +13,19 @@ public class AliquotaEntity {
 
 
     @ManyToOne
-    @JoinColumn(name = "tipo_aliquota_id")
+    @JoinColumn(name = "tipoAliquotaId")
     private TipoAliquotaEntity tipoAliquota;
 
     @ManyToOne
-    @JoinColumn(name = "estado_origem_id")
+    @JoinColumn(name = "estadoOrigemId")
     private EstadoEntity estadoOrigem;
 
     @ManyToOne
-    @JoinColumn(name = "estado_destino_id")
+    @JoinColumn(name = "estadoDestinoId")
     private EstadoEntity estadoDestino;
 
     @ManyToOne
-    @JoinColumn(name = "filial_id")
+    @JoinColumn(name = "filialId")
     private FilialEntity filial;
 
     private Double aliquota;

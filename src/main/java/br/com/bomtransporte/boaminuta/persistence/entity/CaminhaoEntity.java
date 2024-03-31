@@ -17,15 +17,14 @@ public class CaminhaoEntity {
     private String placa;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "pessoa_transporte_transportador_id")
+    @JoinColumn(name = "pessoaTransporteTransportadorId")
     private PessoaTransporteEntity transportador;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "pessoa_transporte_motorista_id")
+    @JoinColumn(name = "pessoaTransporteMotoristaId")
     private PessoaTransporteEntity motorista;
 
     @NotNull
-    @Column(name = "data_alteracao")
     private LocalDateTime dataAlteracao;
 
     @Transient

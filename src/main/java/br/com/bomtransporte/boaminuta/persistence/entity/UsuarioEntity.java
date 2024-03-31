@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class UsuarioEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
@@ -31,10 +31,8 @@ public class UsuarioEntity {
     private boolean ativo;
 
     @NotNull
-    @Column(name = "data_cadastro")
     private LocalDateTime dataCadastro;
 
-    @Column(name = "usuario_cadastro_id")
     private Long usuarioCadastroId;
 
 
