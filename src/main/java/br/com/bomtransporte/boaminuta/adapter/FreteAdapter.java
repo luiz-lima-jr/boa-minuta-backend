@@ -14,6 +14,7 @@ import br.com.bomtransporte.boaminuta.persistence.entity.FilialEntity;
 import br.com.bomtransporte.boaminuta.persistence.entity.FreteEntity;
 import br.com.bomtransporte.boaminuta.persistence.repository.IMunicipioRepository;
 import br.com.bomtransporte.boaminuta.service.AliquotaService;
+import br.com.bomtransporte.boaminuta.service.CaminhaoService;
 import br.com.bomtransporte.boaminuta.service.ClienteService;
 import br.com.bomtransporte.boaminuta.service.FilialService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,15 +31,14 @@ public class FreteAdapter {
 
     @Autowired
     private AliquotaService aliquotaService;
-
     @Autowired
     private ClienteService clienteService;
-
     @Autowired
     private IMunicipioRepository municipioRepository;
-
     @Autowired
     private FilialService filialService;
+    @Autowired
+    private CaminhaoService caminhaoService;
 
     public FreteModel freteEntityToModel(FreteEntity frete) throws BoaMinutaBusinessException {
         var filial = frete.getFilial();
@@ -55,11 +55,10 @@ public class FreteAdapter {
             var respOpModel = UsuarioModel.builder().nome(respOpEntity.getNome()).id(respOpEntity.getId()).build();
             cargaModel.setResponsavelOperacional(respOpModel);
         }
-        var clientes = frete.getPedidos().stream().map(f -> f.getCliente()).collect(Collectors.toSet());
-        cargaModel.setClientes(clientes);
+        cargaModel.setClientes(frete.getClientes());
 
         cargaModel.setNumeroCarga(frete.getNumeroCarga());
-        cargaModel.setPlaca(frete.getCaminhao().getPlaca());
+        cargaModel.setPlaca(frete.getPlaca());
         cargaModel.setFaturado(frete.isFaturado());
         cargaModel.setVolumes(frete.getEntregas());
         cargaModel.setM3(frete.getM3());
@@ -134,6 +133,18 @@ public class FreteAdapter {
         }
         cargaModel.setM3(volume);
     }
+    private void setClientesVolumes(Carga cargaResponse, FreteEntity frete){
+        var volume = 0.0;
+        frete.setClientes(new HashSet<>());
+        for(var pedido : cargaResponse.getPedidos().getValue().getPedido()){
+            for(var itemPedido : pedido.getItensPedidos().getValue().getItemPedido()){
+                volume += itemPedido.getProduto().getValue().getVolumeM3();
+            }
+            var clienteEntity = clienteService.montarCliente(pedido.getCliente().getValue(), frete);
+            frete.getClientes().add(clienteEntity);
+        }
+        frete.setM3(volume);
+    }
 
     public FreteModel receberCargaDetalheResponseToCargaModel(ReceberCargaResponse cargaResponse, FilialModel filial) throws AliquotaException {
         var cargaModel = new FreteModel();
@@ -152,19 +163,50 @@ public class FreteAdapter {
         setClientesVolumes(cargaOut, cargaModel);
         setDatas(cargaOut, cargaModel);
 
-        //cargaModel.setFobCif()/;
-
         cargaModel.setFilial(filial);
-
         cargaModel.setObservacoes(cargaOut.getObservacao().getValue());
-
-
         cargaModel.setMunicipioDestino(municipioDestino);
-
-
         cargaModel.setMunicipioOrigem(filialOrigem);
 
         return cargaModel;
+    }
+
+    public FreteEntity receberCargaDetalheResponseToFreteEntity(ReceberCargaResponse cargaResponse, FilialEntity filial) throws AliquotaException {
+        var freteEntity = new FreteEntity();
+
+        atualizarFreteEntity(freteEntity, cargaResponse, filial);
+
+        return freteEntity;
+    }
+
+    public void atualizarFreteEntity(FreteEntity freteEntity, ReceberCargaResponse cargaResponse, FilialEntity filial)  throws AliquotaException {
+        var cargaOut = cargaResponse.getOut();
+        var municipioDestino = municipioRepository.findByCodigoIbge(cargaOut.getCodIbge().longValue());
+        var filialOrigem = filialService.getByCodigoMili(Long.parseLong(cargaOut.getLocalCarregamento().getValue()));
+        freteEntity.setNumeroCarga(cargaOut.getNrCarga());
+
+        var caminhao = cargaOut.getCaminhao();
+        if( caminhao != null && caminhao.getValue().getPlaca() != null){
+            freteEntity.setPlaca(cargaOut.getCaminhao().getValue().getPlaca().getValue());
+            var caminhaoExistente = caminhaoService.buscarPorPlaca(caminhao.getValue().getPlaca().getValue());
+            if(caminhaoExistente != null){
+                freteEntity.setCaminhao(caminhaoExistente);
+            }
+        }
+        freteEntity.setValorCarga(cargaOut.getVlrConhecimento());
+        freteEntity.setEntregas(cargaOut.getTotalEntrega());
+        freteEntity.setComplementoCalculo(cargaOut.getVlrRedespacho());
+
+        if(cargaOut.getObservacao() != null){
+            freteEntity.setObservacoes(cargaOut.getObservacao().getValue());
+        }
+        setAliquotasFreteEntity(freteEntity, filialOrigem, municipioDestino.getEstado());
+        setClientesVolumes(cargaOut, freteEntity);
+        setDatas(cargaOut, freteEntity);
+
+        freteEntity.setFilial(filial);
+        freteEntity.setMunicipioDestino(municipioDestino);
+        freteEntity.setMunicipioOrigem(filialOrigem);
     }
 
     private void setAliquotasCargaModel(FreteModel cargaModel, FilialEntity filialOrigem, EstadoEntity estadoDestino) throws AliquotaException {
@@ -174,6 +216,15 @@ public class FreteAdapter {
         cargaModel.setAliquotaCustos(aliquotaService.buscarValorAliquotaOrigemDestino(filialOrigem, estadoDestino, TipoAliquotaEnum.CUSTOS.getId()));
         cargaModel.setAliquotaIrcs(aliquotaService.buscarValorAliquotaOrigemDestino(filialOrigem, estadoDestino, TipoAliquotaEnum.IRRF.getId()));
         cargaModel.setAliquotaIcms(aliquotaService.buscarValorAliquotaOrigemDestino(filialOrigem, estadoDestino, TipoAliquotaEnum.ICMS.getId()));
+    }
+
+    private void setAliquotasFreteEntity(FreteEntity frete, FilialEntity filialOrigem, EstadoEntity estadoDestino) throws AliquotaException {
+
+        frete.setAliquotaIss(aliquotaService.buscarValorAliquotaFilial(filialOrigem.getId(), TipoAliquotaEnum.ISS.getId()));
+        frete.setAliquotaPisCofins(aliquotaService.buscarValorAliquotaOrigemDestino(filialOrigem, estadoDestino, TipoAliquotaEnum.PIS_COFINS.getId()));
+        frete.setAliquotaCustos(aliquotaService.buscarValorAliquotaOrigemDestino(filialOrigem, estadoDestino, TipoAliquotaEnum.CUSTOS.getId()));
+        frete.setAliquotaIrcs(aliquotaService.buscarValorAliquotaOrigemDestino(filialOrigem, estadoDestino, TipoAliquotaEnum.IRRF.getId()));
+        frete.setAliquotaIcms(aliquotaService.buscarValorAliquotaOrigemDestino(filialOrigem, estadoDestino, TipoAliquotaEnum.ICMS.getId()));
     }
 
     private void setDatas(Carga cargaOut, FreteModel cargaModel){
@@ -186,6 +237,20 @@ public class FreteAdapter {
 
         var dtSaida = cargaOut.getDtHrFaturamento();
         if(dtSaida != null){
+            cargaModel.setDataSaida(LocalDateTime.parse(dtSaida.getValue(), df));
+        }
+    }
+
+    private void setDatas(Carga cargaOut, FreteEntity cargaModel){
+        var df = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+
+        var dtLiberacaoFaturamento = cargaOut.getDtLiberacaoFaturamento();
+        if(dtLiberacaoFaturamento != null && !dtLiberacaoFaturamento.getValue().isEmpty()){
+            cargaModel.setDataLiberacaoFaturamento(LocalDateTime.parse(dtLiberacaoFaturamento.getValue(), df));
+        }
+
+        var dtSaida = cargaOut.getDtHrFaturamento();
+        if(dtSaida != null && !dtSaida.getValue().isEmpty()){
             cargaModel.setDataSaida(LocalDateTime.parse(dtSaida.getValue(), df));
         }
     }

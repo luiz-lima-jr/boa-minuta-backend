@@ -9,6 +9,7 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Entity(name = "frete")
 @Data
@@ -18,7 +19,7 @@ public class FreteEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "filialId")
     private FilialEntity filial;
 
@@ -31,19 +32,15 @@ public class FreteEntity {
     //@NotNull
     private Integer entregas;
 
-    @NotNull
     private Double m3;
 
-    //@NotNull
     private Double volumes;
 
-    //@NotNull
     private String complemento;
 
     @OneToMany(mappedBy = "frete", cascade = CascadeType.ALL)
     private List<PedidoEntity> pedidos;
 
-    @NotNull
     private LocalDateTime dataSaida;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -56,63 +53,47 @@ public class FreteEntity {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "caminhaoId")
-    @NotNull
     private CaminhaoEntity caminhao;
 
-    @NotNull
     private Double valorCarga;
 
-    @NotNull
     private Double pedagio;
 
-    @NotNull
     private Double complementoCalculo;
 
-    //@NotNull
     private Double descontos;
 
-    @NotNull
     private Double frete;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     private FobCifEnum fobCif;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     private PagamentoPedagioEnum pagamentoPedagio;
 
-    @NotNull
     private Double nfse;
 
-    @NotNull
     private Double fretePago;
 
-    @NotNull
     private Double iss;
 
-    @NotNull
     private Double pisCofins;
 
-    @NotNull
     private Double icms;
 
-    @NotNull
     private Double custos;
 
-    @NotNull
     private Double irCs;
 
-    @NotNull
     private Double saldo;
 
-    @NotNull
     private Double margem;
 
-    @NotNull
     private Double markup;
 
     private String observacoes;
+
+    private String placa;
 
     private boolean paletizado;
 
@@ -127,17 +108,33 @@ public class FreteEntity {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "usuarioResponsavelOperacionalId")
-    @NotNull
     private UsuarioEntity responsavelOperacional;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "usuarioResponsavelFaturamentoId")
     private UsuarioEntity responsavelFaturamento;
 
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY )
+    @JoinTable(name = "cliente_frete",
+            joinColumns = { @JoinColumn(name = "freteId") },
+            inverseJoinColumns = {@JoinColumn(name = "clienteId")}
+    )
+    private Set<ClienteEntity> clientes;
+
+
+    @Transient
+    private Double aliquotaIss;
+    @Transient
+    private Double aliquotaPisCofins;
+    @Transient
+    private Double aliquotaCustos;
+    @Transient
+    private Double aliquotaIrcs;
+    @Transient
+    private Double aliquotaIcms;
     @Transient
     public double totalImpostos(){
         return pisCofins;
     }
-
-
 }

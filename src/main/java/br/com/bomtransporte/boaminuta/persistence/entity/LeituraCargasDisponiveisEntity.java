@@ -7,7 +7,7 @@ import jakarta.persistence.Id;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-@Entity(name = "leitura-cargas-disponiveis")
+@Entity(name = "leitura_cargas_disponiveis")
 @Data
 public class LeituraCargasDisponiveisEntity {
     @Id

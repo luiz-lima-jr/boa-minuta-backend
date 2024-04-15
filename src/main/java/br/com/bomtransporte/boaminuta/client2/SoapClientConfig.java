@@ -1,10 +1,11 @@
 package br.com.bomtransporte.boaminuta.client2;
 
+import br.com.bomtransporte.boaminuta.service.DetalheCargaArquivoService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
-@Configuration
+//@Configuration
 public class SoapClientConfig {
 
     @Bean
@@ -15,8 +16,8 @@ public class SoapClientConfig {
     }
 
     @Bean
-    public CargaMiliClient articleClient(Jaxb2Marshaller jaxb2Marshaller) {
-        CargaMiliClient articleClient = new CargaMiliClient();
+    public DetalheCargaArquivoService articleClient(Jaxb2Marshaller jaxb2Marshaller) {
+        DetalheCargaArquivoService articleClient = new DetalheCargaArquivoService();
         articleClient.setDefaultUri("https://web2.mili.com.br/eFrotasws/miliws/CargaService");
         articleClient.setMarshaller(jaxb2Marshaller);
         articleClient.setUnmarshaller(jaxb2Marshaller);

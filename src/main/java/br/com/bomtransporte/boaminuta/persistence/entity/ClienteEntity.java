@@ -22,11 +22,11 @@ public class ClienteEntity {
 
     private String endereco;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "estadoId")
     private EstadoEntity estado;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "municipioId")
     private MunicipioEntity cidade;
 

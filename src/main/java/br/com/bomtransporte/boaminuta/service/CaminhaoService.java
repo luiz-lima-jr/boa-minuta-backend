@@ -54,14 +54,11 @@ public class CaminhaoService {
             caminhaoAnterior.getTransportador().setExperiencia(motoristaNovo.getExperiencia());
             motoristaNovo = caminhaoAnterior.getTransportador();
         }
-
         caminhaoAnterior.setMotorista(motoristaNovo);
-
 
         if(motoristaNovo.getResponsavelOperacional() == null) {
             motoristaNovo.setResponsavelOperacional(usuarioService.getUsuarioLogado());
         }
-
         pessoaTransporteRepository.save(motoristaNovo);
     }
 
@@ -71,5 +68,9 @@ public class CaminhaoService {
 
     public List<CaminhaoEntity> filtrarPorPlaca(String placa){
         return caminhaoRepository.findByPlacaLike(placa);
+    }
+
+    public CaminhaoEntity buscarPorPlaca(String placa){
+        return caminhaoRepository.findByPlaca(placa);
     }
 }

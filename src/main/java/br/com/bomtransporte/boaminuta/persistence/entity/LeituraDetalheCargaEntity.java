@@ -8,7 +8,7 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
-@Entity(name = "leitura-detalhe-carga")
+@Entity(name = "leitura_detalhe_carga")
 @Data
 public class LeituraDetalheCargaEntity {
     @Id

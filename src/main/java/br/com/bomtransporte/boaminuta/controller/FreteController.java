@@ -20,7 +20,7 @@ public class FreteController {
     private FreteService cargaService;
 
     @PostMapping("cargas-disponiveis")
-    public ResponseEntity<List<FreteModel>> consultarCargasDisponiveis(@RequestBody CargaFiltro filtro) throws Exception {
+    public ResponseEntity<List<FreteEntity>> consultarCargasDisponiveis(@RequestBody CargaFiltro filtro) throws Exception {
         return ResponseEntity.ok(cargaService.consultarCargas(filtro));
     }
 

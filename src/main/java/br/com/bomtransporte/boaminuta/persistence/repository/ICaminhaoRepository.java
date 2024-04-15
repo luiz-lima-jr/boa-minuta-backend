@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface ICaminhaoRepository extends JpaRepository<CaminhaoEntity, Long> {
     List<CaminhaoEntity> findByPlacaLike(String placa);
+    CaminhaoEntity findByPlaca(String placa);
 }
