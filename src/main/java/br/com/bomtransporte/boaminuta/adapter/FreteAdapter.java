@@ -3,6 +3,7 @@ package br.com.bomtransporte.boaminuta.adapter;
 import br.com.bomtransporte.boaminuta.enuns.TipoAliquotaEnum;
 import br.com.bomtransporte.boaminuta.exception.AliquotaException;
 import br.com.bomtransporte.boaminuta.exception.BoaMinutaBusinessException;
+import br.com.bomtransporte.boaminuta.exception.FreteException;
 import br.com.bomtransporte.boaminuta.mili.Carga;
 import br.com.bomtransporte.boaminuta.mili.ConsultarCargasDisponiveisResponse;
 import br.com.bomtransporte.boaminuta.mili.ReceberCargaResponse;
@@ -183,6 +184,9 @@ public class FreteAdapter {
         var cargaOut = cargaResponse.getOut();
         var municipioDestino = municipioRepository.findByCodigoIbge(cargaOut.getCodIbge().longValue());
         var filialOrigem = filialService.getByCodigoMili(Long.parseLong(cargaOut.getLocalCarregamento().getValue()));
+        if(filialOrigem == null){
+            throw new RuntimeException("Filial " + cargaOut.getLocalCarregamento().getValue() + " não cadastrada");
+        }
         freteEntity.setNumeroCarga(cargaOut.getNrCarga());
 
         var caminhao = cargaOut.getCaminhao();
