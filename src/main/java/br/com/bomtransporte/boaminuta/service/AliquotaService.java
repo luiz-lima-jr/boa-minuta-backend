@@ -50,9 +50,13 @@ public class AliquotaService {
     }
 
     public Double buscarValorAliquotaOrigemDestino(FilialEntity origem, EstadoEntity destino, Long idTipoAliquota) throws AliquotaException {
-        var aliquota = repository.findByFilialIdAndEstadoDestinoIdAndTipoAliquotaId(origem.getId(), destino.getId(), idTipoAliquota);
+        try {
+            var aliquota = repository.findByEstadoOrigemIdAndEstadoDestinoIdAndTipoAliquotaIdAndFilialId(origem.getMunicipio().getEstado().getId(), destino.getId(), idTipoAliquota, origem.getId());
 
-        return aliquota == null ? 0 : aliquota.getAliquota();
+            return aliquota == null ? 0 : aliquota.getAliquota();
+        } catch (Exception e){
+            throw e;
+        }
     }
 
 }

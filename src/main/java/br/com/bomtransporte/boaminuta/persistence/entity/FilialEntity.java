@@ -20,4 +20,8 @@ public class FilialEntity {
 
     @NotNull
     private String senha;
+
+    @ManyToOne
+    @JoinColumn(name = "municipioId")
+    private MunicipioEntity municipio;
 }

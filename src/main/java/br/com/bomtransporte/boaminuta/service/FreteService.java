@@ -81,10 +81,10 @@ public class FreteService {
                 ok = ok && c.isFaturado();
             }
             if(filtro.getDataInicioFaturamento() != null){
-                ok = ok && filtro.getDataInicioFaturamento().isBefore(c.getDataLiberacaoFaturamento());
+                ok = ok && filtro.getDataInicioFaturamento().atTime(0,0,0).isBefore(c.getDataLiberacaoFaturamento());
             }
             if(filtro.getDataFimFaturamento() != null){
-                ok = ok && filtro.getDataFimFaturamento().isAfter(c.getDataLiberacaoFaturamento());
+                ok = ok && filtro.getDataFimFaturamento().atTime(23,59,59).isAfter(c.getDataLiberacaoFaturamento());
             }
             return ok;
         }).collect(Collectors.toList());
