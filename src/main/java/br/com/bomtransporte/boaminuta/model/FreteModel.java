@@ -74,6 +74,7 @@ public class FreteModel {
     private Set<ClienteEntity> clientes;
 
     private boolean faturado;
+    private boolean freteCalculado;
 
     @Override
     public boolean equals(Object o) {

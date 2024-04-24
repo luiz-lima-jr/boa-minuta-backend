@@ -1,7 +1,6 @@
 package br.com.bomtransporte.boaminuta.service;
 
 import br.com.bomtransporte.boaminuta.persistence.entity.CaminhaoEntity;
-import br.com.bomtransporte.boaminuta.persistence.entity.UsuarioEntity;
 import br.com.bomtransporte.boaminuta.persistence.repository.ICaminhaoRepository;
 import br.com.bomtransporte.boaminuta.persistence.repository.IPessoaTransporteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +49,7 @@ public class CaminhaoService {
 
     private void atualizarMotorista(CaminhaoEntity caminhaoAnterior, CaminhaoEntity caminhaoNovo){
         var motoristaNovo = caminhaoNovo.getMotorista();
-        if(caminhaoNovo.isCopiarTransportador()){
+        if(!caminhaoNovo.isHabiliarCampoMotorista()){
             caminhaoAnterior.getTransportador().setExperiencia(motoristaNovo.getExperiencia());
             motoristaNovo = caminhaoAnterior.getTransportador();
         }

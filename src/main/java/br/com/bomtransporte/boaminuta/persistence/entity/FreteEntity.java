@@ -29,6 +29,8 @@ public class FreteEntity {
     @NotNull
     private boolean faturado;
 
+    private boolean freteCalculado;
+
     //@NotNull
     private Integer entregas;
 
@@ -38,7 +40,7 @@ public class FreteEntity {
 
     private String complemento;
 
-    @OneToMany(mappedBy = "frete", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "frete", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<PedidoEntity> pedidos;
 
     private LocalDateTime dataSaida;
@@ -115,7 +117,7 @@ public class FreteEntity {
     private UsuarioEntity responsavelFaturamento;
 
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY )
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY )
     @JoinTable(name = "cliente_frete",
             joinColumns = { @JoinColumn(name = "freteId") },
             inverseJoinColumns = {@JoinColumn(name = "clienteId")}

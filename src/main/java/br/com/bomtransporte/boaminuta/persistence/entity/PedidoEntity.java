@@ -14,7 +14,7 @@ public class PedidoEntity {
 
     private String numeroPedido;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "freteId")
     private FreteEntity frete;
 

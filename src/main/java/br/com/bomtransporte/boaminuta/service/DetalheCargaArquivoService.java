@@ -28,8 +28,6 @@ public class DetalheCargaArquivoService extends WebServiceGatewaySupport {
 
     public ReceberCargaResponse consultarDetalheCarga(Long codigoFilial, Long codigoCarga) throws Exception {
         try {
-            JAXBContext jaxbContext = JAXBContext.newInstance(ReceberCargaResponse.class);
-            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             var result = detalheCargaArquivoRepository.findByCodigoFilialAndCodigoCargaOrderByIdDesc(codigoFilial, codigoCarga);
             if(result.isEmpty()){
                 return null;

@@ -9,6 +9,7 @@ import br.com.bomtransporte.boaminuta.model.UsuarioModel;
 import br.com.bomtransporte.boaminuta.persistence.entity.FilialEntity;
 import br.com.bomtransporte.boaminuta.persistence.entity.FreteEntity;
 import br.com.bomtransporte.boaminuta.persistence.entity.PedidoEntity;
+import br.com.bomtransporte.boaminuta.persistence.repository.IClienteFreteRepository;
 import br.com.bomtransporte.boaminuta.persistence.repository.IFreteRepository;
 import br.com.bomtransporte.boaminuta.persistence.repository.IMunicipioRepository;
 import br.com.bomtransporte.boaminuta.persistenceMili.entity.DetalheCargaArquivoEntity;
@@ -34,7 +35,7 @@ public class FreteService {
     private FilialService filialService;
 
     @Autowired
-    private FreteAdapter cargaAdapter;
+    private FreteAdapter freteAdapter;
 
     @Autowired
     private CaminhaoService caminhaoService;
@@ -47,6 +48,8 @@ public class FreteService {
 
     @Autowired
     private PedidoService pedidoService;
+    @Autowired
+    private IClienteFreteRepository clienteFreteRepository;
 
     public FreteService(){
 
@@ -57,10 +60,6 @@ public class FreteService {
         filiais = filiais == null || filiais.isEmpty() ? filialService.getFiliaisUsuarioEntity() : filiais;
 
         var fretes = freteRepository.findAllByFilialIdIn(filiais.stream().map(FilialEntity::getId).collect(Collectors.toList()));
-        List<FreteModel> cargas = new ArrayList<>();
-       /* for(var frete : fretes){
-            cargas.add(cargaAdapter.freteEntityToModel(frete));
-        }*/
 
         return aplicarFiltros(fretes, filtro);
     }
@@ -86,24 +85,23 @@ public class FreteService {
             if(filtro.getDataFimFaturamento() != null){
                 ok = ok && filtro.getDataFimFaturamento().atTime(23,59,59).isAfter(c.getDataLiberacaoFaturamento());
             }
+            c.setPedidos(null);
             return ok;
         }).collect(Collectors.toList());
     }
 
     public FreteModel buscarCarga(Long nroCarga, Long idFilial) throws Exception {
         var frete = freteRepository.findByNumeroCargaAndFilialId(nroCarga, idFilial);
-        var filial = filialService.getById(idFilial);
-        var cargaModel = frete != null ? cargaAdapter.freteEntityToModel(frete) : buscarDetalheCarga(nroCarga, filial.getCodigoMili(), filial.getSenha(), true);
+        var freteModel = freteAdapter.freteEntityToModel(frete);
         var usuarioOp = frete != null && frete.getResponsavelOperacional() != null ? frete.getResponsavelOperacional() : usuarioService.getUsuarioLogado();
         var respFatModel = UsuarioModel.builder().nome(usuarioOp.getNome()).id(usuarioOp.getId()).build();
 
-        cargaModel.setResponsavelOperacional(respFatModel);
+        freteModel.setResponsavelOperacional(respFatModel);
 
-        return cargaModel;
+        return freteModel;
     }
 
     public FreteModel buscarDetalheCarga(Long nroCarga, Long codigoMili, String senha, boolean isArquivoObrigatorio) throws Exception {
-       // var request = new ReceberCarga(codigoMili, senha, nroCarga);
         var cargaMili = detalheCargaService.consultarDetalheCarga(nroCarga, codigoMili);
         var filialModel = filialService.getModelByCodigoMili(codigoMili);
         if(cargaMili == null) {
@@ -116,11 +114,16 @@ public class FreteService {
                 return cargaModel;
             }
         }
-        return cargaAdapter.receberCargaDetalheResponseToCargaModel(cargaMili, filialModel);
+        return freteAdapter.receberCargaDetalheResponseToCargaModel(cargaMili, filialModel);
     }
 
     @Transactional
     public void salvar(FreteEntity frete) throws Exception {
+        var clientes = clienteFreteRepository.findByFreteId(frete.getId());
+        if(!frete.isFreteCalculado()){
+            frete.setFreteCalculado(true);
+        }
+        frete.setClientes(clientes.stream().map(c -> c.getCliente()).collect(Collectors.toSet()));
         frete.setSaldo(round(frete.getSaldo()));
         frete.setMargem(round(frete.getMargem()));
         frete.setMarkup(round(frete.getMarkup()));
@@ -204,13 +207,13 @@ public class FreteService {
     @Transactional
     public FreteEntity atualizarFreteView(FilialEntity filial, DetalheCargaArquivoEntity detalheCargaArquivo){
         try {
-            var carga = detalheCargaService.converterWsdlToReceberCargaResponse(detalheCargaArquivo);
-            var nrCarga = carga.getOut().getNrCarga();
+            var cargaResponse = detalheCargaService.converterWsdlToReceberCargaResponse(detalheCargaArquivo);
+            var nrCarga = cargaResponse.getOut().getNrCarga();
             var frete =  freteRepository.findByNumeroCargaAndFilialId(nrCarga, filial.getId());
             if(frete != null) {
-                cargaAdapter.atualizarFreteEntity(frete, carga, filial);
+                freteAdapter.atualizarFreteEntity(frete, cargaResponse, filial);
             } else {
-                frete = cargaAdapter.receberCargaDetalheResponseToFreteEntity(carga, filial);
+                frete = freteAdapter.receberCargaDetalheResponseToFreteEntity(cargaResponse, filial);
             }
             freteRepository.save(frete);
             return frete;

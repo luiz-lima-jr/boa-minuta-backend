@@ -13,17 +13,16 @@ import br.com.bomtransporte.boaminuta.model.UsuarioModel;
 import br.com.bomtransporte.boaminuta.persistence.entity.EstadoEntity;
 import br.com.bomtransporte.boaminuta.persistence.entity.FilialEntity;
 import br.com.bomtransporte.boaminuta.persistence.entity.FreteEntity;
+import br.com.bomtransporte.boaminuta.persistence.entity.PedidoEntity;
 import br.com.bomtransporte.boaminuta.persistence.repository.IMunicipioRepository;
-import br.com.bomtransporte.boaminuta.service.AliquotaService;
-import br.com.bomtransporte.boaminuta.service.CaminhaoService;
-import br.com.bomtransporte.boaminuta.service.ClienteService;
-import br.com.bomtransporte.boaminuta.service.FilialService;
+import br.com.bomtransporte.boaminuta.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -40,6 +39,9 @@ public class FreteAdapter {
     private FilialService filialService;
     @Autowired
     private CaminhaoService caminhaoService;
+
+    @Autowired
+    private PedidoService pedidoService;
 
     public FreteModel freteEntityToModel(FreteEntity frete) throws BoaMinutaBusinessException {
         var filial = frete.getFilial();
@@ -90,6 +92,7 @@ public class FreteAdapter {
         cargaModel.setFilial(new FilialModel(filial.getId(), filial.getNome(), filial.getCodigoMili()));
         cargaModel.setMunicipioDestino(frete.getMunicipioDestino());
         cargaModel.setMunicipioOrigem(frete.getMunicipioOrigem());
+        cargaModel.setFreteCalculado(frete.isFreteCalculado());
         setAliquotasCargaModel(cargaModel, frete.getFilial(), frete.getMunicipioDestino().getEstado());
 
         cargaModel.setCaminhao(frete.getCaminhao());
@@ -148,31 +151,31 @@ public class FreteAdapter {
     }
 
     public FreteModel receberCargaDetalheResponseToCargaModel(ReceberCargaResponse cargaResponse, FilialModel filial) throws AliquotaException {
-        var cargaModel = new FreteModel();
+        var freteModel = new FreteModel();
         var cargaOut = cargaResponse.getOut();
         var municipioDestino = municipioRepository.findByCodigoIbge(cargaOut.getCodIbge().longValue());
         var filialOrigem = filialService.getByCodigoMili(Long.parseLong(cargaOut.getLocalCarregamento().getValue()));
 
-        cargaModel.setNumeroCarga(cargaOut.getNrCarga());
-        cargaModel.setPlaca(cargaOut.getCaminhao().getValue().getPlaca().getValue());
-        cargaModel.setValorCarga(cargaOut.getVlrConhecimento());
-        cargaModel.setEntregas(cargaOut.getTotalEntrega());
-        cargaModel.setComplementoCalculo(cargaOut.getVlrRedespacho());
+        freteModel.setNumeroCarga(cargaOut.getNrCarga());
+        freteModel.setPlaca(cargaOut.getCaminhao().getValue().getPlaca().getValue());
+        freteModel.setValorCarga(cargaOut.getVlrConhecimento());
+        freteModel.setEntregas(cargaOut.getTotalEntrega());
+        freteModel.setComplementoCalculo(cargaOut.getVlrRedespacho());
 
-        cargaModel.setObservacoes(cargaOut.getObservacao().getValue());
-        setAliquotasCargaModel(cargaModel, filialOrigem, municipioDestino.getEstado());
-        setClientesVolumes(cargaOut, cargaModel);
-        setDatas(cargaOut, cargaModel);
+        freteModel.setObservacoes(cargaOut.getObservacao().getValue());
+        setAliquotasCargaModel(freteModel, filialOrigem, municipioDestino.getEstado());
+        setClientesVolumes(cargaOut, freteModel);
+        setDatas(cargaOut, freteModel);
 
-        cargaModel.setFilial(filial);
-        cargaModel.setObservacoes(cargaOut.getObservacao().getValue());
-        cargaModel.setMunicipioDestino(municipioDestino);
-        cargaModel.setMunicipioOrigem(filialOrigem);
+        freteModel.setFilial(filial);
+        freteModel.setObservacoes(cargaOut.getObservacao().getValue());
+        freteModel.setMunicipioDestino(municipioDestino);
+        freteModel.setMunicipioOrigem(filialOrigem);
 
-        return cargaModel;
+        return freteModel;
     }
 
-    public FreteEntity receberCargaDetalheResponseToFreteEntity(ReceberCargaResponse cargaResponse, FilialEntity filial) throws AliquotaException {
+    public FreteEntity receberCargaDetalheResponseToFreteEntity(ReceberCargaResponse cargaResponse, FilialEntity filial) throws Exception {
         var freteEntity = new FreteEntity();
 
         atualizarFreteEntity(freteEntity, cargaResponse, filial);
@@ -180,7 +183,7 @@ public class FreteAdapter {
         return freteEntity;
     }
 
-    public void atualizarFreteEntity(FreteEntity freteEntity, ReceberCargaResponse cargaResponse, FilialEntity filial)  throws AliquotaException {
+    public void atualizarFreteEntity(FreteEntity freteEntity, ReceberCargaResponse cargaResponse, FilialEntity filial) throws Exception {
         var cargaOut = cargaResponse.getOut();
         var municipioDestino = municipioRepository.findByCodigoIbge(cargaOut.getCodIbge().longValue());
         var filialOrigem = filialService.getByCodigoMili(Long.parseLong(cargaOut.getLocalCarregamento().getValue()));
@@ -211,6 +214,13 @@ public class FreteAdapter {
         freteEntity.setFilial(filial);
         freteEntity.setMunicipioDestino(municipioDestino);
         freteEntity.setMunicipioOrigem(filialOrigem);
+        montarPedidos(freteEntity, cargaResponse);
+    }
+
+    private void montarPedidos(FreteEntity frete, ReceberCargaResponse detalheCarga) throws Exception {
+
+         var pedidos = pedidoService.montarPedidos(frete, detalheCarga);
+         frete.setPedidos(pedidos);
     }
 
     private void setAliquotasCargaModel(FreteModel cargaModel, FilialEntity filialOrigem, EstadoEntity estadoDestino) throws AliquotaException {

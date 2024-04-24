@@ -28,6 +28,6 @@ public class CaminhaoEntity {
     private LocalDateTime dataAlteracao;
 
     @Transient
-    private boolean copiarTransportador;
+    private boolean habiliarCampoMotorista;
 
 }
