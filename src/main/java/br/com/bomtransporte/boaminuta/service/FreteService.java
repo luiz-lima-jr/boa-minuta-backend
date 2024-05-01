@@ -159,8 +159,6 @@ public class FreteService {
         frete.setMunicipioDestino(municipioRepository.findById(frete.getMunicipioDestino().getId()).get());
         frete.setMunicipioOrigem(filialService.getById(frete.getMunicipioOrigem().getId()));
         frete.setResponsavelOperacional(usuarioService.getById(frete.getResponsavelOperacional().getId()));
-
-
     }
 
     private List<PedidoEntity> montarPedidos(FreteEntity frete) throws Exception {

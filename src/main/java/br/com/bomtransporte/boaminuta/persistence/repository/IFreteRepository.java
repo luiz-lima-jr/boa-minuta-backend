@@ -16,7 +16,7 @@ public interface IFreteRepository extends JpaRepository<FreteEntity, Long> {
 
 
     default List<FreteEntity> findByFiltro(FiltroRelatorios filtro, EntityManager entityManager){
-        StringBuilder query = new StringBuilder("SELECT f FROM br.com.bomtransporte.boaminuta.persistence.entity.FreteEntity f WHERE f.freteCalculado == true ");
+        StringBuilder query = new StringBuilder("SELECT f FROM br.com.bomtransporte.boaminuta.persistence.entity.FreteEntity f WHERE f.freteCalculado = true ");
 
         if(filtro.getFiliais() != null && !filtro.getFiliais().isEmpty()){
             query.append(" AND f.filial.id IN (:filiais) ");
