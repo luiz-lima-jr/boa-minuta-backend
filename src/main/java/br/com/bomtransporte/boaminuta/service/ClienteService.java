@@ -1,5 +1,6 @@
 package br.com.bomtransporte.boaminuta.service;
 
+import br.com.bomtransporte.boaminuta.exception.BoaMinutaBusinessException;
 import br.com.bomtransporte.boaminuta.mili.Cliente;
 import br.com.bomtransporte.boaminuta.persistence.entity.ClienteEntity;
 import br.com.bomtransporte.boaminuta.persistence.entity.ClienteFreteEntity;
@@ -24,27 +25,23 @@ public class ClienteService {
     private EstadoService estadoService;
 
     @Autowired
-    private IMunicipioRepository municipioRepository;
+    private MunicipioService municipioService;
 
-    public ClienteEntity montarCliente(Cliente cliente){
-        var clienteEntity = clienteRepository.findByCodigoClienteMili(cliente.getCodCliente());
-        if(clienteEntity == null){
-            clienteEntity = clienteEntity = getEntity(cliente);
-            clienteRepository.save(clienteEntity);
+
+    public ClienteEntity montarCliente(Cliente cliente) throws BoaMinutaBusinessException {
+        try {
+            var clienteEntity = clienteRepository.findByCodigoClienteMili(cliente.getCodCliente());
+            if (clienteEntity == null) {
+                clienteEntity = getEntity(cliente);
+                clienteRepository.saveAndFlush(clienteEntity);
+            }
+            return clienteEntity;
+        } catch (Exception e){
+            throw e;
         }
-        return clienteEntity;
     }
 
-
-    public ClienteEntity montarCliente(Cliente cliente, FreteEntity freteEntity){
-        var clienteEntity = clienteRepository.findByCodigoClienteMili(cliente.getCodCliente());
-        if(clienteEntity == null){
-            clienteEntity = getEntity(cliente);
-        }
-        return clienteEntity;
-    }
-
-    private ClienteEntity getEntity(Cliente cliente){
+    private ClienteEntity getEntity(Cliente cliente) throws BoaMinutaBusinessException {
         var clienteEntity = new ClienteEntity();
         clienteEntity.setNome(cliente.getRazaoSocial().getValue());
         clienteEntity.setCnpj(cliente.getCnpj().getValue());
@@ -52,7 +49,7 @@ public class ClienteService {
         clienteEntity.setEndereco(cliente.getEndereco().getValue());
         clienteEntity.setEstado(estadoService.findBySigla(cliente.getUf().getValue()));
 
-        var municipio = municipioRepository.findByCodigoIbge(cliente.getCodIbge().longValue());
+        var municipio = municipioService.buscarPorCodigoIbge(cliente.getCodIbge().longValue());
         clienteEntity.setCidade(municipio);
 
         return clienteEntity;

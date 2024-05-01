@@ -1,6 +1,7 @@
 package br.com.bomtransporte.boaminuta.schedule;
 
 
+import br.com.bomtransporte.boaminuta.exception.MunicipioVazioException;
 import br.com.bomtransporte.boaminuta.persistenceMili.repository.IDetalheCargaArquivoRepository;
 import br.com.bomtransporte.boaminuta.service.CargasConsultadasService;
 import br.com.bomtransporte.boaminuta.service.FilialService;
@@ -8,6 +9,8 @@ import br.com.bomtransporte.boaminuta.service.FreteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
 
 @Component
 public class AtualizarCargasConsultadasSchedule {
@@ -31,8 +34,14 @@ public class AtualizarCargasConsultadasSchedule {
            var atualizados = repository.findIdsByCodigoFilialAndIdGreaterThan(filial.getCodigoMili(), ultimo);
            for(var carga : atualizados){
                var arquivo = repository.findById(carga);
-               var frete = freteService.atualizarFreteView(filial, arquivo.get());
-               cargasConsultadasService.salvar(frete, carga);
+               try {
+                   var frete = freteService.atualizarFreteView(filial, arquivo.get());
+                   cargasConsultadasService.salvar(frete, carga);
+               } catch (MunicipioVazioException e){
+                   //NOTHING
+               } catch (Exception e){
+                   throw e;
+               }
            }
         }
     }

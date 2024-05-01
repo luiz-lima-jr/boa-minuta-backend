@@ -2,6 +2,7 @@ package br.com.bomtransporte.boaminuta.service;
 
 import br.com.bomtransporte.boaminuta.adapter.FreteAdapter;
 import br.com.bomtransporte.boaminuta.exception.BoaMinutaBusinessException;
+import br.com.bomtransporte.boaminuta.exception.MunicipioVazioException;
 import br.com.bomtransporte.boaminuta.mili.ReceberCargaResponse;
 import br.com.bomtransporte.boaminuta.model.CargaFiltro;
 import br.com.bomtransporte.boaminuta.model.FreteModel;
@@ -205,7 +206,7 @@ public class FreteService {
     }
 
     @Transactional
-    public FreteEntity atualizarFreteView(FilialEntity filial, DetalheCargaArquivoEntity detalheCargaArquivo){
+    public FreteEntity atualizarFreteView(FilialEntity filial, DetalheCargaArquivoEntity detalheCargaArquivo) throws MunicipioVazioException {
         try {
             var cargaResponse = detalheCargaService.converterWsdlToReceberCargaResponse(detalheCargaArquivo);
             var nrCarga = cargaResponse.getOut().getNrCarga();
@@ -215,8 +216,10 @@ public class FreteService {
             } else {
                 frete = freteAdapter.receberCargaDetalheResponseToFreteEntity(cargaResponse, filial);
             }
-            freteRepository.save(frete);
+            freteRepository.saveAndFlush(frete);
             return frete;
+        } catch (MunicipioVazioException e) {
+            throw e;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

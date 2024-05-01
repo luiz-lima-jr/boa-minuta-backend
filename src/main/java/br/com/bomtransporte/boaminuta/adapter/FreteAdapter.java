@@ -34,7 +34,7 @@ public class FreteAdapter {
     @Autowired
     private ClienteService clienteService;
     @Autowired
-    private IMunicipioRepository municipioRepository;
+    private MunicipioService municipioService;
     @Autowired
     private FilialService filialService;
     @Autowired
@@ -125,7 +125,7 @@ public class FreteAdapter {
 
         return cargas;
     }
-    private void setClientesVolumes(Carga cargaResponse, FreteModel cargaModel){
+    private void setClientesVolumes(Carga cargaResponse, FreteModel cargaModel) throws BoaMinutaBusinessException {
         var volume = 0.0;
         cargaModel.setClientes(new HashSet<>());
         for(var pedido : cargaResponse.getPedidos().getValue().getPedido()){
@@ -137,23 +137,25 @@ public class FreteAdapter {
         }
         cargaModel.setM3(volume);
     }
-    private void setClientesVolumes(Carga cargaResponse, FreteEntity frete){
+    private void setClientesVolumes(Carga cargaResponse, FreteEntity frete) throws BoaMinutaBusinessException {
         var volume = 0.0;
         frete.setClientes(new HashSet<>());
         for(var pedido : cargaResponse.getPedidos().getValue().getPedido()){
             for(var itemPedido : pedido.getItensPedidos().getValue().getItemPedido()){
                 volume += itemPedido.getProduto().getValue().getVolumeM3();
             }
-            var clienteEntity = clienteService.montarCliente(pedido.getCliente().getValue(), frete);
-            frete.getClientes().add(clienteEntity);
+            var clienteEntity = clienteService.montarCliente(pedido.getCliente().getValue());
+            var possuiClienteNoSet = frete.getClientes().stream().filter(c -> c.getCodigoClienteMili().equals(clienteEntity.getCodigoClienteMili())).count() > 0;
+            if(!possuiClienteNoSet)
+                frete.getClientes().add(clienteEntity);
         }
         frete.setM3(volume);
     }
 
-    public FreteModel receberCargaDetalheResponseToCargaModel(ReceberCargaResponse cargaResponse, FilialModel filial) throws AliquotaException {
+    public FreteModel receberCargaDetalheResponseToCargaModel(ReceberCargaResponse cargaResponse, FilialModel filial) throws BoaMinutaBusinessException {
         var freteModel = new FreteModel();
         var cargaOut = cargaResponse.getOut();
-        var municipioDestino = municipioRepository.findByCodigoIbge(cargaOut.getCodIbge().longValue());
+        var municipioDestino = municipioService.buscarPorCodigoIbge(cargaOut.getCodIbge().longValue());
         var filialOrigem = filialService.getByCodigoMili(Long.parseLong(cargaOut.getLocalCarregamento().getValue()));
 
         freteModel.setNumeroCarga(cargaOut.getNrCarga());
@@ -185,7 +187,7 @@ public class FreteAdapter {
 
     public void atualizarFreteEntity(FreteEntity freteEntity, ReceberCargaResponse cargaResponse, FilialEntity filial) throws Exception {
         var cargaOut = cargaResponse.getOut();
-        var municipioDestino = municipioRepository.findByCodigoIbge(cargaOut.getCodIbge().longValue());
+        var municipioDestino = municipioService.buscarPorCodigoIbge(cargaOut.getCodIbge().longValue());
         var filialOrigem = filialService.getByCodigoMili(Long.parseLong(cargaOut.getLocalCarregamento().getValue()));
         if(filialOrigem == null){
             throw new RuntimeException("Filial " + cargaOut.getLocalCarregamento().getValue() + " não cadastrada");
@@ -205,7 +207,8 @@ public class FreteAdapter {
         freteEntity.setComplementoCalculo(cargaOut.getVlrRedespacho());
 
         if(cargaOut.getObservacao() != null){
-            freteEntity.setObservacoes(cargaOut.getObservacao().getValue());
+            String obs = cargaOut.getObservacao().getValue().replace("�", "");
+            freteEntity.setObservacoes(obs);
         }
         setAliquotasFreteEntity(freteEntity, filialOrigem, municipioDestino.getEstado());
         setClientesVolumes(cargaOut, freteEntity);

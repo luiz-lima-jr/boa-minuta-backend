@@ -13,7 +13,7 @@ public class ClienteEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "codigoClienteMiliId")
+    @Column(name = "codigoClienteMiliId", unique = true)
     private Long codigoClienteMili;
 
     private String cnpj;
@@ -41,6 +41,6 @@ public class ClienteEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, codigoClienteMili, cnpj, nome);
+        return Objects.hash(codigoClienteMili);
     }
 }

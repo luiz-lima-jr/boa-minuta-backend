@@ -93,6 +93,7 @@ public class FreteEntity {
 
     private Double markup;
 
+    @Column(columnDefinition="VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_bin")
     private String observacoes;
 
     private String placa;
