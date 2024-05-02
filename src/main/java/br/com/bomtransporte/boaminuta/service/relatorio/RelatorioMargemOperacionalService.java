@@ -21,7 +21,6 @@ public class RelatorioMargemOperacionalService extends BaseRelatorioService {
 
 
     public RelatorioMargemOperacionalModel buscarPorFiltro(FiltroRelatorios filtro) throws BoaMinutaBusinessException {
-        //var fretes = freteRepository.findByFiltro(filtro, entityManager);
         var fretes = freteRepository.findByFiltro(filtro, entityManager);
         var totalFrete = 0.0;
         var totalFretePago = 0.0;

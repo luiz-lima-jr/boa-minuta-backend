@@ -32,7 +32,7 @@ public class RelatorioMinutaService {
         minuta.setDireto("BOM TRANSPORTE");
         minuta.setNumeroCarga(frete.getNumeroCarga());
         minuta.setPlaca(frete.getCaminhao().getPlaca());
-        minuta.setMotorista(frete.getCaminhao().getMotorista().getNome());
+        minuta.setMotorista(frete.getCaminhao().getMotorista().getPessoaTransporte().getNome());
         minuta.setRedespacho("NÃO");
         minuta.setDataSaida(frete.getDataSaida());
         minuta.setValorTotal(frete.getValorCarga());

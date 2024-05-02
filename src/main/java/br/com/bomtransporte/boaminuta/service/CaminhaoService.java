@@ -2,6 +2,7 @@ package br.com.bomtransporte.boaminuta.service;
 
 import br.com.bomtransporte.boaminuta.persistence.entity.CaminhaoEntity;
 import br.com.bomtransporte.boaminuta.persistence.repository.ICaminhaoRepository;
+import br.com.bomtransporte.boaminuta.persistence.repository.IMotoristaRepository;
 import br.com.bomtransporte.boaminuta.persistence.repository.IPessoaTransporteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,9 @@ public class CaminhaoService {
     @Autowired
     private IPessoaTransporteRepository pessoaTransporteRepository;
 
+    @Autowired
+    private IMotoristaRepository motoristaRepository;
+
     public CaminhaoService(){
 
     }
@@ -29,36 +33,40 @@ public class CaminhaoService {
         if(caminhao.getTransportador().getId() == null){
             pessoaTransporteRepository.save(caminhao.getTransportador());
         }
+
+        if(!caminhao.isMotoristaDiferente()){
+            caminhao.getMotorista().setPessoaTransporte(caminhao.getTransportador());
+        }
         if(caminhao.getMotorista().getId() == null){
-            pessoaTransporteRepository.save(caminhao.getMotorista());
+            motoristaRepository.save(caminhao.getMotorista());
         }
         caminhao.setDataAlteracao(LocalDateTime.now());
         caminhaoRepository.save(caminhao);
     }
 
     public void atualizar(CaminhaoEntity caminhaoAnterior, CaminhaoEntity caminhaoNovo){
-        var transportadorNovo = caminhaoNovo.getTransportador();
-        caminhaoAnterior.setTransportador(transportadorNovo);
-        pessoaTransporteRepository.save(transportadorNovo);
-
+        atualizarTransportador(caminhaoAnterior, caminhaoNovo);
         atualizarMotorista(caminhaoAnterior, caminhaoNovo);
 
         caminhaoAnterior.setDataAlteracao(LocalDateTime.now());
         caminhaoRepository.save(caminhaoAnterior);
     }
 
+    private void atualizarTransportador(CaminhaoEntity caminhaoAnterior, CaminhaoEntity caminhaoNovo){
+        var transportadorNovo = caminhaoNovo.getTransportador();
+        caminhaoAnterior.setTransportador(transportadorNovo);
+        pessoaTransporteRepository.save(transportadorNovo);
+    }
+
     private void atualizarMotorista(CaminhaoEntity caminhaoAnterior, CaminhaoEntity caminhaoNovo){
         var motoristaNovo = caminhaoNovo.getMotorista();
-        if(!caminhaoNovo.isHabiliarCampoMotorista()){
-            caminhaoAnterior.getTransportador().setExperiencia(motoristaNovo.getExperiencia());
-            motoristaNovo = caminhaoAnterior.getTransportador();
-        }
         caminhaoAnterior.setMotorista(motoristaNovo);
 
-        if(motoristaNovo.getResponsavelOperacional() == null) {
-            motoristaNovo.setResponsavelOperacional(usuarioService.getUsuarioLogado());
+        if(motoristaNovo.getPessoaTransporte().getResponsavelOperacional() == null) {
+            motoristaNovo.getPessoaTransporte().setResponsavelOperacional(usuarioService.getUsuarioLogado());
         }
-        pessoaTransporteRepository.save(motoristaNovo);
+        motoristaNovo.setExperiencia(caminhaoAnterior.getMotorista().getExperiencia());
+        motoristaRepository.save(motoristaNovo);
     }
 
     public CaminhaoEntity findById(Long idCaminhao){

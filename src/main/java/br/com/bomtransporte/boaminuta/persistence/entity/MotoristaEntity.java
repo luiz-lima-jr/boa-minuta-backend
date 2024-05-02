@@ -5,21 +5,17 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-@Entity(name = "pessoa_transporte")
+@Entity(name = "motorista")
 @Data
-public class PessoaTransporteEntity {
-
+public class MotoristaEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    private String nome;
-
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "responsavelOperacionalId")
-    private UsuarioEntity responsavelOperacional;
+    private PessoaTransporteEntity pessoaTransporte;
 
-
-
+    @Enumerated(EnumType.STRING)
+    private ExperienciaBomEnum experiencia;
 }
