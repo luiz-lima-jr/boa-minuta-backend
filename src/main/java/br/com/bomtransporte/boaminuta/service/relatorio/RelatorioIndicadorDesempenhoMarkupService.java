@@ -1,10 +1,9 @@
 package br.com.bomtransporte.boaminuta.service.relatorio;
 
 import br.com.bomtransporte.boaminuta.exception.BoaMinutaBusinessException;
+import br.com.bomtransporte.boaminuta.model.FreteFiltro;
 import br.com.bomtransporte.boaminuta.model.UsuarioModel;
-import br.com.bomtransporte.boaminuta.model.relatorio.FiltroRelatorios;
 import br.com.bomtransporte.boaminuta.model.relatorio.IndicadorDesempenhoFreteResponsavel;
-import br.com.bomtransporte.boaminuta.model.relatorio.RelatorioIndicadorDesempenhoFretes;
 import br.com.bomtransporte.boaminuta.model.relatorio.RelatorioIndicadorDesempenhoMarkup;
 import br.com.bomtransporte.boaminuta.persistence.entity.FreteEntity;
 import br.com.bomtransporte.boaminuta.persistence.entity.UsuarioEntity;
@@ -18,8 +17,8 @@ import java.util.stream.Collectors;
 @Service
 public class RelatorioIndicadorDesempenhoMarkupService extends BaseRelatorioService {
 
-    public List<RelatorioIndicadorDesempenhoMarkup> buscarPorFiltro(FiltroRelatorios filtro) throws BoaMinutaBusinessException {
-        var fretes = freteRepository.findByFiltro(filtro, entityManager);
+    public List<RelatorioIndicadorDesempenhoMarkup> buscarPorFiltro(FreteFiltro filtro) throws BoaMinutaBusinessException {
+        var fretes = freteRepository.findByFiltroFretesCalculados(filtro, entityManager);
         List<RelatorioIndicadorDesempenhoMarkup> relatorio = new ArrayList<>();
         Map<UsuarioEntity, List<FreteEntity>> groupResponsaveis = fretes.stream().collect(Collectors.groupingBy(FreteEntity::getResponsavelOperacional));
         List<IndicadorDesempenhoFreteResponsavel> indicadores = new ArrayList<>();

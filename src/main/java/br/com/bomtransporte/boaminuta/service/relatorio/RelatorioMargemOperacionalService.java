@@ -2,7 +2,7 @@ package br.com.bomtransporte.boaminuta.service.relatorio;
 
 import br.com.bomtransporte.boaminuta.adapter.FreteAdapter;
 import br.com.bomtransporte.boaminuta.exception.BoaMinutaBusinessException;
-import br.com.bomtransporte.boaminuta.model.relatorio.FiltroRelatorios;
+import br.com.bomtransporte.boaminuta.model.FreteFiltro;
 import br.com.bomtransporte.boaminuta.model.relatorio.RelatorioMargemOperacionalModel;
 import br.com.bomtransporte.boaminuta.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +20,8 @@ public class RelatorioMargemOperacionalService extends BaseRelatorioService {
     private FreteAdapter freteAdapter;
 
 
-    public RelatorioMargemOperacionalModel buscarPorFiltro(FiltroRelatorios filtro) throws BoaMinutaBusinessException {
-        var fretes = freteRepository.findByFiltro(filtro, entityManager);
+    public RelatorioMargemOperacionalModel buscarPorFiltro(FreteFiltro filtro) throws BoaMinutaBusinessException {
+        var fretes = freteRepository.findByFiltroFretesCalculados(filtro, entityManager);
         var totalFrete = 0.0;
         var totalFretePago = 0.0;
         var totalCustos = 0.0;

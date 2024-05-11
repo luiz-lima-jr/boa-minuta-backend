@@ -26,7 +26,7 @@ public class AtualizarCargasConsultadasSchedule {
     @Autowired
     private FreteService freteService;
 
-    @Scheduled(fixedRate = 1000)
+  //  @Scheduled(fixedRate = 1000)
     public void atualizar() {
         var filiais = filialService.getAll();
         for(var filial : filiais){

@@ -1,8 +1,9 @@
 package br.com.bomtransporte.boaminuta.controller;
 
 import br.com.bomtransporte.boaminuta.config.Constantes;
-import br.com.bomtransporte.boaminuta.model.CargaFiltro;
+import br.com.bomtransporte.boaminuta.model.FreteFiltro;
 import br.com.bomtransporte.boaminuta.model.FreteModel;
+import br.com.bomtransporte.boaminuta.model.ListarFrete;
 import br.com.bomtransporte.boaminuta.persistence.entity.FreteEntity;
 import br.com.bomtransporte.boaminuta.service.FreteService;
 import jakarta.validation.Valid;
@@ -20,7 +21,7 @@ public class FreteController {
     private FreteService cargaService;
 
     @PostMapping("cargas-disponiveis")
-    public ResponseEntity<List<FreteEntity>> consultarCargasDisponiveis(@RequestBody CargaFiltro filtro) throws Exception {
+    public ResponseEntity<ListarFrete> consultarCargasDisponiveis(@RequestBody FreteFiltro filtro) throws Exception {
         return ResponseEntity.ok(cargaService.consultarCargas(filtro));
     }
 

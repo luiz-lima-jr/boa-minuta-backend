@@ -1,8 +1,8 @@
 package br.com.bomtransporte.boaminuta.service.relatorio;
 
 import br.com.bomtransporte.boaminuta.exception.BoaMinutaBusinessException;
+import br.com.bomtransporte.boaminuta.model.FreteFiltro;
 import br.com.bomtransporte.boaminuta.model.UsuarioModel;
-import br.com.bomtransporte.boaminuta.model.relatorio.FiltroRelatorios;
 import br.com.bomtransporte.boaminuta.persistence.repository.IFreteRepository;
 import br.com.bomtransporte.boaminuta.service.UsuarioService;
 import jakarta.persistence.EntityManager;
@@ -22,7 +22,7 @@ public abstract class BaseRelatorioService<T> {
     @Autowired
     protected UsuarioService usuarioService;
 
-    abstract T buscarPorFiltro(FiltroRelatorios filtro) throws BoaMinutaBusinessException;
+    abstract T buscarPorFiltro(FreteFiltro filtro) throws BoaMinutaBusinessException;
 
     public List<UsuarioModel> buscarResponstaveisOperacional(){
         return freteRepository.buscarResponstaveisOperacional(entityManager);
