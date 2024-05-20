@@ -73,14 +73,14 @@ public interface IFreteRepository extends JpaRepository<FreteEntity, Long> {
         }
 
         if(filtro.getComPlaca() != null  && filtro.getComPlaca()){
-            query.append(" AND f.placa != null ");
+            query.append(" AND f.placa is not null ");
         }
         if(filtro.getSemPlaca() != null && filtro.getSemPlaca()){
-            query.append(" AND f.placa == null ");
+            query.append(" AND f.placa is null ");
         }
 
         if(filtro.getFaturadas() != null && filtro.getFaturadas()){
-            query.append(" AND f.faturado == true ");
+            query.append(" AND f.faturado = true ");
         }
         if(filtro.isFreteCalculado()){
             query.append(" AND f.freteCalculado = true");
