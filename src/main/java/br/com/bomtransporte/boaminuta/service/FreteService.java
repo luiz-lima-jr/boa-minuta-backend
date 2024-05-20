@@ -180,6 +180,7 @@ public class FreteService {
             caminhaoService.atualizar(caminhaoAtual, frete.getCaminhao());
             frete.setCaminhao(caminhaoAtual);
         }
+        frete.setPlaca(frete.getCaminhao().getPlaca());
     }
     private void atualizar(FreteEntity frete) throws BoaMinutaBusinessException {
 

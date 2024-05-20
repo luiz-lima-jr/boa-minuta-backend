@@ -16,7 +16,7 @@ public class PessoaTransporteEntity {
     @NotNull
     private String nome;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "responsavelOperacionalId")
     private UsuarioEntity responsavelOperacional;
 

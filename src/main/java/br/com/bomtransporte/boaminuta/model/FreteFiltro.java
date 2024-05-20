@@ -19,5 +19,7 @@ public class FreteFiltro {
     private boolean freteCalculado;
     private int pagina;
     private int qtdPagina;
+    private String coluna;
+    private String direcao;
 
 }

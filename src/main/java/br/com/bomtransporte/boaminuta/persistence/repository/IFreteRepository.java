@@ -41,7 +41,7 @@ public interface IFreteRepository extends JpaRepository<FreteEntity, Long> {
         for(String key : params.keySet()){
             tp.setParameter(key, params.get(key));
         }
-        tp.setMaxResults(filtro.getQtdPagina() == 0 ? 10 : filtro.getQtdPagina());
+        tp.setMaxResults(filtro.getQtdPagina() == 0 ? 100 : filtro.getQtdPagina());
         tp.setFirstResult(filtro.getPagina() * filtro.getQtdPagina());
 
         return tp.getResultList();
@@ -85,6 +85,10 @@ public interface IFreteRepository extends JpaRepository<FreteEntity, Long> {
         if(filtro.isFreteCalculado()){
             query.append(" AND f.freteCalculado = true");
         }
+
+        String coluna = filtro.getColuna() == null ? "numeroCarga" : filtro.getColuna();
+        String direcao = filtro.getDirecao() == null ? " DESC" : filtro.getDirecao();
+        query.append(" ORDER BY f.").append(coluna).append(" ").append(direcao);
 
         return params;
     }
