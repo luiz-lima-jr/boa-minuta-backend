@@ -92,7 +92,7 @@ public class FreteAdapter {
         cargaModel.setFilial(new FilialModel(filial.getId(), filial.getNome(), filial.getCodigoMili()));
         cargaModel.setMunicipioDestino(frete.getMunicipioDestino());
         cargaModel.setMunicipioOrigem(frete.getMunicipioOrigem());
-        cargaModel.setFreteCalculado(frete.isFreteCalculado());
+        cargaModel.setFreteCalculado(frete.getDataCalculo() != null);
         setAliquotasCargaModel(cargaModel, frete.getFilial(), frete.getMunicipioDestino().getEstado());
 
         cargaModel.setCaminhao(frete.getCaminhao());

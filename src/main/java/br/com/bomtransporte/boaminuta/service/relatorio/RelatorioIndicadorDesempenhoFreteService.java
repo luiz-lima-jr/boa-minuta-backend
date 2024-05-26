@@ -3,8 +3,8 @@ package br.com.bomtransporte.boaminuta.service.relatorio;
 import br.com.bomtransporte.boaminuta.exception.BoaMinutaBusinessException;
 import br.com.bomtransporte.boaminuta.model.FreteFiltro;
 import br.com.bomtransporte.boaminuta.model.UsuarioModel;
-import br.com.bomtransporte.boaminuta.model.relatorio.IndicadorDesempenhoFreteResponsavel;
-import br.com.bomtransporte.boaminuta.model.relatorio.RelatorioIndicadorDesempenhoFretes;
+import br.com.bomtransporte.boaminuta.model.relatorio.IndicadorDesempenhoResponsavelModel;
+import br.com.bomtransporte.boaminuta.model.relatorio.RelatorioIndicadorDesempenhoFretesModel;
 import br.com.bomtransporte.boaminuta.persistence.entity.FreteEntity;
 import br.com.bomtransporte.boaminuta.persistence.entity.UsuarioEntity;
 import org.springframework.stereotype.Service;
@@ -16,11 +16,11 @@ import java.util.stream.Collectors;
 public class RelatorioIndicadorDesempenhoFreteService extends BaseRelatorioService {
 
 
-    public RelatorioIndicadorDesempenhoFretes buscarPorFiltro(FreteFiltro filtro) throws BoaMinutaBusinessException {
+    public RelatorioIndicadorDesempenhoFretesModel buscarPorFiltro(FreteFiltro filtro) throws BoaMinutaBusinessException {
         var fretes = freteRepository.findByFiltroFretesCalculados(filtro, entityManager);
-        RelatorioIndicadorDesempenhoFretes relatorio = new RelatorioIndicadorDesempenhoFretes();
+        RelatorioIndicadorDesempenhoFretesModel relatorio = new RelatorioIndicadorDesempenhoFretesModel();
         Map<UsuarioEntity, List<FreteEntity>> groupResponsaveis = fretes.stream().collect(Collectors.groupingBy(FreteEntity::getResponsavelOperacional));
-        List<IndicadorDesempenhoFreteResponsavel> indicadores = new ArrayList<>();
+        List<IndicadorDesempenhoResponsavelModel> indicadores = new ArrayList<>();
         for(var key : groupResponsaveis.keySet()) {
             var fretesResponsavel = groupResponsaveis.get(key);
             var indicador = montarIndicador(relatorio, key, fretesResponsavel);
@@ -30,8 +30,8 @@ public class RelatorioIndicadorDesempenhoFreteService extends BaseRelatorioServi
         return relatorio;
     }
 
-    private IndicadorDesempenhoFreteResponsavel montarIndicador( RelatorioIndicadorDesempenhoFretes relatorio, UsuarioEntity key, List<FreteEntity> fretesResponsavel){
-        var indicador = new IndicadorDesempenhoFreteResponsavel(new UsuarioModel(key.getId(), key.getNome()));
+    private IndicadorDesempenhoResponsavelModel montarIndicador(RelatorioIndicadorDesempenhoFretesModel relatorio, UsuarioEntity key, List<FreteEntity> fretesResponsavel){
+        var indicador = new IndicadorDesempenhoResponsavelModel(new UsuarioModel(key.getId(), key.getNome()));
         for(var frete : fretesResponsavel) {
             addIndicadorResponsavel(indicador, frete);
             relatorio.addTotalCargas(1);
@@ -46,7 +46,7 @@ public class RelatorioIndicadorDesempenhoFreteService extends BaseRelatorioServi
     }
 
 
-    private void addIndicadorResponsavel(IndicadorDesempenhoFreteResponsavel indicador, FreteEntity frete){
+    private void addIndicadorResponsavel(IndicadorDesempenhoResponsavelModel indicador, FreteEntity frete){
         indicador.addCargas(1);
         indicador.addM3(frete.getM3());
         indicador.addFretes(frete.getFrete());

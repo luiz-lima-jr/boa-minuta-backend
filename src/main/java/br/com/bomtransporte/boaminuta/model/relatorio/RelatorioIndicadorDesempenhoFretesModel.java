@@ -1,17 +1,15 @@
 package br.com.bomtransporte.boaminuta.model.relatorio;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class RelatorioIndicadorDesempenhoFretes {
+public class RelatorioIndicadorDesempenhoFretesModel {
 
-    private List<IndicadorDesempenhoFreteResponsavel> list;
+    private List<IndicadorDesempenhoResponsavelModel> list;
     private int totalCargas;
     private Double totalM3;
     private Double totalFrete;
@@ -20,7 +18,7 @@ public class RelatorioIndicadorDesempenhoFretes {
     private Double totalSomaImpostos;
     private Double totalPedagio;
 
-    public RelatorioIndicadorDesempenhoFretes(){
+    public RelatorioIndicadorDesempenhoFretesModel(){
         totalCargas = 0;
         totalM3 = 0.0;
         totalFrete = 0.0;

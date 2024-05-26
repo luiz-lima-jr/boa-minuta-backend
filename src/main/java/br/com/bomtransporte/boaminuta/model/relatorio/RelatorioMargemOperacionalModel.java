@@ -8,10 +8,6 @@ import java.util.List;
 @Data
 public class RelatorioMargemOperacionalModel {
 
-    public RelatorioMargemOperacionalModel(){
-        
-    }
-
     private List<FreteModel> list;
     private Double totalFrete;
     private Double totalFretePago;

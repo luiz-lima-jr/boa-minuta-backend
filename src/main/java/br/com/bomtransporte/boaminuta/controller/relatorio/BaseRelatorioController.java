@@ -15,7 +15,7 @@ public abstract class BaseRelatorioController {
     }
     abstract ResponseEntity buscarPorFiltro(FreteFiltro filtro) throws BoaMinutaBusinessException;
 
-        @GetMapping("responsaveis-faturamento")
+    @GetMapping("responsaveis-faturamento")
     public ResponseEntity buscarResponstaveisOperacional() {
         var resultados = baseRelatorioService.buscarResponstaveisOperacional();
         return ResponseEntity.ok(resultados);

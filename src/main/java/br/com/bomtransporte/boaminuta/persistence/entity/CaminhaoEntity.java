@@ -20,7 +20,7 @@ public class CaminhaoEntity {
     @JoinColumn(name = "pessoaTransportadorId")
     private PessoaTransporteEntity transportador;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "motoristaId")
     private MotoristaEntity motorista;
 

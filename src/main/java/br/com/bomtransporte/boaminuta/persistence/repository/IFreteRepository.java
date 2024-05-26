@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 
 public interface IFreteRepository extends JpaRepository<FreteEntity, Long> {
 
-    List<FreteEntity> findAllByFilialIdIn(List<Long> numeros);
     FreteEntity findByNumeroCargaAndFilialId(Long numeroCarga, Long idFilial);
 
     default List<FreteEntity> findByFiltroFretesCalculados(FreteFiltro filtro, EntityManager entityManager) {
@@ -51,19 +50,27 @@ public interface IFreteRepository extends JpaRepository<FreteEntity, Long> {
         Map<String, Object> params = new HashMap<>();
         boolean todasFilias = filtro.getFiliais() == null || filtro.getFiliais().stream().anyMatch(f -> f.getId().equals(0L));
 
-        if(todasFilias || !filtro.getFiliais().isEmpty()){
+        if(filtro.getFiliais() != null  && (todasFilias || (!filtro.getFiliais().isEmpty()))){
             query.append(" AND f.filial.id IN (:filiais) ");
             params.put("filiais", filtro.getFiliais().stream().map(f -> f.getId()).collect(Collectors.toList()));
         }
         if(filtro.getDataInicioFaturamento() != null){
-            query.append(" AND f.dataLiberacaoFaturamento <= :inicio ");
-            params.put("inicio", filtro.getDataInicioFaturamento());
+            query.append(" AND f.dataLiberacaoFaturamento >= :inicio ");
+            params.put("inicio", filtro.getDataInicioFaturamento().withHour(0).withMinute(0).withSecond(0));
         }
         if(filtro.getDataFimFaturamento() != null){
-            query.append(" AND f.dataLiberacaoFaturamento >= :fim ");
-            params.put("fim", filtro.getDataFimFaturamento());
+            query.append(" AND f.dataLiberacaoFaturamento <= :fim ");
+            params.put("fim", filtro.getDataFimFaturamento().withHour(23).withMinute(59).withSecond(59));
         }
-        if(filtro.getResponsaveis() != null && !filtro.getResponsaveis().isEmpty()){
+        if(filtro.getDataInicioCadastro() != null){
+            query.append(" AND f.dataCalculo >= :inicioCadastro ");
+            params.put("inicioCadastro", filtro.getDataInicioCadastro().withHour(0).withMinute(0).withSecond(0));
+        }
+        if(filtro.getDataFimCadastro() != null){
+            query.append(" AND f.dataCalculo <= :fimCadastro ");
+            params.put("fimCadastro", filtro.getDataFimCadastro().withHour(23).withMinute(59).withSecond(59));
+        }
+        if(filtro.getResponsaveis() != null  && filtro.getResponsaveis() != null && !filtro.getResponsaveis().isEmpty()){
             query.append(" AND f.responsavelOperacional.id IN (:responsaveis) ");
             params.put("responsaveis", filtro.getResponsaveis().stream().map(f -> f.getId()).collect(Collectors.toList()));
         }
@@ -83,7 +90,11 @@ public interface IFreteRepository extends JpaRepository<FreteEntity, Long> {
             query.append(" AND f.faturado = true ");
         }
         if(filtro.isFreteCalculado()){
-            query.append(" AND f.freteCalculado = true");
+            query.append(" AND f.dataCalculo is not null ");
+        }
+        if(filtro.getExperienciasBom() != null && !filtro.getExperienciasBom().isEmpty()){
+            query.append(" AND f.caminhao.motorista.experiencia IN (:experiencia) ");
+            params.put("experiencia", filtro.getExperienciasBom());
         }
 
         String coluna = filtro.getColuna() == null ? "numeroCarga" : filtro.getColuna();

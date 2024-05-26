@@ -3,11 +3,10 @@ package br.com.bomtransporte.boaminuta.model.relatorio;
 import br.com.bomtransporte.boaminuta.model.UsuarioModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @Data
-public class IndicadorDesempenhoFreteResponsavel {
+public class IndicadorDesempenhoResponsavelModel {
 
     private UsuarioModel responsavel;
     private int cargas;
@@ -18,8 +17,7 @@ public class IndicadorDesempenhoFreteResponsavel {
     private double somaImpostos;
     private double pedagio;
 
-
-    public IndicadorDesempenhoFreteResponsavel(UsuarioModel responsavel){
+    public IndicadorDesempenhoResponsavelModel(UsuarioModel responsavel){
         this.responsavel = responsavel;
         this.cargas = 0;
         this.m3 = 0.0;

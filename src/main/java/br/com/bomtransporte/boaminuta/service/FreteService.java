@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -69,32 +70,6 @@ public class FreteService {
         return new ListarFrete(qtd, fretes);
     }
 
-    private List<FreteEntity> aplicarFiltros(List<FreteEntity> cargas, FreteFiltro filtro){
-        return cargas.stream().filter(c -> {
-            var ok = true;
-            if(filtro.getComPlaca() != null  && filtro.getComPlaca()){
-                ok = ok && c.getPlaca() != null && !c.getPlaca().isEmpty();
-            }
-            if(filtro.getSemPlaca() != null && filtro.getSemPlaca()){
-                ok = ok && (c.getPlaca() == null || c.getPlaca().isEmpty());
-            }
-            if(filtro.getSemPlaca() != null && filtro.getSemPlaca() && filtro.getComPlaca() != null  && filtro.getComPlaca()){
-                ok = true;
-            }
-            if(filtro.getFaturadas() != null && filtro.getFaturadas()){
-                ok = ok && c.isFaturado();
-            }
-            if(filtro.getDataInicioFaturamento() != null){
-                ok = ok && filtro.getDataInicioFaturamento().atTime(0,0,0).isBefore(c.getDataLiberacaoFaturamento());
-            }
-            if(filtro.getDataFimFaturamento() != null){
-                ok = ok && filtro.getDataFimFaturamento().atTime(23,59,59).isAfter(c.getDataLiberacaoFaturamento());
-            }
-            c.setPedidos(null);
-            return ok;
-        }).collect(Collectors.toList());
-    }
-
     public FreteModel buscarCarga(Long nroCarga, Long idFilial) throws Exception {
         var frete = freteRepository.findByNumeroCargaAndFilialId(nroCarga, idFilial);
         var freteModel = freteAdapter.freteEntityToModel(frete);
@@ -125,8 +100,8 @@ public class FreteService {
     @Transactional
     public void salvar(FreteEntity frete) throws Exception {
         var clientes = clienteFreteRepository.findByFreteId(frete.getId());
-        if(!frete.isFreteCalculado()){
-            frete.setFreteCalculado(true);
+        if(frete.getDataCalculo() == null) {
+            frete.setDataCalculo(LocalDateTime.now());
         }
         frete.setClientes(clientes.stream().map(c -> c.getCliente()).collect(Collectors.toSet()));
         frete.setSaldo(round(frete.getSaldo()));

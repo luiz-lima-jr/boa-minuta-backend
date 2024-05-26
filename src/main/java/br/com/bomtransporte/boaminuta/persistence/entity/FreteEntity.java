@@ -29,7 +29,7 @@ public class FreteEntity {
     @NotNull
     private boolean faturado;
 
-    private boolean freteCalculado;
+    private LocalDateTime dataCalculo;
 
     //@NotNull
     private Integer entregas;
@@ -53,7 +53,7 @@ public class FreteEntity {
     @JoinColumn(name = "municipioDestinoId")
     private MunicipioEntity municipioDestino;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "caminhaoId")
     private CaminhaoEntity caminhao;
 
