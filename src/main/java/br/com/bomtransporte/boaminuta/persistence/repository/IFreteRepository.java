@@ -19,6 +19,7 @@ public interface IFreteRepository extends JpaRepository<FreteEntity, Long> {
         filtro.setFreteCalculado(true);
         return findByFiltro(filtro, entityManager);
     }
+
     default Long countByFiltro(FreteFiltro filtro, EntityManager entityManager) {
         StringBuilder query = new StringBuilder("SELECT count(f) FROM br.com.bomtransporte.boaminuta.persistence.entity.FreteEntity f WHERE f.id != null ");
         Map<String, Object> params = montarFiltro(filtro, query);
@@ -43,6 +44,12 @@ public interface IFreteRepository extends JpaRepository<FreteEntity, Long> {
         tp.setMaxResults(filtro.getQtdPagina() == 0 ? 100 : filtro.getQtdPagina());
         tp.setFirstResult(filtro.getPagina() * filtro.getQtdPagina());
 
+        return tp.getResultList();
+    }
+
+    default List<Long> findAnos(EntityManager entityManager) {
+        StringBuilder query = new StringBuilder("SELECT distinct YEAR(f.dataLiberacaoFaturamento) FROM br.com.bomtransporte.boaminuta.persistence.entity.FreteEntity f WHERE f.dataLiberacaoFaturamento is not null ");
+        var tp = entityManager.createQuery(query.toString(), Long.class);
         return tp.getResultList();
     }
 
@@ -95,6 +102,10 @@ public interface IFreteRepository extends JpaRepository<FreteEntity, Long> {
         if(filtro.getExperienciasBom() != null && !filtro.getExperienciasBom().isEmpty()){
             query.append(" AND f.caminhao.motorista.experiencia IN (:experiencia) ");
             params.put("experiencia", filtro.getExperienciasBom());
+        }
+        if(filtro.getAnoExercicio() != null){
+            query.append(" AND f.dataLiberacaoFaturamento IS NOT NULL and YEAR(f.dataLiberacaoFaturamento) = :anoExercicio ");
+            params.put("anoExercicio", filtro.getAnoExercicio());
         }
 
         String coluna = filtro.getColuna() == null ? "numeroCarga" : filtro.getColuna();

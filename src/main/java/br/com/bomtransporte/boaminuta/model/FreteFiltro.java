@@ -18,6 +18,7 @@ public class FreteFiltro {
     private LocalDateTime dataFimFaturamento;
     private LocalDateTime dataInicioCadastro;
     private LocalDateTime dataFimCadastro;
+    private Integer anoExercicio;
     private Long numeroCarga;
     private List<FilialEntity> filiais;
     private List<UsuarioModel> responsaveis;
