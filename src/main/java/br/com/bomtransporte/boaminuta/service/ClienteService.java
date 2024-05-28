@@ -29,8 +29,8 @@ public class ClienteService {
 
 
     public ClienteEntity montarCliente(Cliente cliente) throws BoaMinutaBusinessException {
+        var clienteEntity = clienteRepository.findByCodigoClienteMili(cliente.getCodCliente());
         try {
-            var clienteEntity = clienteRepository.findByCodigoClienteMili(cliente.getCodCliente());
             if (clienteEntity == null) {
                 clienteEntity = getEntity(cliente);
                 clienteRepository.saveAndFlush(clienteEntity);
@@ -43,7 +43,7 @@ public class ClienteService {
 
     private ClienteEntity getEntity(Cliente cliente) throws BoaMinutaBusinessException {
         var clienteEntity = new ClienteEntity();
-        clienteEntity.setNome(cliente.getRazaoSocial().getValue());
+        clienteEntity.setNome(cliente.getRazaoSocial().getValue().replaceAll("�", ""));
         clienteEntity.setCnpj(cliente.getCnpj().getValue());
         clienteEntity.setCodigoClienteMili(cliente.getCodCliente());
         clienteEntity.setEndereco(cliente.getEndereco().getValue());
