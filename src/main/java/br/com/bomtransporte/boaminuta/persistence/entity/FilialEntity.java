@@ -19,7 +19,7 @@ public class FilialEntity {
     private Long codigoMili;
 
     @NotNull
-    private String senha;
+    private Long codigoCarregamento;
 
     @ManyToOne
     @JoinColumn(name = "municipioId")

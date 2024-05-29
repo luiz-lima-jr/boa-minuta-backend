@@ -31,7 +31,7 @@ public class AtualizarCargasConsultadasSchedule {
         var filiais = filialService.getAll();
         for(var filial : filiais){
            var ultimo = cargasConsultadasService.buscarUltimaConsultada(filial.getId());
-           var atualizados = repository.findIdsByCodigoFilialAndIdGreaterThan(filial.getCodigoMili(), ultimo);
+           var atualizados = repository.findIdsByEftCodigoAndIdGreaterThan(filial.getCodigoMili(), ultimo);
            for(var carga : atualizados){
                var arquivo = repository.findById(carga);
                try {

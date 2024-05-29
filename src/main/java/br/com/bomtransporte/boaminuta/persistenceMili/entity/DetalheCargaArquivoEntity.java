@@ -16,8 +16,8 @@ public class DetalheCargaArquivoEntity {
     @Column(length = Integer.MAX_VALUE, name="DS_XML_RETORNO")
     private String arquivo;
 
-    @Column(name="ID_FILIAL_MILI")
-    private Long codigoFilial;
+    @Column(name="EFTCODIGO")
+    private Long eftCodigo;
 
     @Column(name="NRCARGA")
     private Long codigoCarga;

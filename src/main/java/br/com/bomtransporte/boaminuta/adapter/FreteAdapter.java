@@ -188,7 +188,7 @@ public class FreteAdapter {
     public void atualizarFreteEntity(FreteEntity freteEntity, ReceberCargaResponse cargaResponse, FilialEntity filial) throws Exception {
         var cargaOut = cargaResponse.getOut();
         var municipioDestino = municipioService.buscarPorCodigoIbge(cargaOut.getCodIbge().longValue());
-        var filialOrigem = filialService.getByCodigoMili(Long.parseLong(cargaOut.getLocalCarregamento().getValue()));
+        var filialOrigem = filialService.getByCodigoCarregamento(Long.parseLong(cargaOut.getLocalCarregamento().getValue()));
         if(filialOrigem == null){
             throw new RuntimeException("Filial " + cargaOut.getLocalCarregamento().getValue() + " não cadastrada");
         }

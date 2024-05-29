@@ -24,6 +24,7 @@ public class FreteEntity {
     private FilialEntity filial;
 
     @NotNull
+    @Column(unique = true)
     private Long numeroCarga;
 
     @NotNull

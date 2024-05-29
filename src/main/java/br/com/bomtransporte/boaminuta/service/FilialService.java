@@ -36,6 +36,9 @@ public class FilialService {
     public FilialEntity getByCodigoMili(Long codigoMili){
         return filialRepository.findByCodigoMili(codigoMili);
     }
+    public FilialEntity getByCodigoCarregamento(Long codigoCarregamento){
+        return filialRepository.findByCodigoCarregamento(codigoCarregamento);
+    }
 
     public List<FilialEntity> getTodasByIds(List<Long> ids){
         return filialRepository.findAllByIdIn(ids);

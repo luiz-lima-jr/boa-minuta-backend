@@ -28,7 +28,7 @@ public class DetalheCargaArquivoService extends WebServiceGatewaySupport {
 
     public ReceberCargaResponse consultarDetalheCarga(Long codigoFilial, Long codigoCarga) throws Exception {
         try {
-            var result = detalheCargaArquivoRepository.findByCodigoFilialAndCodigoCargaOrderByIdDesc(codigoFilial, codigoCarga);
+            var result = detalheCargaArquivoRepository.findByEftCodigoAndCodigoCargaOrderByIdDesc(codigoFilial, codigoCarga);
             if(result.isEmpty()){
                 return null;
             }
@@ -43,7 +43,7 @@ public class DetalheCargaArquivoService extends WebServiceGatewaySupport {
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(ReceberCargaResponse.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            var file = new File("carga-completa-"+wsdl.getCodigoFilial()+".xml");
+            var file = new File("carga-completa-"+wsdl.getCodigoCarga()+".xml");
             file.createNewFile();
             try(PrintWriter out = new PrintWriter(file)) {
                 var arquivo = wsdl.getArquivo();

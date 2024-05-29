@@ -7,6 +7,8 @@ import br.com.bomtransporte.boaminuta.persistence.repository.IMunicipioRepositor
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class MunicipioService {
 
@@ -19,5 +21,9 @@ public class MunicipioService {
             throw new MunicipioVazioException("Codigo IBGE não localizado: " + codigoIbge);
         }
         return municipio;
+    }
+    public List<MunicipioEntity> buscarPorEstado(Long idEstado) {
+
+        return repository.findByEstadoId(idEstado);
     }
 }
