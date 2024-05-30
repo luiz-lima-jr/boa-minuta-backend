@@ -18,7 +18,6 @@ public class FilialEntity {
     @NotNull
     private Long codigoMili;
 
-    @NotNull
     private Long codigoCarregamento;
 
     @ManyToOne
