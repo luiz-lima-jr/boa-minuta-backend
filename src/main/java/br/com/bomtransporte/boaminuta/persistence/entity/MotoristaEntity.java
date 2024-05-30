@@ -12,7 +12,7 @@ public class MotoristaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE'')
     @JoinColumn(name = "responsavelOperacionalId")
     private PessoaTransporteEntity pessoaTransporte;
 

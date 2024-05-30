@@ -16,7 +16,7 @@ public class CaminhaoEntity {
 
     private String placa;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "pessoaTransportadorId")
     private PessoaTransporteEntity transportador;
 
