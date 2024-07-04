@@ -194,7 +194,7 @@ public class FreteService {
             } else {
                 frete = freteAdapter.receberCargaDetalheResponseToFreteEntity(cargaResponse, filial);
             }
-            if(frete.getDataLiberacaoFaturamento().isBefore(LocalDateTime.of(2024, 7, 1, 0, 0))) {
+            if(frete.getDataLiberacaoFaturamento() != null && frete.getDataLiberacaoFaturamento().isBefore(LocalDateTime.of(2024, 7, 1, 0, 0))) {
                 return null;
             }
             freteRepository.saveAndFlush(frete);
