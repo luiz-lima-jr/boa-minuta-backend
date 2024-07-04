@@ -8,12 +8,11 @@ import br.com.bomtransporte.boaminuta.model.FreteFiltro;
 import br.com.bomtransporte.boaminuta.model.FreteModel;
 import br.com.bomtransporte.boaminuta.model.ListarFrete;
 import br.com.bomtransporte.boaminuta.model.UsuarioModel;
+import br.com.bomtransporte.boaminuta.persistence.entity.CargasConsultadas;
 import br.com.bomtransporte.boaminuta.persistence.entity.FilialEntity;
 import br.com.bomtransporte.boaminuta.persistence.entity.FreteEntity;
 import br.com.bomtransporte.boaminuta.persistence.entity.PedidoEntity;
-import br.com.bomtransporte.boaminuta.persistence.repository.IClienteFreteRepository;
-import br.com.bomtransporte.boaminuta.persistence.repository.IFreteRepository;
-import br.com.bomtransporte.boaminuta.persistence.repository.IMunicipioRepository;
+import br.com.bomtransporte.boaminuta.persistence.repository.*;
 import br.com.bomtransporte.boaminuta.persistenceMili.entity.DetalheCargaArquivoEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -54,6 +53,13 @@ public class FreteService {
     private PedidoService pedidoService;
     @Autowired
     private IClienteFreteRepository clienteFreteRepository;
+    @Autowired
+    private IItemPedidoRepository itemPedidoRepository;
+    @Autowired
+    private IPedidoRepository pedidoRepository;
+
+    @Autowired
+    private ICargasConsultadasRepository cargasConsultadasRepository;
 
     @PersistenceContext
     protected EntityManager entityManager;
@@ -191,10 +197,13 @@ public class FreteService {
             var frete =  freteRepository.findByNumeroCargaAndFilialId(nrCarga, filial.getId());
             if(frete != null) {
                 freteAdapter.atualizarFreteEntity(frete, cargaResponse, filial);
+                if(isAntesJulho(frete)){
+                    delete(frete);
+                }
             } else {
                 frete = freteAdapter.receberCargaDetalheResponseToFreteEntity(cargaResponse, filial);
             }
-            if(frete.getDataLiberacaoFaturamento() != null && frete.getDataLiberacaoFaturamento().isBefore(LocalDateTime.of(2024, 7, 1, 0, 0))) {
+            if(isAntesJulho(frete)) {
                 return null;
             }
             freteRepository.saveAndFlush(frete);
@@ -205,6 +214,25 @@ public class FreteService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void delete(FreteEntity frete){
+        var clientes = clienteFreteRepository.findByFreteId(frete.getId());
+        clienteFreteRepository.deleteAll(clientes);
+
+        for(var pedido : pedidoRepository.findByFreteId(frete.getId())){
+            var itens = itemPedidoRepository.findByPedidoId(pedido.getId());
+            itemPedidoRepository.deleteAll(itens);
+            pedidoRepository.delete(pedido);
+        }
+        List<CargasConsultadas> cargas = cargasConsultadasRepository.findByFreteId(frete.getId());
+        cargasConsultadasRepository.deleteAll(cargas);
+        freteRepository.delete(frete);
+        freteRepository.flush();
+    }
+
+    private boolean isAntesJulho(FreteEntity frete){
+        return frete != null && frete.getDataLiberacaoFaturamento() != null && frete.getDataLiberacaoFaturamento().isBefore(LocalDateTime.of(2024, 7, 1, 0, 0));
     }
 
     private Double round(Double value){

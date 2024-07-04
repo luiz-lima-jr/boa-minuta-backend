@@ -46,15 +46,15 @@ public class FreteEntity {
 
     private LocalDateTime dataSaida;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "filialOrigemId")
     private FilialEntity municipioOrigem;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "municipioDestinoId")
     private MunicipioEntity municipioDestino;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinColumn(name = "caminhaoId")
     private CaminhaoEntity caminhao;
 
