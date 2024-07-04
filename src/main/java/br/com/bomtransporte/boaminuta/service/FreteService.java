@@ -194,7 +194,11 @@ public class FreteService {
             } else {
                 frete = freteAdapter.receberCargaDetalheResponseToFreteEntity(cargaResponse, filial);
             }
-            freteRepository.saveAndFlush(frete);
+            if(frete.getDataLiberacaoFaturamento().isAfter(LocalDateTime.of(2024, 7, 1, 0, 0))) {
+                freteRepository.saveAndFlush(frete);
+                return null;
+            }
+
             return frete;
         } catch (MunicipioVazioException e) {
             throw e;
