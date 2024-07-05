@@ -6,6 +6,8 @@ import br.com.bomtransporte.boaminuta.persistenceMili.repository.IDetalheCargaAr
 import br.com.bomtransporte.boaminuta.service.CargasConsultadasService;
 import br.com.bomtransporte.boaminuta.service.FilialService;
 import br.com.bomtransporte.boaminuta.service.FreteService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -27,12 +29,16 @@ public class AtualizarCargasConsultadasSchedule {
     @Autowired
     private FreteService freteService;
 
+    @PersistenceContext(unitName = "miliPU")
+    protected EntityManager entityManager;
+
     @Scheduled(fixedRate = 1000)
     public void atualizar() {
         var filiais = filialService.getAll();
         for(var filial : filiais){
            var ultimo = cargasConsultadasService.buscarUltimaConsultada(filial.getId());
-           var atualizados = repository.findIdsByEftCodigoAndIdGreaterThan(filial.getCodigoMili(), ultimo);
+           LocalDateTime julho = LocalDateTime.of(2024, 7, 1, 0, 0);
+           var atualizados = repository.findIdsByEftCodigoAndIdGreaterThanAndDataLiberacaoFaturamentoGreaterThan(filial.getCodigoMili(), ultimo, julho, entityManager);
            for(var carga : atualizados){
                var arquivo = repository.findById(carga);
                try {
