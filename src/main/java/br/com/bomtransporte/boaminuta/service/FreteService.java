@@ -228,6 +228,7 @@ public class FreteService {
     private void delete(FreteEntity frete){
         var clientes = clienteFreteRepository.findByFreteId(frete.getId());
         clienteFreteRepository.deleteAll(clientes);
+
         List<PedidoEntity> pedidos = pedidoRepository.findByFreteId(frete.getId());
         for(var pedido : pedidos){
             var itens = itemPedidoRepository.findByPedidoId(pedido.getId());

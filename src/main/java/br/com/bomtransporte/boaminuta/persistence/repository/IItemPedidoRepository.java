@@ -9,6 +9,6 @@ import java.util.List;
 import java.util.Set;
 
 public interface IItemPedidoRepository extends JpaRepository<ItemPedidoEntity, Long> {
-    List<ItemPedidoEntity> findByPedidoId(Long pedidoId);
+    Set<ItemPedidoEntity> findByPedidoId(Long pedidoId);
 
 }

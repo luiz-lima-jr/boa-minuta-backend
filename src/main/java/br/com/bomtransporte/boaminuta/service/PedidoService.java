@@ -66,8 +66,8 @@ public class PedidoService {
 
 
 
-    private Set<ItemPedidoEntity> montarItemPedido(Pedido pedidoOut, PedidoEntity pedidoEntity){
-        var itensPedidoEntity = new HashSet<ItemPedidoEntity>();
+    private List<ItemPedidoEntity> montarItemPedido(Pedido pedidoOut, PedidoEntity pedidoEntity){
+        var itensPedidoEntity = new ArrayList<ItemPedidoEntity>();
         for(var itemPedidoOut : pedidoOut.getItensPedidos().getValue().getItemPedido()){
             var itemPedidoEntity = new ItemPedidoEntity();
             var produtoOut = itemPedidoOut.getProduto().getValue();

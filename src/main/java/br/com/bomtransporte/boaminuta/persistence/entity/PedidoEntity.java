@@ -20,7 +20,7 @@ public class PedidoEntity {
     private FreteEntity frete;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
-    private Set<ItemPedidoEntity> itensPedido;
+    private List<ItemPedidoEntity> itensPedido;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "clienteId")
