@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity(name = "pedido")
 @Data
@@ -19,7 +20,7 @@ public class PedidoEntity {
     private FreteEntity frete;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
-    private List<ItemPedidoEntity> itensPedido;
+    private Set<ItemPedidoEntity> itensPedido;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "clienteId")

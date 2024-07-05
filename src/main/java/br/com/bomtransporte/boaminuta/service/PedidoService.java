@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class PedidoService {
@@ -64,8 +66,8 @@ public class PedidoService {
 
 
 
-    private List<ItemPedidoEntity> montarItemPedido(Pedido pedidoOut, PedidoEntity pedidoEntity){
-        var itensPedidoEntity = new ArrayList<ItemPedidoEntity>();
+    private Set<ItemPedidoEntity> montarItemPedido(Pedido pedidoOut, PedidoEntity pedidoEntity){
+        var itensPedidoEntity = new HashSet<ItemPedidoEntity>();
         for(var itemPedidoOut : pedidoOut.getItensPedidos().getValue().getItemPedido()){
             var itemPedidoEntity = new ItemPedidoEntity();
             var produtoOut = itemPedidoOut.getProduto().getValue();

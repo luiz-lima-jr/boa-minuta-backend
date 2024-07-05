@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public interface ICargasConsultadasRepository extends JpaRepository<CargasConsultadas, Long> {
 
-    Optional<CargasConsultadas> findFirstByFreteFilialIdOrderByIdViewDesc(Long idFilial);
+    Optional<CargasConsultadas> findFirstByFreteFilialIdOrFilialIdOrderByIdViewDesc(Long idFilial, Long filialId);
     List<CargasConsultadas> findByFreteId(Long freteId);
 }

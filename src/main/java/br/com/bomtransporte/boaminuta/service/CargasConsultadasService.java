@@ -2,6 +2,7 @@ package br.com.bomtransporte.boaminuta.service;
 
 
 import br.com.bomtransporte.boaminuta.persistence.entity.CargasConsultadas;
+import br.com.bomtransporte.boaminuta.persistence.entity.FilialEntity;
 import br.com.bomtransporte.boaminuta.persistence.entity.FreteEntity;
 import br.com.bomtransporte.boaminuta.persistence.repository.ICargasConsultadasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +17,20 @@ public class CargasConsultadasService {
     private ICargasConsultadasRepository repository;
 
     public Long buscarUltimaConsultada(Long idFilial){
-        var ultimo = repository.findFirstByFreteFilialIdOrderByIdViewDesc(idFilial).orElse(null);
+        var ultimo = repository.findFirstByFreteFilialIdOrFilialIdOrderByIdViewDesc(idFilial, idFilial).orElse(null);
         return  ultimo == null ? 0L : ultimo.getIdView();
     }
 
     public void salvar(FreteEntity frete, Long idView){
         CargasConsultadas carga = new CargasConsultadas();
         carga.setFrete(frete);
+        carga.setIdView(idView);
+        carga.setDataRegistro(LocalDateTime.now());
+        repository.save(carga);
+    }
+    public void salvar(FilialEntity filial, Long idView){
+        CargasConsultadas carga = new CargasConsultadas();
+        carga.setFilial(filial);
         carga.setIdView(idView);
         carga.setDataRegistro(LocalDateTime.now());
         repository.save(carga);

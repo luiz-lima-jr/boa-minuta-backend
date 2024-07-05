@@ -37,8 +37,11 @@ public class AtualizarCargasConsultadasSchedule {
                var arquivo = repository.findById(carga);
                try {
                    var frete = freteService.atualizarFreteView(filial, arquivo.get());
-                   if(frete != null)
+                   if(frete != null) {
                        cargasConsultadasService.salvar(frete, carga);
+                   } else {
+                       cargasConsultadasService.salvar(filial, carga);
+                   }
                } catch (MunicipioVazioException e){
                    //NOTHING
                } catch (Exception e){

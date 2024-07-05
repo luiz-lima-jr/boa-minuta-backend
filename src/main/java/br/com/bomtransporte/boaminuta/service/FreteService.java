@@ -24,6 +24,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -207,6 +208,7 @@ public class FreteService {
                 return null;
             }
             freteRepository.saveAndFlush(frete);
+            System.out.println("Id: " + frete.getId() + ", Carga: " + frete.getNumeroCarga() + ", DataLibFat: " + frete.getDataLiberacaoFaturamento()) ;
 
             return frete;
         } catch (MunicipioVazioException e) {
@@ -216,11 +218,18 @@ public class FreteService {
         }
     }
 
+    public void deteleAll(){
+        List<FreteEntity> all = freteRepository.findAll();
+        all = all.stream().filter(f -> isAntesJulho(f)).collect(Collectors.toList());
+        for(var f : all){
+            delete(f);
+        }
+    }
     private void delete(FreteEntity frete){
         var clientes = clienteFreteRepository.findByFreteId(frete.getId());
         clienteFreteRepository.deleteAll(clientes);
-
-        for(var pedido : pedidoRepository.findByFreteId(frete.getId())){
+        List<PedidoEntity> pedidos = pedidoRepository.findByFreteId(frete.getId());
+        for(var pedido : pedidos){
             var itens = itemPedidoRepository.findByPedidoId(pedido.getId());
             itemPedidoRepository.deleteAll(itens);
             pedidoRepository.delete(pedido);

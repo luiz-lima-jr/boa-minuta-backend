@@ -20,6 +20,11 @@ public class CargasConsultadas {
     @ManyToOne
     @JoinColumn(name = "freteId")
     private FreteEntity frete;
+    @ManyToOne
+    @JoinColumn(name = "idFilial")
+    private FilialEntity filial;
+
+
 
     private Long idView;
     private LocalDateTime dataRegistro;
