@@ -208,7 +208,6 @@ public class FreteService {
                 return null;
             }
             freteRepository.saveAndFlush(frete);
-            System.out.println("Id: " + frete.getId() + ", Carga: " + frete.getNumeroCarga() + ", DataLibFat: " + frete.getDataLiberacaoFaturamento()) ;
 
             return frete;
         } catch (MunicipioVazioException e) {

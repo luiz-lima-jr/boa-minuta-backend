@@ -64,6 +64,7 @@ public class DetalheCargaArquivoService extends WebServiceGatewaySupport {
 
     private String removerCampos(String wsdl){
         wsdl = wsdl.replaceAll("xsi:nil=\"true\"","");
+        wsdl = wsdl.replaceAll("�", "");
 
         return wsdl;
     }
