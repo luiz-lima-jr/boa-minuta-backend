@@ -51,6 +51,9 @@ public class AliquotaService {
 
     public Double buscarValorAliquotaOrigemDestino(FilialEntity origem, EstadoEntity destino, Long idTipoAliquota) throws AliquotaException {
         try {
+            if(origem.getMunicipio() == null){
+                throw new AliquotaException("A filial " + origem.getNome() +" não possui  municipio cadastrado, por isso não foi possivel consultar as aliquotas");
+            }
             var aliquota = repository.findByEstadoOrigemIdAndEstadoDestinoIdAndTipoAliquotaIdAndFilialId(origem.getMunicipio().getEstado().getId(), destino.getId(), idTipoAliquota, origem.getId());
 
             return aliquota == null ? 0 : aliquota.getAliquota();

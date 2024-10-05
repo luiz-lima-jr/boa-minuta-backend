@@ -142,7 +142,7 @@ public class FreteAdapter {
         frete.setClientes(new HashSet<>());
         for(var pedido : cargaResponse.getPedidos().getValue().getPedido()){
             for(var itemPedido : pedido.getItensPedidos().getValue().getItemPedido()){
-                volume += itemPedido.getProduto().getValue().getVolumeM3();
+                volume += itemPedido.getProduto().getValue().getVolumeM3() * itemPedido.getQtde();
             }
             var clienteEntity = clienteService.montarCliente(pedido.getCliente().getValue());
             var possuiClienteNoSet = frete.getClientes().stream().filter(c -> c.getCodigoClienteMili().equals(clienteEntity.getCodigoClienteMili())).count() > 0;

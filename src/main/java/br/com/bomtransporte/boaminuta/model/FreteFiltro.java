@@ -11,8 +11,7 @@ import java.util.List;
 
 @Data
 public class FreteFiltro {
-    private Boolean semPlaca;
-    private Boolean comPlaca;
+    private Boolean lancadas;
     private Boolean faturadas;
     private LocalDateTime dataInicioFaturamento;
     private LocalDateTime dataFimFaturamento;
