@@ -79,7 +79,8 @@ public class CaminhaoService {
 
     public CaminhaoEntity buscarPorPlaca(String placa){
         try {
-            return caminhaoRepository.findByPlaca(placa);
+            List<CaminhaoEntity> caminhoes = caminhaoRepository.findByPlaca(placa);
+            return caminhoes != null && !caminhoes.isEmpty() ? caminhoes.get(0) : null;
         }catch (Exception e){
             throw e;
         }
