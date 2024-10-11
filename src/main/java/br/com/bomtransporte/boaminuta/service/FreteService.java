@@ -238,19 +238,24 @@ public class FreteService {
         }
     }
     private void delete(FreteEntity frete){
-        var clientes = clienteFreteRepository.findByFreteId(frete.getId());
-        clienteFreteRepository.deleteAll(clientes);
+        try {
+            var clientes = clienteFreteRepository.findByFreteId(frete.getId());
+            clienteFreteRepository.deleteAll(clientes);
 
-        List<PedidoEntity> pedidos = pedidoRepository.findByFreteId(frete.getId());
-        for(var pedido : pedidos){
-            var itens = itemPedidoRepository.findByPedidoId(pedido.getId());
-            itemPedidoRepository.deleteAll(itens);
-            pedidoRepository.delete(pedido);
+            List<PedidoEntity> pedidos = pedidoRepository.findByFreteId(frete.getId());
+            for(var pedido : pedidos){
+                var itens = itemPedidoRepository.findByPedidoId(pedido.getId());
+                itemPedidoRepository.deleteAll(itens);
+                pedidoRepository.delete(pedido);
+            }
+            List<CargasConsultadas> cargas = cargasConsultadasRepository.findByFreteId(frete.getId());
+            cargasConsultadasRepository.deleteAll(cargas);
+            freteRepository.delete(frete);
+            freteRepository.flush();
+        }catch (Exception e){
+            throw e;
         }
-        List<CargasConsultadas> cargas = cargasConsultadasRepository.findByFreteId(frete.getId());
-        cargasConsultadasRepository.deleteAll(cargas);
-        freteRepository.delete(frete);
-        freteRepository.flush();
+
     }
 
     private boolean isAntesJulho(FreteEntity frete){
