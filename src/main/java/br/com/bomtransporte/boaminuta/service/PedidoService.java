@@ -47,21 +47,26 @@ public class PedidoService {
 
 
     public List<PedidoEntity> montarPedidos(FreteEntity frete, ReceberCargaResponse detalheCarga) throws Exception {
-        var pedidosEntity = new ArrayList<PedidoEntity>();
-        var pedidosOut = detalheCarga.getOut().getPedidos().getValue().getPedido();
-        for(var pedidoOut : pedidosOut){
-            var pedidoEntity = new PedidoEntity();
-            var itensPedido = montarItemPedido(pedidoOut, pedidoEntity);
-            var clienteEntity = clienteService.montarCliente(pedidoOut.getCliente().getValue());
+        try {
+            var pedidosEntity = new ArrayList<PedidoEntity>();
+            var pedidosOut = detalheCarga.getOut().getPedidos().getValue().getPedido();
+            for(var pedidoOut : pedidosOut){
+                var pedidoEntity = new PedidoEntity();
+                var itensPedido = montarItemPedido(pedidoOut, pedidoEntity);
+                var clienteEntity = clienteService.montarCliente(pedidoOut.getCliente().getValue());
 
-            pedidoEntity.setNumeroPedido(pedidoOut.getNrPedido().getValue());
-            pedidoEntity.setItensPedido(itensPedido);
-            pedidoEntity.setFrete(frete);
-            pedidoEntity.setCliente(clienteEntity);
+                pedidoEntity.setNumeroPedido(pedidoOut.getNrPedido().getValue());
+                pedidoEntity.setItensPedido(itensPedido);
+                pedidoEntity.setFrete(frete);
+                pedidoEntity.setCliente(clienteEntity);
 
-            pedidosEntity.add(pedidoEntity);
+                pedidosEntity.add(pedidoEntity);
+            }
+            return pedidosEntity;
+        } catch (Exception e){
+            throw e;
         }
-        return pedidosEntity;
+
     }
 
 

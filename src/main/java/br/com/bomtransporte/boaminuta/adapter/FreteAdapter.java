@@ -138,18 +138,23 @@ public class FreteAdapter {
         cargaModel.setM3(volume);
     }
     private void setClientesVolumes(Carga cargaResponse, FreteEntity frete) throws BoaMinutaBusinessException {
-        var volume = 0.0;
-        frete.setClientes(new HashSet<>());
-        for(var pedido : cargaResponse.getPedidos().getValue().getPedido()){
-            for(var itemPedido : pedido.getItensPedidos().getValue().getItemPedido()){
-                volume += itemPedido.getProduto().getValue().getVolumeM3() * itemPedido.getQtde();
-            }
-            var clienteEntity = clienteService.montarCliente(pedido.getCliente().getValue());
-            var possuiClienteNoSet = frete.getClientes().stream().filter(c -> c.getCodigoClienteMili().equals(clienteEntity.getCodigoClienteMili())).count() > 0;
-            if(!possuiClienteNoSet)
-                frete.getClientes().add(clienteEntity);
-        }
-        frete.setM3(volume);
+      try {
+          var volume = 0.0;
+          frete.setClientes(new HashSet<>());
+          for(var pedido : cargaResponse.getPedidos().getValue().getPedido()){
+              for(var itemPedido : pedido.getItensPedidos().getValue().getItemPedido()){
+                  volume += itemPedido.getProduto().getValue().getVolumeM3() * itemPedido.getQtde();
+              }
+              var clienteEntity = clienteService.montarCliente(pedido.getCliente().getValue());
+              var possuiClienteNoSet = frete.getClientes().stream().filter(c -> c.getCodigoClienteMili().equals(clienteEntity.getCodigoClienteMili())).count() > 0;
+              if(!possuiClienteNoSet)
+                  frete.getClientes().add(clienteEntity);
+          }
+          frete.setM3(volume);
+      }catch (Exception e){
+          throw e;
+      }
+
     }
 
     public FreteModel receberCargaDetalheResponseToCargaModel(ReceberCargaResponse cargaResponse, FilialModel filial) throws BoaMinutaBusinessException {
@@ -186,38 +191,44 @@ public class FreteAdapter {
     }
 
     public void atualizarFreteEntity(FreteEntity freteEntity, ReceberCargaResponse cargaResponse, FilialEntity filial) throws Exception {
-        var cargaOut = cargaResponse.getOut();
-        var municipioDestino = municipioService.buscarPorCodigoIbge(cargaOut.getCodIbge().longValue());
-        var filialOrigem = filialService.getByCodigoCarregamento(Long.parseLong(cargaOut.getLocalCarregamento().getValue()));
-        if(filialOrigem == null){
-            throw new RuntimeException("Filial " + cargaOut.getLocalCarregamento().getValue() + " não cadastrada");
-        }
-        freteEntity.setNumeroCarga(cargaOut.getNrCarga());
 
-        var caminhao = cargaOut.getCaminhao();
-        if( caminhao != null && caminhao.getValue().getPlaca() != null){
-            freteEntity.setPlaca(cargaOut.getCaminhao().getValue().getPlaca().getValue());
-            var caminhaoExistente = caminhaoService.buscarPorPlaca(caminhao.getValue().getPlaca().getValue());
-            if(caminhaoExistente != null){
-                freteEntity.setCaminhao(caminhaoExistente);
-            }
-        }
-        freteEntity.setValorCarga(cargaOut.getVlrConhecimento());
-        freteEntity.setEntregas(cargaOut.getTotalEntrega());
-        freteEntity.setComplementoCalculo(cargaOut.getVlrRedespacho());
+       try {
+           var cargaOut = cargaResponse.getOut();
+           var municipioDestino = municipioService.buscarPorCodigoIbge(cargaOut.getCodIbge().longValue());
+           var filialOrigem = filialService.getByCodigoCarregamento(Long.parseLong(cargaOut.getLocalCarregamento().getValue()));
+           if(filialOrigem == null){
+               throw new RuntimeException("Filial " + cargaOut.getLocalCarregamento().getValue() + " não cadastrada");
+           }
+           freteEntity.setNumeroCarga(cargaOut.getNrCarga());
 
-        if(cargaOut.getObservacao() != null){
-            String obs = cargaOut.getObservacao().getValue().replace("�", "");
-            freteEntity.setObservacoes(obs);
-        }
-        setAliquotasFreteEntity(freteEntity, filialOrigem, municipioDestino.getEstado());
-        setClientesVolumes(cargaOut, freteEntity);
-        setDatas(cargaOut, freteEntity);
+           var caminhao = cargaOut.getCaminhao();
+           if( caminhao != null && caminhao.getValue().getPlaca() != null){
+               freteEntity.setPlaca(cargaOut.getCaminhao().getValue().getPlaca().getValue());
+               var caminhaoExistente = caminhaoService.buscarPorPlaca(caminhao.getValue().getPlaca().getValue());
+               if(caminhaoExistente != null){
+                   freteEntity.setCaminhao(caminhaoExistente);
+               }
+           }
+           freteEntity.setValorCarga(cargaOut.getVlrConhecimento());
+           freteEntity.setEntregas(cargaOut.getTotalEntrega());
+           freteEntity.setComplementoCalculo(cargaOut.getVlrRedespacho());
 
-        freteEntity.setFilial(filial);
-        freteEntity.setMunicipioDestino(municipioDestino);
-        freteEntity.setMunicipioOrigem(filialOrigem);
-        montarPedidos(freteEntity, cargaResponse);
+           if(cargaOut.getObservacao() != null){
+               String obs = cargaOut.getObservacao().getValue().replace("�", "");
+               freteEntity.setObservacoes(obs);
+           }
+           setAliquotasFreteEntity(freteEntity, filialOrigem, municipioDestino.getEstado());
+           setClientesVolumes(cargaOut, freteEntity);
+           setDatas(cargaOut, freteEntity);
+
+           freteEntity.setFilial(filial);
+           freteEntity.setMunicipioDestino(municipioDestino);
+           freteEntity.setMunicipioOrigem(filialOrigem);
+           montarPedidos(freteEntity, cargaResponse);
+       } catch (Exception e){
+           throw e;
+       }
+
     }
 
     private void montarPedidos(FreteEntity frete, ReceberCargaResponse detalheCarga) throws Exception {

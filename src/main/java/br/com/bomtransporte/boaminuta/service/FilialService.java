@@ -37,7 +37,11 @@ public class FilialService {
         return filialRepository.findByCodigoMili(codigoMili);
     }
     public FilialEntity getByCodigoCarregamento(Long codigoCarregamento){
-        return filialRepository.findByCodigoCarregamento(codigoCarregamento);
+        try {
+            return filialRepository.findByCodigoCarregamento(codigoCarregamento);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     public List<FilialEntity> getTodasByIds(List<Long> ids){

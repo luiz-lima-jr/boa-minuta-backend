@@ -78,6 +78,10 @@ public class CaminhaoService {
     }
 
     public CaminhaoEntity buscarPorPlaca(String placa){
-        return caminhaoRepository.findByPlaca(placa);
+        try {
+            return caminhaoRepository.findByPlaca(placa);
+        }catch (Exception e){
+            throw e;
+        }
     }
 }

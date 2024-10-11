@@ -195,7 +195,12 @@ public class FreteService {
         try {
             var cargaResponse = detalheCargaService.converterWsdlToReceberCargaResponse(detalheCargaArquivo);
             var nrCarga = cargaResponse.getOut().getNrCarga();
-            var frete =  freteRepository.findByNumeroCargaAndFilialId(nrCarga, filial.getId());
+            FreteEntity frete;
+            try {
+                frete =  freteRepository.findByNumeroCargaAndFilialId(nrCarga, filial.getId());
+            } catch (Exception e){
+                throw new Exception("Nao foi possivel consultar nrCarga " + nrCarga + " e filial "+ filial.getId() , e);
+            }
             if(frete != null) {
                 freteAdapter.atualizarFreteEntity(frete, cargaResponse, filial);
                 if(isAntesJulho(frete)){
