@@ -226,6 +226,7 @@ public class FreteService {
         } catch (MunicipioVazioException e) {
             throw e;
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
