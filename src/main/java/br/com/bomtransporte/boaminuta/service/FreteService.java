@@ -202,12 +202,20 @@ public class FreteService {
                 throw new Exception("Nao foi possivel consultar nrCarga " + nrCarga + " e filial "+ filial.getId() , e);
             }
             if(frete != null) {
-                freteAdapter.atualizarFreteEntity(frete, cargaResponse, filial);
+                try {
+                    freteAdapter.atualizarFreteEntity(frete, cargaResponse, filial);
+                } catch (Exception e){
+                    throw e;
+                }
                 if(isAntesJulho(frete)){
                     delete(frete);
                 }
             } else {
-                frete = freteAdapter.receberCargaDetalheResponseToFreteEntity(cargaResponse, filial);
+                try {
+                    frete = freteAdapter.receberCargaDetalheResponseToFreteEntity(cargaResponse, filial);
+                } catch (Exception e){
+                    throw e;
+                }
             }
             if(isAntesJulho(frete)) {
                 return null;
