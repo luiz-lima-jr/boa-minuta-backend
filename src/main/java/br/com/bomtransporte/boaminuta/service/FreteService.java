@@ -79,6 +79,9 @@ public class FreteService {
 
     public FreteModel buscarCarga(Long nroCarga, Long idFilial) throws Exception {
         var frete = freteRepository.findByNumeroCargaAndFilialId(nroCarga, idFilial);
+        if(frete == null){
+            throw new Exception("Carga não localizada para a filial informada");
+        }
         var freteModel = freteAdapter.freteEntityToModel(frete);
         var usuarioOp = frete != null && frete.getResponsavelOperacional() != null ? frete.getResponsavelOperacional() : usuarioService.getUsuarioLogado();
         var respFatModel = UsuarioModel.builder().nome(usuarioOp.getNome()).id(usuarioOp.getId()).build();

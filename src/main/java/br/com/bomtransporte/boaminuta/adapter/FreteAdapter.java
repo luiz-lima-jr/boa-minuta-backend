@@ -1,5 +1,7 @@
 package br.com.bomtransporte.boaminuta.adapter;
 
+import br.com.bomtransporte.boaminuta.enuns.FobCifEnum;
+import br.com.bomtransporte.boaminuta.enuns.PagamentoPedagioEnum;
 import br.com.bomtransporte.boaminuta.enuns.TipoAliquotaEnum;
 import br.com.bomtransporte.boaminuta.exception.AliquotaException;
 import br.com.bomtransporte.boaminuta.exception.BoaMinutaBusinessException;
@@ -70,12 +72,12 @@ public class FreteAdapter {
         cargaModel.setDataSaida(frete.getDataSaida());
         cargaModel.setMunicipioDestino(frete.getMunicipioDestino());
         cargaModel.setValorCarga(frete.getValorCarga());
-        cargaModel.setPedagio(frete.getPedagio());
-        cargaModel.setComplementoCalculo(frete.getComplementoCalculo());
-        cargaModel.setDescontos(frete.getDescontos());
+        cargaModel.setPedagio(frete.getPedagio() == null ? 0 : frete.getPedagio());
+        cargaModel.setComplementoCalculo(frete.getComplementoCalculo() == null ? 0 : frete.getComplementoCalculo());
+        cargaModel.setDescontos(frete.getDescontos() == null ? 0 : frete.getPedagio());
         cargaModel.setFrete(frete.getFrete());
-        cargaModel.setFobCif(frete.getFobCif());
-        cargaModel.setPagamentoPedagio(frete.getPagamentoPedagio());
+        cargaModel.setFobCif(frete.getFobCif() == null ?  FobCifEnum.CIF : frete.getFobCif());
+        cargaModel.setPagamentoPedagio(frete.getPagamentoPedagio() == null ? PagamentoPedagioEnum.SEM_PEDAGIO : frete.getPagamentoPedagio());
         cargaModel.setNfse(frete.getNfse());
         cargaModel.setFretePago(frete.getFretePago());
         cargaModel.setIss(frete.getIss());

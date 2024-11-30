@@ -56,6 +56,7 @@ public interface IFreteRepository extends JpaRepository<FreteEntity, Long> {
     private Map<String, Object> montarFiltro(FreteFiltro filtro, StringBuilder query) {
         Map<String, Object> params = new HashMap<>();
         boolean todasFilias = filtro.getFiliais() == null || filtro.getFiliais().stream().anyMatch(f -> f.getId().equals(0L));
+        query.append(" AND f.faturado =  ").append(filtro.isFaturadas());
 
         if(filtro.getFiliais() != null  && (todasFilias || (!filtro.getFiliais().isEmpty()))){
             query.append(" AND f.filial.id IN (:filiais) ");
@@ -90,9 +91,6 @@ public interface IFreteRepository extends JpaRepository<FreteEntity, Long> {
             query.append(" AND f.dataCalculo is not null ");
         }
 
-        if(filtro.getFaturadas() != null && filtro.getFaturadas()){
-            query.append(" AND f.faturado = true ");
-        }
         if(filtro.isFreteCalculado()){
             query.append(" AND f.dataCalculo is not null ");
         }

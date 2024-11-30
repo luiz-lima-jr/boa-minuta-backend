@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 public class FreteFiltro {
     private Boolean lancadas;
-    private Boolean faturadas;
+    private boolean faturadas;
     private LocalDateTime dataInicioFaturamento;
     private LocalDateTime dataFimFaturamento;
     private LocalDateTime dataInicioCadastro;
