@@ -5,6 +5,7 @@ import br.com.bomtransporte.boaminuta.model.UsuarioModel;
 import br.com.bomtransporte.boaminuta.persistence.entity.FreteEntity;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +15,8 @@ import java.util.stream.Collectors;
 public interface IFreteRepository extends JpaRepository<FreteEntity, Long> {
 
     FreteEntity findByNumeroCargaAndFilialId(Long numeroCarga, Long idFilial);
+    @Query("SELECT count(f) FROM br.com.bomtransporte.boaminuta.persistence.entity.FreteEntity f WHERE f.caminhao.motorista.pessoaTransporte.id = :idPessoaTransporte ")
+    Long findQtdByPessoaMotoristaId(Long idPessoaTransporte);
 
     default List<FreteEntity> findByFiltroFretesCalculados(FreteFiltro filtro, EntityManager entityManager) {
         filtro.setFreteCalculado(true);

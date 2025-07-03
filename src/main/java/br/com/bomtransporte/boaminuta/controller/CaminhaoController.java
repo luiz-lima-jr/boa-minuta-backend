@@ -2,6 +2,7 @@ package br.com.bomtransporte.boaminuta.controller;
 
 
 import br.com.bomtransporte.boaminuta.config.Constantes;
+import br.com.bomtransporte.boaminuta.enuns.ExperienciaBomEnum;
 import br.com.bomtransporte.boaminuta.persistence.entity.CaminhaoEntity;
 import br.com.bomtransporte.boaminuta.service.CaminhaoService;
 import jakarta.validation.Valid;
@@ -28,6 +29,12 @@ public class CaminhaoController {
         service.salvar(caminhaoEntity);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("experiencia")
+    public ResponseEntity<ExperienciaBomEnum> getExperiencia(@RequestParam Long idPessoa) {
+        return ResponseEntity.ok(service.getExperienciaMotorista(idPessoa));
+    }
+
 
     @DeleteMapping("{idFilial}")
     public ResponseEntity excluir(@PathVariable("idFilial") Long idFilial) throws Exception {

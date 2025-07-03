@@ -1,7 +1,10 @@
 package br.com.bomtransporte.boaminuta.service;
 
+import br.com.bomtransporte.boaminuta.enuns.ExperienciaBomEnum;
 import br.com.bomtransporte.boaminuta.persistence.entity.CaminhaoEntity;
+import br.com.bomtransporte.boaminuta.persistence.entity.MotoristaEntity;
 import br.com.bomtransporte.boaminuta.persistence.repository.ICaminhaoRepository;
+import br.com.bomtransporte.boaminuta.persistence.repository.IFreteRepository;
 import br.com.bomtransporte.boaminuta.persistence.repository.IMotoristaRepository;
 import br.com.bomtransporte.boaminuta.persistence.repository.IPessoaTransporteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,9 @@ public class CaminhaoService {
 
     @Autowired
     private IMotoristaRepository motoristaRepository;
+
+    @Autowired
+    private IFreteRepository freteRepository;
 
     public CaminhaoService(){
 
@@ -74,7 +80,8 @@ public class CaminhaoService {
     }
 
     public List<CaminhaoEntity> filtrarPorPlaca(String placa){
-        return caminhaoRepository.findByPlacaLike(placa);
+        List<CaminhaoEntity> caminhao = caminhaoRepository.findByPlacaLike(placa);
+        return caminhao;
     }
 
     public CaminhaoEntity buscarPorPlaca(String placa){
@@ -83,6 +90,17 @@ public class CaminhaoService {
             return caminhoes != null && !caminhoes.isEmpty() ? caminhoes.get(0) : null;
         }catch (Exception e){
             throw e;
+        }
+    }
+
+    public ExperienciaBomEnum getExperienciaMotorista(Long idPessoa){
+        Long qtd = freteRepository.findQtdByPessoaMotoristaId(idPessoa);
+        if(qtd > 5){
+            return ExperienciaBomEnum.CARREGA_SEMPRE;
+        } else if(qtd == 0){
+            return ExperienciaBomEnum.NOVO_PARA_CARREGAMENTO;
+        } else {
+            return ExperienciaBomEnum.RETORNANDO;
         }
     }
 }
